@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto — Brenda Molineris</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --gold: #c9a84c;
+      --gold-light: #e2c06a;
+      --white: #f5f3ef;
+      --grey: #888;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 8vw, 52px);
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--white);
+    }
+
+    .header h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .header p {
+      margin-top: 14px;
+      font-size: 14px;
+      color: var(--grey);
+      line-height: 1.6;
+    }
+
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      margin: 24px auto;
+      opacity: 0.5;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #333;
+      padding: 10px 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--white);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input::placeholder {
+      color: #444;
+    }
+
+    input:focus {
+      border-bottom-color: var(--gold);
+    }
+
+    .btn {
+      width: 100%;
+      margin-top: 36px;
+      padding: 16px;
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn:hover {
+      background: var(--gold-light);
+    }
+
+    .btn:active {
+      transform: scale(0.99);
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 12px;
+      color: #444;
+    }
+
+    .footer-note a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    /* Success state */
+    .success {
+      display: none;
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    .success.show { display: block; }
+    .form-inner.hide { display: none; }
+
+    .success-icon {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+    .success h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .success p {
+      font-size: 14px;
+      color: var(--grey);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">BM · Brenda Molineris</div>
+      <h1>Hablemos de <em>tu objetivo</em></h1>
+      <div class="divider"></div>
+      <p>Dejame tus datos y te escribo en menos de 24 hs para contarte cómo puedo ayudarte.</p>
+    </div>
+
+    <div class="form-inner">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" placeholder="¿Cómo te llamás?" autocomplete="name" />
+      </div>
+
+      <div class="form-group">
+        <label for="contacto">Teléfono o mail</label>
+        <input type="text" id="contacto" placeholder="WhatsApp o email" autocomplete="off" />
+      </div>
+
+      <button class="btn" onclick="enviar()">Quiero empezar</button>
+
+      <p class="footer-note">
+        También podés escribirme directamente en
+        <a href="https://instagram.com/brendamolineris" target="_blank">@brendamolineris</a>
+      </p>
+    </div>
+
+    <div class="success">
+      <div class="success-icon">✦</div>
+      <h2>¡Recibido!</h2>
+      <p>Te escribo por WhatsApp pronto.<br>¡Gracias por contactarte!</p>
+    </div>
+  </div>
+
+  <script>
+    function enviar() {
+      const nombre = document.getElementById('nombre').value.trim();
+      const contacto = document.getElementById('contacto').value.trim();
+
+      if (!nombre || !contacto) {
+        alert('Por favor completá nombre y teléfono o mail.');
+        return;
+      }
+
+      const mensaje = `Hola Brenda! Me contacto desde tu perfil de Google Maps 👋\n\nNombre: ${nombre}\nContacto: ${contacto}`;
+      const url = `https://wa.me/5491123838704?text=${encodeURIComponent(mensaje)}`;
+
+      document.querySelector('.form-inner').classList.add('hide');
+      document.querySelector('.success').classList.add('show');
+
+      // Redirigir a WhatsApp después de 1 segundo
+      setTimeout(() => {
+        window.open(url, '_blank');
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
