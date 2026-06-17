@@ -12,1214 +12,292 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #0a0a0a;
-    --dark: #111111;
-    --card: #161616;
-    --border: #2a2a2a;
-    --gold: #C9A84C;
-    --gold-light: #E2C97E;
-    --gold-dim: rgba(201,168,76,0.15);
-    --white: #f5f5f0;
-    --muted: #888;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--black);
-    color: var(--white);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-  }
-
-  /* ── LOGIN ── */
-  #login-screen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 2rem;
-    background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 60%), var(--black);
-  }
-
-  .login-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
-    letter-spacing: 0.35em;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-
-  .login-tagline {
-    font-size: 0.75rem;
-    color: var(--muted);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 3rem;
-  }
-
-  .login-box {
-    width: 100%;
-    max-width: 360px;
-  }
-
-  .login-box h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.2rem;
-    font-weight: 300;
-    line-height: 1.2;
-    margin-bottom: 0.5rem;
-  }
-
-  .login-box h1 em {
-    font-style: italic;
-    color: var(--gold);
-  }
-
-  .login-box p {
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin-bottom: 2rem;
-  }
-
-  .field {
-    margin-bottom: 1rem;
-  }
-
-  .field label {
-    display: block;
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.5rem;
-  }
-
-  .field input {
-    width: 100%;
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--white);
-    padding: 0.85rem 1rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    border-radius: 4px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .field input:focus {
-    border-color: var(--gold);
-  }
-
-  .btn-gold {
-    width: 100%;
-    background: var(--gold);
-    color: #000;
-    border: none;
-    padding: 0.9rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 0.5rem;
-    transition: background 0.2s;
-  }
-
-  .btn-gold:hover { background: var(--gold-light); }
-
-  #login-error {
-    color: #e05c5c;
-    font-size: 0.8rem;
-    margin-top: 0.75rem;
-    display: none;
-    text-align: center;
-  }
-
-  /* ── APP ── */
-  #app { display: none; }
-
-  /* Sidebar */
-  .layout {
-    display: flex;
-    min-height: 100vh;
-  }
-
-  .sidebar {
-    width: 240px;
-    background: var(--dark);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0; left: 0; bottom: 0;
-    z-index: 100;
-    transition: transform 0.3s;
-  }
-
-  .sidebar-logo {
-    padding: 1.8rem 1.5rem 1.2rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .sidebar-logo .brand {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.8rem;
-    letter-spacing: 0.3em;
-    color: var(--gold);
-    text-transform: uppercase;
-  }
-
-  .sidebar-logo .sub {
-    font-size: 0.65rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-
-  .sidebar-greeting {
-    padding: 1.2rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .sidebar-greeting .hello {
-    font-size: 0.7rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  .sidebar-greeting .name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem;
-    font-weight: 300;
-    color: var(--white);
-    margin-top: 2px;
-  }
-
-  nav { flex: 1; padding: 1rem 0; }
-
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.83rem;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    border-left: 2px solid transparent;
-  }
-
-  .nav-item:hover { color: var(--white); background: rgba(255,255,255,0.03); }
-  .nav-item.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-dim); }
-
-  .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
-
-  .sidebar-footer {
-    padding: 1rem 1.5rem;
-    border-top: 1px solid var(--border);
-  }
-
-  .logout-btn {
-    font-size: 0.72rem;
-    color: var(--muted);
-    cursor: pointer;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    transition: color 0.2s;
-  }
-
-  .logout-btn:hover { color: var(--white); }
-
-  /* Main content */
-  .main {
-    margin-left: 240px;
-    flex: 1;
-    padding: 2.5rem 2rem;
-    max-width: calc(100% - 240px);
-  }
-
-  .page-header {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .page-header .eyebrow {
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.5rem;
-  }
-
-  .page-header h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;
-    font-weight: 300;
-  }
-
-  /* Sections */
-  .section { display: none; }
-  .section.active { display: block; }
-
-  /* Cards */
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 1.5rem;
-    transition: border-color 0.2s;
-  }
-
-  .card:hover { border-color: rgba(201,168,76,0.4); }
-
-  .card-eyebrow {
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.5rem;
-  }
-
-  .card h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
-    font-weight: 300;
-    margin-bottom: 0.5rem;
-  }
-
-  .card p {
-    font-size: 0.82rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  /* Inicio stats */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-
-  .stat-box {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 1.2rem 1.5rem;
-  }
-
-  .stat-box .stat-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.4rem;
-  }
-
-  .stat-box .stat-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.8rem;
-    font-weight: 300;
-    color: var(--gold);
-  }
-
-  .stat-box .stat-unit {
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-left: 4px;
-  }
-
-  /* Rutina table */
-  .routine-day {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    margin-bottom: 1rem;
-    overflow: hidden;
-  }
-
-  .routine-day-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.5rem;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .routine-day-header:hover { background: rgba(255,255,255,0.02); }
-
-  .routine-day-header .day-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-
-  .routine-day-header .day-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    font-weight: 300;
-  }
-
-  .routine-day-body {
-    display: none;
-    padding: 0 1.5rem 1.5rem;
-  }
-
-  .routine-day-body.open { display: block; }
-
-  table.exercises {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-  }
-
-  table.exercises th {
-    text-align: left;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  table.exercises td {
-    padding: 0.6rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    color: var(--white);
-  }
-
-  table.exercises td:last-child { color: var(--muted); }
-
-  /* Recetas */
-  .recipe-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 1.5rem;
-  }
-
-  .recipe-card .macro-row {
-    display: flex;
-    gap: 1.5rem;
-    margin: 1rem 0;
-    padding: 0.75rem 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .macro { text-align: center; }
-  .macro .val { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--gold); }
-  .macro .lbl { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
-
-  .ingredient-list { list-style: none; margin: 0.75rem 0; }
-  .ingredient-list li {
-    font-size: 0.83rem;
-    color: var(--muted);
-    padding: 0.3rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .ingredient-list li span { color: var(--white); }
-
-  /* Progreso */
-  .progress-form { max-width: 480px; }
-
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .form-field label {
-    display: block;
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.4rem;
-  }
-
-  .form-field input {
-    width: 100%;
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--white);
-    padding: 0.7rem 0.9rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    border-radius: 4px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .form-field input:focus { border-color: var(--gold); }
-
-  .btn-outline {
-    background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    padding: 0.7rem 1.5rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-outline:hover { background: var(--gold-dim); }
-
-  .progress-log {
-    margin-top: 2rem;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .progress-log-header {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .log-row {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.82rem;
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-    align-items: center;
-  }
-
-  .log-row:last-child { border-bottom: none; }
-  .log-row .date { color: var(--muted); font-size: 0.75rem; }
-
-  /* Recursos */
-  .resource-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.5rem;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    margin-bottom: 0.75rem;
-    transition: border-color 0.2s;
-  }
-
-  .resource-item:hover { border-color: rgba(201,168,76,0.4); }
-
-  .resource-info .resource-name {
-    font-size: 0.9rem;
-    margin-bottom: 2px;
-  }
-
-  .resource-info .resource-desc {
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-
-  .download-btn {
-    background: var(--gold-dim);
-    border: 1px solid rgba(201,168,76,0.3);
-    color: var(--gold);
-    padding: 0.4rem 1rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: all 0.2s;
-    text-decoration: none;
-    display: inline-block;
-  }
-
-  .download-btn:hover { background: rgba(201,168,76,0.25); }
-
-  /* Contacto */
-  .contact-options {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-width: 400px;
-  }
-
-  .contact-btn {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.2rem 1.5rem;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    cursor: pointer;
-    text-decoration: none;
-    color: var(--white);
-    transition: border-color 0.2s;
-  }
-
-  .contact-btn:hover { border-color: rgba(201,168,76,0.4); }
-
-  .contact-btn .contact-icon { font-size: 1.5rem; }
-
-  .contact-btn .contact-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px; }
-  .contact-btn .contact-text { font-size: 0.9rem; }
-
-  /* Mobile hamburger */
-  .hamburger {
-    display: none;
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    z-index: 200;
-    background: var(--dark);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 0.5rem 0.75rem;
-    cursor: pointer;
-    font-size: 1.1rem;
-    color: var(--gold);
-  }
-
-  .overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    z-index: 90;
-  }
-
-  @media (max-width: 768px) {
-    .hamburger { display: block; }
-    .sidebar { transform: translateX(-100%); }
-    .sidebar.open { transform: translateX(0); }
-    .overlay.open { display: block; }
-    .main { margin-left: 0; max-width: 100%; padding: 5rem 1.2rem 2rem; }
-    .stats-row { grid-template-columns: 1fr 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-    .log-row { grid-template-columns: 1.2fr 1fr 1fr; }
-    .log-row .col-hide { display: none; }
-  }
-
-  .gold-line {
-    display: inline-block;
-    width: 32px;
-    height: 1px;
-    background: var(--gold);
-    vertical-align: middle;
-    margin-right: 0.75rem;
-  }
-
-  .chevron {
-    transition: transform 0.2s;
-    color: var(--muted);
-    font-size: 0.8rem;
-  }
-
-  .chevron.open { transform: rotate(180deg); }
-
-  /* ADMIN */
-  #admin-app{min-height:100vh;flex-direction:row;width:100%}
-  .admin-sidebar{width:220px;background:var(--dark);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform .3s}
-  .admin-main{margin-left:220px;flex:1;padding:2rem;max-width:calc(100% - 220px)}
-  .admin-section{display:none}.admin-section.active{display:block}
-  .admin-nav-item{display:flex;align-items:center;gap:.75rem;padding:.7rem 1.5rem;font-size:.82rem;color:var(--muted);cursor:pointer;transition:all .2s;border-left:2px solid transparent}
-  .admin-nav-item:hover{color:var(--white);background:rgba(255,255,255,.03)}
-  .admin-nav-item.active{color:var(--gold);border-left-color:var(--gold);background:var(--gold-dim)}
-  .admin-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:1.5rem;margin-bottom:1.5rem}
-  .admin-card h3{font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
-  .admin-field{margin-bottom:.85rem}
-  .admin-field label{display:block;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
-  .admin-field input,.admin-field textarea,.admin-field select{width:100%;background:var(--black);border:1px solid var(--border);color:var(--white);padding:.7rem .9rem;font-family:'DM Sans',sans-serif;font-size:.85rem;border-radius:4px;outline:none;transition:border-color .2s}
-  .admin-field input:focus,.admin-field textarea:focus,.admin-field select:focus{border-color:var(--gold)}
-  .admin-field textarea{resize:vertical;min-height:80px}
-  .admin-field select option{background:var(--dark)}
-  .admin-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-  .admin-row-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.75rem}
-  .admin-actions{display:flex;gap:.75rem;margin-top:1rem;flex-wrap:wrap}
-  .existing-item{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem;background:var(--black);border:1px solid var(--border);border-radius:4px;margin-bottom:.5rem;font-size:.83rem}
-  .existing-item .item-title{color:var(--white)}
-  .existing-item .item-sub{color:var(--muted);font-size:.75rem;margin-top:2px}
-  .toast{position:fixed;bottom:2rem;right:2rem;background:var(--gold);color:#000;padding:.75rem 1.5rem;border-radius:4px;font-size:.82rem;font-weight:500;opacity:0;transition:opacity .3s;z-index:999;pointer-events:none}
-  .toast.show{opacity:1}
-  .divider{height:1px;background:var(--border);margin:1.5rem 0}
-  .btn-sm{background:var(--gold-dim);border:1px solid rgba(201,168,76,.3);color:var(--gold);padding:.4rem .9rem;font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;border-radius:4px;cursor:pointer;transition:all .2s}
-  .btn-sm:hover{background:rgba(201,168,76,.25)}
-  .btn-danger{background:transparent;border:1px solid #555;color:#888;padding:.5rem 1rem;font-family:'DM Sans',sans-serif;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;border-radius:4px;cursor:pointer;transition:all .2s}
-  .btn-danger:hover{border-color:#e05c5c;color:#e05c5c}
-  @media(max-width:768px){.admin-sidebar{transform:translateX(-100%)}.admin-sidebar.open{transform:translateX(0)}.admin-main{margin-left:0;max-width:100%;padding:5rem 1.2rem 2rem}.admin-row{grid-template-columns:1fr}.admin-row-4{grid-template-columns:1fr 1fr}}
-
-
-  /* VIDEO MODAL */
-  .video-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
-  .video-modal-bg.open{display:flex}
-  .video-modal{width:100%;max-width:640px;background:var(--dark);border:1px solid var(--border);border-radius:8px;overflow:hidden}
-  .video-modal-header{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border-bottom:1px solid var(--border)}
-  .video-modal-title{font-size:.85rem;color:var(--white)}
-  .video-modal-close{background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;padding:.25rem .5rem;transition:color .2s}
-  .video-modal-close:hover{color:var(--white)}
-  .video-embed{position:relative;padding-bottom:56.25%;height:0;overflow:hidden}
-  .video-embed iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
-  .video-btn{display:inline-flex;align-items:center;gap:.4rem;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);color:var(--gold);padding:.3rem .75rem;border-radius:4px;font-size:.72rem;cursor:pointer;font-family:"DM Sans",sans-serif;letter-spacing:.05em;transition:all .2s;white-space:nowrap}
-  .video-btn:hover{background:rgba(201,168,76,.22)}
-  table.exercises td.td-video{padding-right:.5rem}
-  /* Admin video field */
-  .ej-video-hint{font-size:.65rem;color:var(--muted);margin-top:.25rem}
-
+:root{--black:#0a0a0a;--dark:#111111;--card:#161616;--border:#2a2a2a;--gold:#C9A84C;--gold-light:#E2C97E;--gold-dim:rgba(201,168,76,0.15);--white:#f5f5f0;--muted:#888;--red:#e05c5c}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh}
+.screen{display:none}
+.screen.active{display:flex}
+#login-screen{min-height:100vh;align-items:center;justify-content:center;flex-direction:column;padding:2rem;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.08) 0%,transparent 60%),var(--black)}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:1rem;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
+.login-tagline{font-size:.75rem;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:3rem}
+.login-box{width:100%;max-width:360px}
+.login-box h1{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;line-height:1.2;margin-bottom:.5rem}
+.login-box h1 em{font-style:italic;color:var(--gold)}
+.login-box>p{font-size:.85rem;color:var(--muted);margin-bottom:2rem}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.field input,.field select,.field textarea{width:100%;background:var(--card);border:1px solid var(--border);color:var(--white);padding:.85rem 1rem;font-family:'DM Sans',sans-serif;font-size:.9rem;border-radius:4px;outline:none;transition:border-color .2s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold)}
+.btn-gold{width:100%;background:var(--gold);color:#000;border:none;padding:.9rem;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;cursor:pointer;margin-top:.5rem;transition:background .2s}
+.btn-gold:hover{background:var(--gold-light)}
+.btn-outline{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:.7rem 1.5rem;font-family:'DM Sans',sans-serif;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;cursor:pointer;transition:all .2s}
+.btn-outline:hover{background:var(--gold-dim)}
+.btn-danger{background:transparent;border:1px solid #555;color:#888;padding:.5rem 1rem;font-family:'DM Sans',sans-serif;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;border-radius:4px;cursor:pointer;transition:all .2s}
+.btn-danger:hover{border-color:var(--red);color:var(--red)}
+.btn-sm{background:var(--gold-dim);border:1px solid rgba(201,168,76,.3);color:var(--gold);padding:.4rem .9rem;font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;border-radius:4px;cursor:pointer;transition:all .2s}
+.btn-sm:hover{background:rgba(201,168,76,.25)}
+.error-msg{color:var(--red);font-size:.8rem;margin-top:.75rem;display:none;text-align:center}
+.sidebar{width:240px;background:var(--dark);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform .3s}
+.sidebar-logo{padding:1.8rem 1.5rem 1.2rem;border-bottom:1px solid var(--border)}
+.sidebar-logo .brand{font-family:'Cormorant Garamond',serif;font-size:.8rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase}
+.sidebar-logo .sub{font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.sidebar-greeting{padding:1.2rem 1.5rem;border-bottom:1px solid var(--border)}
+.sidebar-greeting .hello{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.sidebar-greeting .name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--white);margin-top:2px}
+nav{flex:1;padding:1rem 0;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.5rem;font-size:.83rem;color:var(--muted);cursor:pointer;transition:all .2s;border-left:2px solid transparent}
+.nav-item:hover{color:var(--white);background:rgba(255,255,255,.03)}
+.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:var(--gold-dim)}
+.nav-item .nav-icon{font-size:1rem;width:20px;text-align:center}
+.sidebar-footer{padding:1rem 1.5rem;border-top:1px solid var(--border)}
+.logout-btn{font-size:.72rem;color:var(--muted);cursor:pointer;letter-spacing:.1em;text-transform:uppercase;background:none;border:none;font-family:'DM Sans',sans-serif;transition:color .2s}
+.logout-btn:hover{color:var(--white)}
+.main{margin-left:240px;flex:1;padding:2.5rem 2rem;max-width:calc(100% - 240px)}
+.page-header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.page-header-left .eyebrow{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.page-header-left h2{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300}
+.section{display:none}
+.section.active{display:block}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-top:1.5rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:1.5rem;transition:border-color .2s}
+.card:hover{border-color:rgba(201,168,76,.4)}
+.card-eyebrow{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.card h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;margin-bottom:.5rem}
+.card p{font-size:.82rem;color:var(--muted);line-height:1.6}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:1.2rem 1.5rem}
+.stat-box .stat-label{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.stat-box .stat-value{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--gold)}
+.stat-box .stat-unit{font-size:.75rem;color:var(--muted);margin-left:4px}
+.routine-day{background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:1rem;overflow:hidden}
+.routine-day-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;cursor:pointer;transition:background .2s}
+.routine-day-header:hover{background:rgba(255,255,255,.02)}
+.routine-day-header .day-label{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}
+.routine-day-header .day-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300}
+.routine-day-body{display:none;padding:0 1.5rem 1.5rem}
+.routine-day-body.open{display:block}
+table.exercises{width:100%;border-collapse:collapse;font-size:.82rem}
+table.exercises th{text-align:left;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:.5rem 0;border-bottom:1px solid var(--border)}
+table.exercises td{padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--white)}
+table.exercises td:last-child{color:var(--muted)}
+.chevron{transition:transform .2s;color:var(--muted);font-size:.8rem}
+.chevron.open{transform:rotate(180deg)}
+.empty-state{padding:2rem;text-align:center;color:var(--muted);font-size:.85rem}
+.recipe-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:1.5rem;margin-bottom:1rem}
+.recipe-card .macro-row{display:flex;gap:1.5rem;margin:1rem 0;padding:.75rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.macro{text-align:center}
+.macro .val{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold)}
+.macro .lbl{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.ingredient-list{list-style:none;margin:.75rem 0}
+.ingredient-list li{font-size:.83rem;color:var(--muted);padding:.3rem 0;border-bottom:1px solid rgba(255,255,255,.03);display:flex;justify-content:space-between}
+.ingredient-list li span{color:var(--white)}
+.progress-form{max-width:480px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.form-field label{display:block;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.form-field input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--white);padding:.7rem .9rem;font-family:'DM Sans',sans-serif;font-size:.9rem;border-radius:4px;outline:none;transition:border-color .2s}
+.form-field input:focus{border-color:var(--gold)}
+.progress-log{margin-top:2rem;background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.progress-log-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.log-row{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;padding:.75rem 1.5rem;font-size:.82rem;border-bottom:1px solid rgba(255,255,255,.03);align-items:center}
+.log-row:last-child{border-bottom:none}
+.log-row .date{color:var(--muted);font-size:.75rem}
+.resource-item{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:.75rem;transition:border-color .2s}
+.resource-item:hover{border-color:rgba(201,168,76,.4)}
+.resource-info .resource-name{font-size:.9rem;margin-bottom:2px}
+.resource-info .resource-desc{font-size:.75rem;color:var(--muted)}
+.download-btn{background:var(--gold-dim);border:1px solid rgba(201,168,76,.3);color:var(--gold);padding:.4rem 1rem;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;text-decoration:none;display:inline-block}
+.download-btn:hover{background:rgba(201,168,76,.25)}
+.contact-options{display:flex;flex-direction:column;gap:.75rem;max-width:400px}
+.contact-btn{display:flex;align-items:center;gap:1rem;padding:1.2rem 1.5rem;background:var(--card);border:1px solid var(--border);border-radius:6px;cursor:pointer;text-decoration:none;color:var(--white);transition:border-color .2s}
+.contact-btn:hover{border-color:rgba(201,168,76,.4)}
+.contact-btn .contact-icon{font-size:1.5rem}
+.contact-btn .contact-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+.contact-btn .contact-text{font-size:.9rem}
+.admin-sidebar{width:220px;background:var(--dark);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform .3s}
+.admin-main{margin-left:220px;flex:1;padding:2rem;max-width:calc(100% - 220px)}
+.admin-section{display:none}
+.admin-section.active{display:block}
+.admin-nav-item{display:flex;align-items:center;gap:.75rem;padding:.7rem 1.5rem;font-size:.82rem;color:var(--muted);cursor:pointer;transition:all .2s;border-left:2px solid transparent}
+.admin-nav-item:hover{color:var(--white);background:rgba(255,255,255,.03)}
+.admin-nav-item.active{color:var(--gold);border-left-color:var(--gold);background:var(--gold-dim)}
+.admin-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:1.5rem;margin-bottom:1.5rem}
+.admin-card h3{font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+.admin-field{margin-bottom:.85rem}
+.admin-field label{display:block;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.admin-field input,.admin-field textarea,.admin-field select{width:100%;background:var(--black);border:1px solid var(--border);color:var(--white);padding:.7rem .9rem;font-family:'DM Sans',sans-serif;font-size:.85rem;border-radius:4px;outline:none;transition:border-color .2s}
+.admin-field input:focus,.admin-field textarea:focus,.admin-field select:focus{border-color:var(--gold)}
+.admin-field textarea{resize:vertical;min-height:80px}
+.admin-field select option{background:var(--dark)}
+.admin-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.admin-row-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.75rem}
+.admin-actions{display:flex;gap:.75rem;margin-top:1rem;flex-wrap:wrap}
+.existing-item{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem;background:var(--black);border:1px solid var(--border);border-radius:4px;margin-bottom:.5rem;font-size:.83rem}
+.existing-item .item-title{color:var(--white)}
+.existing-item .item-sub{color:var(--muted);font-size:.75rem;margin-top:2px}
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--gold);color:#000;padding:.75rem 1.5rem;border-radius:4px;font-size:.82rem;font-weight:500;opacity:0;transition:opacity .3s;z-index:999;pointer-events:none}
+.toast.show{opacity:1}
+.divider{height:1px;background:var(--border);margin:1.5rem 0}
+.hamburger{display:none;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--dark);border:1px solid var(--border);border-radius:4px;padding:.5rem .75rem;cursor:pointer;font-size:1.1rem;color:var(--gold)}
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:90}
+.mob-overlay.open{display:block}
+.video-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
+.video-modal-bg.open{display:flex}
+.video-modal{width:100%;max-width:640px;background:var(--dark);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.video-modal-header{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border-bottom:1px solid var(--border)}
+.video-modal-title{font-size:.85rem;color:var(--white)}
+.video-modal-close{background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;padding:.25rem .5rem;transition:color .2s}
+.video-modal-close:hover{color:var(--white)}
+.video-embed{position:relative;padding-bottom:56.25%;height:0;overflow:hidden}
+.video-embed iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.video-btn{display:inline-flex;align-items:center;gap:.4rem;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);color:var(--gold);padding:.3rem .75rem;border-radius:4px;font-size:.72rem;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.05em;transition:all .2s;white-space:nowrap}
+.video-btn:hover{background:rgba(201,168,76,.22)}
+table.exercises td.td-video{padding-right:.5rem}
+@media(max-width:768px){
+.hamburger{display:block}
+.sidebar{transform:translateX(-100%)}
+.sidebar.open{transform:translateX(0)}
+.main{margin-left:0;max-width:100%;padding:5rem 1.2rem 2rem}
+.stats-row{grid-template-columns:1fr 1fr}
+.form-row{grid-template-columns:1fr}
+.log-row{grid-template-columns:1.2fr 1fr 1fr}
+.log-row .col-hide{display:none}
+.admin-sidebar{transform:translateX(-100%)}
+.admin-sidebar.open{transform:translateX(0)}
+.admin-main{margin-left:0;max-width:100%;padding:5rem 1.2rem 2rem}
+.admin-row{grid-template-columns:1fr}
+.admin-row-4{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login-screen">
+<div class="toast" id="toast"></div>
+
+<!-- VIDEO MODAL -->
+<div class="video-modal-bg" id="video-modal">
+  <div class="video-modal">
+    <div class="video-modal-header">
+      <span class="video-modal-title" id="video-modal-title">Ejecución</span>
+      <button class="video-modal-close" onclick="closeVideo()">&#10005;</button>
+    </div>
+    <div class="video-embed"><iframe id="video-iframe" src="" allowfullscreen allow="autoplay"></iframe></div>
+  </div>
+</div>
+
+<!-- LOGIN CLIENTA -->
+<div class="screen active" id="login-screen" style="flex-direction:column">
   <div class="login-logo">BM</div>
   <div class="login-tagline">Portal VIP · Brenda Molineris</div>
   <div class="login-box">
     <h1>Tu espacio <em>exclusivo</em></h1>
     <p>Ingresá con la contraseña que te enviamos por WhatsApp.</p>
-    <div class="field">
-      <label>Tu nombre</label>
-      <input type="text" id="input-name" placeholder="Ej: Jesica" />
-    </div>
-    <div class="field">
-      <label>Contraseña</label>
-      <input type="password" id="input-pass" placeholder="••••••••" />
-    </div>
+    <div class="field"><label>Tu nombre</label><input type="text" id="input-name" placeholder="Ej: Jesica"/></div>
+    <div class="field"><label>Contraseña</label><input type="password" id="input-pass" placeholder="••••••••"/></div>
     <button class="btn-gold" onclick="doLogin()">Entrar</button>
-    <div id="login-error">Contraseña incorrecta. Revisá el mensaje de WhatsApp.</div>
+    <div class="error-msg" id="login-error">Contraseña incorrecta.</div>
+    <p style="margin-top:2rem;font-size:.72rem;color:#333;text-align:center;cursor:pointer" onclick="showScreen('admin-login-screen')">Acceso administrador</p>
   </div>
 </div>
-
-<!-- APP -->
-<div id="app">
-  <button class="hamburger" onclick="toggleSidebar()">☰</button>
-  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-
-  <div class="layout">
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-logo">
-        <div class="brand">BM · Brenda Molineris</div>
-        <div class="sub">Portal VIP</div>
-      </div>
-      <div class="sidebar-greeting">
-        <div class="hello">Hola,</div>
-        <div class="name" id="greeting-name">—</div>
-      </div>
-      <nav>
-        <div class="nav-item active" onclick="showSection('inicio')"><span class="nav-icon">🏠</span> Inicio</div>
-        <div class="nav-item" onclick="showSection('rutina')"><span class="nav-icon">💪</span> Rutina del mes</div>
-        <div class="nav-item" onclick="showSection('alimentacion')"><span class="nav-icon">🥗</span> Alimentación</div>
-        <div class="nav-item" onclick="showSection('progreso')"><span class="nav-icon">📊</span> Mi progreso</div>
-        <div class="nav-item" onclick="showSection('recursos')"><span class="nav-icon">📥</span> Recursos</div>
-        <div class="nav-item" onclick="showSection('contacto')"><span class="nav-icon">💬</span> Contacto</div>
-      </nav>
-      <div class="sidebar-footer">
-        <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
-      </div>
-    </aside>
-
-    <main class="main">
-
-      <!-- INICIO -->
-      <div class="section active" id="sec-inicio">
-        <div class="page-header">
-          <div class="eyebrow">Bienvenida</div>
-          <h2 id="welcome-title">Tu plan VIP</h2>
-        </div>
-        <div class="stats-row">
-          <div class="stat-box">
-            <div class="stat-label">Semana</div>
-            <div class="stat-value">3<span class="stat-unit">/ 4</span></div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-label">Mes</div>
-            <div class="stat-value">Junio</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-label">Próximo check-in</div>
-            <div class="stat-value" style="font-size:1.1rem">Lunes</div>
-          </div>
-        </div>
-        <div class="cards-grid">
-          <div class="card" onclick="showSection('rutina')" style="cursor:pointer">
-            <div class="card-eyebrow">Esta semana</div>
-            <h3>Rutina activa</h3>
-            <p>Mes 1 · Split 4 días · Glúteos y piernas con foco</p>
-          </div>
-          <div class="card" onclick="showSection('alimentacion')" style="cursor:pointer">
-            <div class="card-eyebrow">Plan de comidas</div>
-            <h3>8 recetas del mes</h3>
-            <p>Alto en proteína, fáciles de preparar</p>
-          </div>
-          <div class="card" onclick="showSection('progreso')" style="cursor:pointer">
-            <div class="card-eyebrow">Progreso</div>
-            <h3>Registrá tus medidas</h3>
-            <p>Peso, cintura, cadera y más</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- RUTINA -->
-      <div class="section" id="sec-rutina">
-        <div class="page-header">
-          <div class="eyebrow">Mes 1 · Junio 2026</div>
-          <h2>Rutina del mes</h2>
-        </div>
-
-        <div class="routine-day">
-          <div class="routine-day-header" onclick="toggleDay(this)">
-            <div>
-              <div class="day-label">Día 1</div>
-              <div class="day-name">Glúteos & Isquiotibiales</div>
-            </div>
-            <span class="chevron">▼</span>
-          </div>
-          <div class="routine-day-body">
-            <table class="exercises">
-              <tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Notas</th></tr>
-              <tr><td>Hip thrust con mancuernas</td><td>4</td><td>12–15</td><td>Pausa arriba 1 seg</td></tr>
-              <tr><td>Sentadilla sumo</td><td>3</td><td>12</td><td>Peso moderado</td></tr>
-              <tr><td>Romanian deadlift</td><td>3</td><td>10–12</td><td>Sentí el estiramiento</td></tr>
-              <tr><td>Patada de glúteo en suelo</td><td>3</td><td>15 c/lado</td><td>Con tobillera</td></tr>
-              <tr><td>Abducción lateral acostada</td><td>3</td><td>20</td><td>Lenta y controlada</td></tr>
-            </table>
-          </div>
-        </div>
-
-        <div class="routine-day">
-          <div class="routine-day-header" onclick="toggleDay(this)">
-            <div>
-              <div class="day-label">Día 2</div>
-              <div class="day-name">Tren superior</div>
-            </div>
-            <span class="chevron">▼</span>
-          </div>
-          <div class="routine-day-body">
-            <table class="exercises">
-              <tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Notas</th></tr>
-              <tr><td>Press de hombros con mancuernas</td><td>3</td><td>12</td><td></td></tr>
-              <tr><td>Remo inclinado</td><td>4</td><td>12</td><td>Codos hacia atrás</td></tr>
-              <tr><td>Curl de bíceps</td><td>3</td><td>12–15</td><td></td></tr>
-              <tr><td>Extensión de tríceps</td><td>3</td><td>15</td><td></td></tr>
-              <tr><td>Elevaciones laterales</td><td>3</td><td>15</td><td>Peso liviano</td></tr>
-            </table>
-          </div>
-        </div>
-
-        <div class="routine-day">
-          <div class="routine-day-header" onclick="toggleDay(this)">
-            <div>
-              <div class="day-label">Día 3</div>
-              <div class="day-name">Piernas completas</div>
-            </div>
-            <span class="chevron">▼</span>
-          </div>
-          <div class="routine-day-body">
-            <table class="exercises">
-              <tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Notas</th></tr>
-              <tr><td>Sentadilla goblet</td><td>4</td><td>12</td><td></td></tr>
-              <tr><td>Zancadas caminando</td><td>3</td><td>10 c/lado</td><td></td></tr>
-              <tr><td>Puente de glúteo</td><td>4</td><td>20</td><td>Con banda elástica</td></tr>
-              <tr><td>Sentadilla lateral</td><td>3</td><td>12 c/lado</td><td></td></tr>
-              <tr><td>Elevación de gemelos</td><td>3</td><td>20</td><td></td></tr>
-            </table>
-          </div>
-        </div>
-
-        <div class="routine-day">
-          <div class="routine-day-header" onclick="toggleDay(this)">
-            <div>
-              <div class="day-label">Día 4</div>
-              <div class="day-name">Full body + Core</div>
-            </div>
-            <span class="chevron">▼</span>
-          </div>
-          <div class="routine-day-body">
-            <table class="exercises">
-              <tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Notas</th></tr>
-              <tr><td>Sentadilla con press</td><td>3</td><td>12</td><td>Combinado</td></tr>
-              <tr><td>Peso muerto a una pierna</td><td>3</td><td>10 c/lado</td><td></td></tr>
-              <tr><td>Plancha</td><td>3</td><td>40 seg</td><td></td></tr>
-              <tr><td>Mountain climbers</td><td>3</td><td>30 seg</td><td></td></tr>
-              <tr><td>Dead bug</td><td>3</td><td>10 c/lado</td><td>Lento</td></tr>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ALIMENTACION -->
-      <div class="section" id="sec-alimentacion">
-        <div class="page-header">
-          <div class="eyebrow">Plan de alimentación</div>
-          <h2>Recetas del mes</h2>
-        </div>
-        <div class="cards-grid">
-
-          <div class="recipe-card">
-            <div class="card-eyebrow">Desayuno</div>
-            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;margin-bottom:0.5rem">Bowl de avena proteico</h3>
-            <div class="macro-row">
-              <div class="macro"><div class="val">380</div><div class="lbl">kcal</div></div>
-              <div class="macro"><div class="val">28g</div><div class="lbl">prot</div></div>
-              <div class="macro"><div class="val">45g</div><div class="lbl">carbs</div></div>
-              <div class="macro"><div class="val">8g</div><div class="lbl">grasas</div></div>
-            </div>
-            <ul class="ingredient-list">
-              <li>Avena<span>50g</span></li>
-              <li>Proteína en polvo<span>1 scoop</span></li>
-              <li>Banana<span>½</span></li>
-              <li>Mantequilla de maní<span>1 cdita</span></li>
-            </ul>
-            <p style="font-size:0.78rem;color:var(--muted)">Mezclar avena con agua caliente, agregar proteína, banana en rodajas y la mantequilla de maní.</p>
-          </div>
-
-          <div class="recipe-card">
-            <div class="card-eyebrow">Almuerzo</div>
-            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;margin-bottom:0.5rem">Pollo con arroz integral y verduras</h3>
-            <div class="macro-row">
-              <div class="macro"><div class="val">520</div><div class="lbl">kcal</div></div>
-              <div class="macro"><div class="val">42g</div><div class="lbl">prot</div></div>
-              <div class="macro"><div class="val">55g</div><div class="lbl">carbs</div></div>
-              <div class="macro"><div class="val">10g</div><div class="lbl">grasas</div></div>
-            </div>
-            <ul class="ingredient-list">
-              <li>Pechuga de pollo<span>150g</span></li>
-              <li>Arroz integral<span>80g crudo</span></li>
-              <li>Brócoli<span>100g</span></li>
-              <li>Aceite de oliva<span>1 cdita</span></li>
-            </ul>
-            <p style="font-size:0.78rem;color:var(--muted)">Cocinar el pollo a la plancha, acompañar con arroz y brócoli al vapor. Condimentar a gusto.</p>
-          </div>
-
-          <div class="recipe-card">
-            <div class="card-eyebrow">Merienda</div>
-            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;margin-bottom:0.5rem">Yogur griego con fruta</h3>
-            <div class="macro-row">
-              <div class="macro"><div class="val">210</div><div class="lbl">kcal</div></div>
-              <div class="macro"><div class="val">18g</div><div class="lbl">prot</div></div>
-              <div class="macro"><div class="val">22g</div><div class="lbl">carbs</div></div>
-              <div class="macro"><div class="val">4g</div><div class="lbl">grasas</div></div>
-            </div>
-            <ul class="ingredient-list">
-              <li>Yogur griego 0%<span>200g</span></li>
-              <li>Frutillas<span>100g</span></li>
-              <li>Granola<span>20g</span></li>
-            </ul>
-            <p style="font-size:0.78rem;color:var(--muted)">Combinar todo en un bowl. Se puede preparar la noche anterior.</p>
-          </div>
-
-          <div class="recipe-card">
-            <div class="card-eyebrow">Cena</div>
-            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;margin-bottom:0.5rem">Salmón con batata y espinaca</h3>
-            <div class="macro-row">
-              <div class="macro"><div class="val">490</div><div class="lbl">kcal</div></div>
-              <div class="macro"><div class="val">38g</div><div class="lbl">prot</div></div>
-              <div class="macro"><div class="val">35g</div><div class="lbl">carbs</div></div>
-              <div class="macro"><div class="val">18g</div><div class="lbl">grasas</div></div>
-            </div>
-            <ul class="ingredient-list">
-              <li>Salmón<span>150g</span></li>
-              <li>Batata<span>150g</span></li>
-              <li>Espinaca<span>80g</span></li>
-              <li>Limón<span>½</span></li>
-            </ul>
-            <p style="font-size:0.78rem;color:var(--muted)">Hornear el salmón 20 min a 200°C. Servir con batata asada y espinaca salteada con ajo.</p>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- PROGRESO -->
-      <div class="section" id="sec-progreso">
-        <div class="page-header">
-          <div class="eyebrow">Seguimiento</div>
-          <h2>Mi progreso</h2>
-        </div>
-        <div class="progress-form">
-          <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem">Registrá tus medidas cada semana para hacer seguimiento de tu evolución.</p>
-          <div class="form-row">
-            <div class="form-field">
-              <label>Fecha</label>
-              <input type="date" id="p-fecha" />
-            </div>
-            <div class="form-field">
-              <label>Peso (kg)</label>
-              <input type="number" id="p-peso" placeholder="65.5" step="0.1" />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label>Cintura (cm)</label>
-              <input type="number" id="p-cintura" placeholder="72" />
-            </div>
-            <div class="form-field">
-              <label>Cadera (cm)</label>
-              <input type="number" id="p-cadera" placeholder="96" />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label>Muslo (cm)</label>
-              <input type="number" id="p-muslo" placeholder="58" />
-            </div>
-            <div class="form-field">
-              <label>Brazo (cm)</label>
-              <input type="number" id="p-brazo" placeholder="30" />
-            </div>
-          </div>
-          <button class="btn-outline" onclick="saveProgress()">Guardar medición</button>
-        </div>
-
-        <div class="progress-log" id="progress-log" style="display:none">
-          <div class="progress-log-header">Historial</div>
-          <div id="log-rows"></div>
-        </div>
-      </div>
-
-      <!-- RECURSOS -->
-      <div class="section" id="sec-recursos">
-        <div class="page-header">
-          <div class="eyebrow">Descargables</div>
-          <h2>Recursos</h2>
-        </div>
-        <div class="resource-item">
-          <div class="resource-info">
-            <div class="resource-name">Rutina Mes 1 — PDF completo</div>
-            <div class="resource-desc">Split 4 días · con instrucciones de cada ejercicio</div>
-          </div>
-          <span class="download-btn">Descargar</span>
-        </div>
-        <div class="resource-item">
-          <div class="resource-info">
-            <div class="resource-name">Plan de alimentación Junio</div>
-            <div class="resource-desc">8 recetas + lista de compras semanal</div>
-          </div>
-          <span class="download-btn">Descargar</span>
-        </div>
-        <div class="resource-item">
-          <div class="resource-info">
-            <div class="resource-name">Tracker de pesos — Excel</div>
-            <div class="resource-desc">Registrá los kg usados en cada ejercicio</div>
-          </div>
-          <span class="download-btn">Descargar</span>
-        </div>
-        <div class="resource-item">
-          <div class="resource-info">
-            <div class="resource-name">Guía de suplementación básica</div>
-            <div class="resource-desc">Proteína, creatina y más: cuándo y cómo</div>
-          </div>
-          <span class="download-btn">Descargar</span>
-        </div>
-      </div>
-
-      <!-- CONTACTO -->
-      <div class="section" id="sec-contacto">
-        <div class="page-header">
-          <div class="eyebrow">Soporte VIP</div>
-          <h2>Contacto directo</h2>
-        </div>
-        <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1.5rem;max-width:420px">Como clienta VIP tenés acceso directo a mí. Escribime cuando quieras — respondo dentro de las 24h.</p>
-        <div class="contact-options">
-          <a class="contact-btn" href="https://wa.me/5491100000000" target="_blank">
-            <span class="contact-icon">💬</span>
-            <div>
-              <div class="contact-label">WhatsApp</div>
-              <div class="contact-text">Escribime por aquí</div>
-            </div>
-          </a>
-          <a class="contact-btn" href="https://instagram.com/brendamolineris" target="_blank">
-            <span class="contact-icon">📸</span>
-            <div>
-              <div class="contact-label">Instagram</div>
-              <div class="contact-text">@brendamolineris</div>
-            </div>
-          </a>
-        </div>
-        <p style="font-size:0.75rem;color:var(--muted);margin-top:2rem">Horario de atención: lunes a viernes 12–20h</p>
-      </div>
-
-    </main>
-  </div>
-</div>
-
-<script>
-  // ── AUTH ──
-  const PASSWORD = "vip2026"; // Cambiá esto
-
-  function doLogin() {
-    const name = document.getElementById('input-name').value.trim();
-    const pass = document.getElementById('input-pass').value;
-    const err = document.getElementById('login-error');
-
-    if (pass !== PASSWORD) {
-      err.style.display = 'block';
-      return;
-    }
-
-    if (!name) {
-      alert('Ingresá tu nombre.');
-      return;
-    }
-
-    sessionStorage.setItem('vip_name', name);
-    sessionStorage.setItem('vip_auth', '1');
-    startApp(name);
-  }
-
-  function doLogout() {
-    sessionStorage.clear();
-    document.getElementById('app').style.display = 'none';
-    document.getElementById('login-screen').style.display = 'flex';
-  }
-
-  document.getElementById('input-pass').addEventListener('keydown', e => {
-    if (e.key === 'Enter') doLogin();
-  });
-
-  function startApp(name) {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    document.getElementById('greeting-name').textContent = name;
-    document.getElementById('welcome-title').textContent = 'Hola, ' + name;
-    loadProgress();
-  }
-
-  // Auto-login if session active
-  if (sessionStorage.getItem('vip_auth') === '1') {
-    startApp(sessionStorage.getItem('vip_name') || '');
-  }
-
-  // ── NAVIGATION ──
-  function showSection(id) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('sec-' + id).classList.add('active');
-    event.currentTarget && event.currentTarget.classList.add('active');
-    // find nav item
-    document.querySelectorAll('.nav-item').forEach(n => {
-      if (n.getAttribute('onclick')?.includes(id)) n.classList.add('active');
-    });
-    // close sidebar on mobile
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('overlay').classList.remove('open');
-  }
-
-  // ── SIDEBAR MOBILE ──
-  function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
-    document.getElementById('overlay').classList.toggle('open');
-  }
-
-  // ── ROUTINE ACCORDION ──
-  function toggleDay(header) {
-    const body = header.nextElementSibling;
-    const chevron = header.querySelector('.chevron');
-    const isOpen = body.classList.contains('open');
-    body.classList.toggle('open', !isOpen);
-    chevron.classList.toggle('open', !isOpen);
-  }
-
-  // ── PROGRESS LOG ──
-  let progressData = [];
-
-  function loadProgress() {
-    const stored = localStorage.getItem('vip_progress');
-    if (stored) {
-      progressData = JSON.parse(stored);
-      renderLog();
-    }
-  }
-
-  function saveProgress() {
-    const entry = {
-      fecha: document.getElementById('p-fecha').value || new Date().toLocaleDateString('es-AR'),
-      peso: document.getElementById('p-peso').value,
-      cintura: document.getElementById('p-cintura').value,
-      cadera: document.getElementById('p-cadera').value,
-      muslo: document.getElementById('p-muslo').value,
-    };
-    progressData.unshift(entry);
-    localStorage.setItem('vip_progress', JSON.stringify(progressData));
-    renderLog();
-    // Clear fields
-    ['p-fecha','p-peso','p-cintura','p-cadera','p-muslo','p-brazo'].forEach(id => document.getElementById(id).value = '');
-  }
-
-  function renderLog() {
-    if (!progressData.length) return;
-    document.getElementById('progress-log').style.display = 'block';
-    document.getElementById('log-rows').innerHTML = progressData.map(e => `
-      <div class="log-row">
-        <span class="date">${e.fecha}</span>
-        <span>${e.peso ? e.peso + ' kg' : '—'}</span>
-        <span>${e.cintura ? e.cintura + ' cm' : '—'}</span>
-        <span class="col-hide">${e.cadera ? e.cadera + ' cm' : '—'}</span>
-        <span class="col-hide">${e.muslo ? e.muslo + ' cm' : '—'}</span>
-      </div>
-    `).join('');
-  }
-</script>
-
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
 
 <!-- LOGIN ADMIN -->
-<div class="screen" id="admin-login-screen" style="display:none;flex-direction:column;min-height:100vh;align-items:center;justify-content:center;padding:2rem;background:var(--black)">
-  <div style="width:100%;max-width:360px">
-    <div style="font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#e05c5c;margin-bottom:1rem">Panel de Administracion</div>
-    <h1 style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;margin-bottom:1.5rem">Acceso <em style="font-style:italic;color:var(--gold)">admin</em></h1>
-    <div class="field"><label>Contrasena admin</label><input type="password" id="input-admin-pass" placeholder=""/></div>
+<div class="screen" id="admin-login-screen" style="flex-direction:column;min-height:100vh;align-items:center;justify-content:center;padding:2rem">
+  <div class="login-box">
+    <div style="font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:1rem">Panel de Administración</div>
+    <h1>Acceso <em>admin</em></h1>
+    <p>Solo para Brenda.</p>
+    <div class="field"><label>Contraseña admin</label><input type="password" id="input-admin-pass" placeholder="••••••••"/></div>
     <button class="btn-gold" onclick="doAdminLogin()">Entrar</button>
-    <div style="color:#e05c5c;font-size:.8rem;margin-top:.75rem;display:none;text-align:center" id="admin-login-error">Contrasena incorrecta.</div>
-    <p style="margin-top:1.5rem;font-size:.72rem;color:#333;text-align:center;cursor:pointer" onclick="showOnlyScreen('login-screen')">Volver al portal clientas</p>
+    <div class="error-msg" id="admin-login-error">Contraseña incorrecta.</div>
+    <p style="margin-top:1.5rem;font-size:.72rem;color:#333;text-align:center;cursor:pointer" onclick="showScreen('login-screen')">← Portal clientas</p>
   </div>
+</div>
+
+<!-- APP CLIENTA -->
+<div class="screen" id="app" style="flex-direction:row">
+  <button class="hamburger" onclick="toggleSB('sidebar','ov1')">&#9776;</button>
+  <div class="mob-overlay" id="ov1" onclick="toggleSB('sidebar','ov1')"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><div class="brand">BM · Brenda Molineris</div><div class="sub">Portal VIP</div></div>
+    <div class="sidebar-greeting"><div class="hello">Hola,</div><div class="name" id="greeting-name">—</div></div>
+    <nav>
+      <div class="nav-item active" onclick="showSec('inicio',this)"><span class="nav-icon">🏠</span>Inicio</div>
+      <div class="nav-item" onclick="showSec('rutina',this)"><span class="nav-icon">💪</span>Rutina del mes</div>
+      <div class="nav-item" onclick="showSec('alimentacion',this)"><span class="nav-icon">🥗</span>Plan de alimentación</div>
+      <div class="nav-item" onclick="showSec('progreso',this)"><span class="nav-icon">📊</span>Mi progreso</div>
+      <div class="nav-item" onclick="showSec('recursos',this)"><span class="nav-icon">📥</span>Recursos</div>
+      <div class="nav-item" onclick="showSec('contacto',this)"><span class="nav-icon">💬</span>Contacto</div>
+    </nav>
+    <div class="sidebar-footer"><button class="logout-btn" onclick="doLogout()">Cerrar sesión</button></div>
+  </aside>
+  <main class="main">
+
+    <div class="section active" id="sec-inicio">
+      <div class="page-header"><div class="page-header-left"><div class="eyebrow">Bienvenida</div><h2 id="welcome-title">Tu plan VIP</h2></div></div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-label">Semana</div><div class="stat-value" id="stat-semana">—</div></div>
+        <div class="stat-box"><div class="stat-label">Mes activo</div><div class="stat-value" id="stat-mes">—</div></div>
+        <div class="stat-box"><div class="stat-label">Días de entreno</div><div class="stat-value" id="stat-dias">—</div></div>
+      </div>
+      <div class="cards-grid">
+        <div class="card" onclick="showSec('rutina',null)" style="cursor:pointer"><div class="card-eyebrow">Esta semana</div><h3>Rutina activa</h3><p id="inicio-rutina-desc">Cargando...</p></div>
+        <div class="card" onclick="showSec('alimentacion',null)" style="cursor:pointer"><div class="card-eyebrow">Plan de comidas</div><h3 id="inicio-recetas-h">Plan de alimentación</h3><p>Personalizado para vos</p></div>
+        <div class="card" onclick="showSec('progreso',null)" style="cursor:pointer"><div class="card-eyebrow">Progreso</div><h3>Registrá tus medidas</h3><p>Peso, cintura, cadera y más</p></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-rutina">
+      <div class="page-header"><div class="page-header-left"><div class="eyebrow" id="rutina-eyebrow">Rutina</div><h2>Rutina del mes</h2></div></div>
+      <div id="rutina-container"><div class="empty-state">La rutina del mes estará disponible pronto. 💪</div></div>
+    </div>
+
+    <div class="section" id="sec-alimentacion">
+      <div class="page-header"><div class="page-header-left"><div class="eyebrow">Plan de alimentación</div><h2>Plan de alimentación</h2></div></div>
+      <div id="recetas-container"><div class="empty-state">El plan de alimentación estará disponible pronto. 🥗</div></div>
+    </div>
+
+    <div class="section" id="sec-progreso">
+      <div class="page-header"><div class="page-header-left"><div class="eyebrow">Seguimiento</div><h2>Mi progreso</h2></div></div>
+      <div class="progress-form">
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.5rem">Registrá tus medidas cada semana.</p>
+        <div class="form-row"><div class="form-field"><label>Fecha</label><input type="date" id="p-fecha"/></div><div class="form-field"><label>Peso (kg)</label><input type="number" id="p-peso" placeholder="65.5" step="0.1"/></div></div>
+        <div class="form-row"><div class="form-field"><label>Cintura (cm)</label><input type="number" id="p-cintura" placeholder="72"/></div><div class="form-field"><label>Cadera (cm)</label><input type="number" id="p-cadera" placeholder="96"/></div></div>
+        <div class="form-row"><div class="form-field"><label>Muslo (cm)</label><input type="number" id="p-muslo" placeholder="58"/></div><div class="form-field"><label>Brazo (cm)</label><input type="number" id="p-brazo" placeholder="30"/></div></div>
+        <button class="btn-outline" onclick="saveProgress()">Guardar medición</button>
+      </div>
+      <div class="progress-log" id="progress-log" style="display:none"><div class="progress-log-header">Historial</div><div id="log-rows"></div></div>
+    </div>
+
+    <div class="section" id="sec-recursos">
+      <div class="page-header"><div class="page-header-left"><div class="eyebrow">Descargables</div><h2>Recursos</h2></div></div>
+      <div id="recursos-container"><div class="empty-state">Los recursos estarán disponibles pronto. 📥</div></div>
+    </div>
+
+    <div class="section" id="sec-contacto">
+      <div class="page-header"><div class="page-header-left"><div class="eyebrow">Soporte VIP</div><h2>Contacto directo</h2></div></div>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;max-width:420px">Como clienta VIP tenés acceso directo. Respondo dentro de las 24h.</p>
+      <div class="contact-options">
+        <a class="contact-btn" id="whatsapp-link" href="#" target="_blank"><span class="contact-icon">💬</span><div><div class="contact-label">WhatsApp</div><div class="contact-text">Escribime por aquí</div></div></a>
+        <a class="contact-btn" href="https://instagram.com/brendamolineris" target="_blank"><span class="contact-icon">📸</span><div><div class="contact-label">Instagram</div><div class="contact-text">@brendamolineris</div></div></a>
+      </div>
+      <p style="font-size:.75rem;color:var(--muted);margin-top:2rem" id="horario-texto"></p>
+    </div>
+
+  </main>
 </div>
 
 <!-- APP ADMIN -->
-<div class="screen" id="admin-app" style="display:none;flex-direction:row;min-height:100vh;width:100%">
-  <button class="hamburger" onclick="document.getElementById('admin-sidebar').classList.toggle('open')">&#9776;</button>
+<div class="screen" id="admin-app" style="flex-direction:row">
+  <button class="hamburger" onclick="toggleSB('admin-sidebar','ov2')">&#9776;</button>
+  <div class="mob-overlay" id="ov2" onclick="toggleSB('admin-sidebar','ov2')"></div>
   <aside class="admin-sidebar" id="admin-sidebar">
-    <div class="sidebar-logo"><div class="brand">BM Admin</div><div class="sub" style="color:#e05c5c">Panel de control</div></div>
+    <div class="sidebar-logo"><div class="brand">BM Admin</div><div class="sub" style="color:var(--red)">Panel de control</div></div>
     <nav style="flex:1;padding:1rem 0;overflow-y:auto">
-      <div class="admin-nav-item active" onclick="showAdminSec('a-rutina',this)">Rutina</div>
-      <div class="admin-nav-item" onclick="showAdminSec('a-recetas',this)">Recetas</div>
-      <div class="admin-nav-item" onclick="showAdminSec('a-recursos',this)">Recursos</div>
-      <div class="admin-nav-item" onclick="showAdminSec('a-config',this)">Configuracion</div>
+      <div class="admin-nav-item active" onclick="showAdminSec('a-rutina',this)">💪 Rutina</div>
+      <div class="admin-nav-item" onclick="showAdminSec('a-recetas',this)">🥗 Plan de alimentación</div>
+      <div class="admin-nav-item" onclick="showAdminSec('a-recursos',this)">📥 Recursos</div>
+      <div class="admin-nav-item" onclick="showAdminSec('a-config',this)">⚙️ Configuración</div>
     </nav>
-    <div class="sidebar-footer"><button class="logout-btn" onclick="showOnlyScreen('login-screen')">Salir</button></div>
+    <div class="sidebar-footer"><button class="logout-btn" onclick="showScreen('login-screen')">Salir</button></div>
   </aside>
   <main class="admin-main">
 
@@ -1233,50 +311,74 @@
         </div>
         <div class="admin-row">
           <div class="admin-field"><label>Total semanas</label><input type="number" id="a-semanas-total" placeholder="4"/></div>
-          <div class="admin-field"><label>Dias de entreno</label><input type="number" id="a-dias-entreno" placeholder="4" min="1" max="7"/></div>
+          <div class="admin-field"><label>Días de entreno</label><input type="number" id="a-dias-entreno" placeholder="4" min="1" max="7"/></div>
         </div>
       </div>
       <div class="admin-card">
-        <h3>Agregar dia</h3>
+        <h3>Agregar día</h3>
         <div class="admin-row">
-          <div class="admin-field"><label>Numero de dia</label><input type="number" id="a-dia-num" placeholder="1" min="1" max="7"/></div>
-          <div class="admin-field"><label>Nombre del dia</label><input type="text" id="a-dia-nombre" placeholder="Gluteos e Isquiotibiales"/></div>
+          <div class="admin-field"><label>Número de día</label><input type="number" id="a-dia-num" placeholder="1" min="1" max="7"/></div>
+          <div class="admin-field"><label>Nombre del día</label><input type="text" id="a-dia-nombre" placeholder="Glúteos e Isquiotibiales"/></div>
         </div>
         <div class="admin-field">
-          <label>Ejercicios: Nombre | Series | Reps | Notas | URL Video (opcional)</label>
-          <textarea id="a-dia-ej" placeholder="Hip thrust con mancuernas | 4 | 12-15 | Pausa arriba 1 seg | https://youtu.be/xxxxx&#10;Sentadilla sumo | 3 | 12 | Peso moderado&#10;Romanian deadlift | 3 | 10-12 | Sentir el estiramiento | https://youtu.be/xxxxx"></textarea>
+          <label>Ejercicios: Nombre | Series | Reps | Notas | URL Video (opcional) — uno por línea</label>
+          <textarea id="a-dia-ej" placeholder="Hip thrust con mancuernas | 4 | 12-15 | Pausa arriba 1 seg | https://youtu.be/xxxxx&#10;Sentadilla sumo | 3 | 12 | Peso moderado"></textarea>
         </div>
-        <div class="admin-actions"><button class="btn-sm" onclick="addDia()">+ Agregar dia</button></div>
+        <div class="admin-actions"><button class="btn-sm" onclick="addDia()">+ Agregar día</button></div>
       </div>
       <div class="admin-card">
-        <h3>Dias cargados</h3>
-        <div id="dias-list"><div style="color:var(--muted);font-size:.82rem">Ningun dia cargado aun.</div></div>
+        <h3>Días cargados</h3>
+        <div id="dias-list"><div style="color:var(--muted);font-size:.82rem">Ningún día cargado aún.</div></div>
         <div class="admin-actions" style="margin-top:1.5rem"><button class="btn-gold" style="width:auto;padding:.7rem 2rem" onclick="saveRutina()">Guardar rutina</button></div>
       </div>
     </div>
 
     <div class="admin-section" id="a-recetas">
-      <div class="page-header"><div class="page-header-left"><div class="eyebrow">Admin</div><h2>Gestionar recetas</h2></div></div>
+      <div class="page-header"><div class="page-header-left"><div class="eyebrow">Admin</div><h2>Plan de alimentación</h2></div></div>
+
       <div class="admin-card">
-        <h3>Nueva receta</h3>
+        <h3>Subir plan completo (PDF o imagen)</h3>
+        <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem">Subí el PDF o imagen de la dieta. Se muestra directo en el portal de la clienta.</p>
+        <div class="admin-field">
+          <label>Archivo (PDF, JPG, PNG — máximo 4MB)</label>
+          <input type="file" id="a-plan-file" accept=".pdf,.jpg,.jpeg,.png"/>
+        </div>
+        <div class="admin-field">
+          <label>O URL directa (Google Drive, Dropbox)</label>
+          <input type="url" id="a-plan-url" placeholder="https://drive.google.com/file/d/.../view"/>
+        </div>
+        <div class="admin-field">
+          <label>Título del plan</label>
+          <input type="text" id="a-plan-titulo" placeholder="Plan de alimentación Julio 2026"/>
+        </div>
+        <div class="admin-actions">
+          <button class="btn-gold" style="width:auto;padding:.7rem 2rem" onclick="subirPlan()">Guardar plan</button>
+          <button class="btn-danger" onclick="borrarPlan()">Quitar plan</button>
+        </div>
+        <div id="plan-status" style="font-size:.78rem;color:var(--gold);margin-top:.75rem"></div>
+      </div>
+
+      <div class="admin-card">
+        <h3>O agregar platos individuales</h3>
         <div class="admin-row">
-          <div class="admin-field"><label>Categoria</label><select id="a-rec-cat"><option>Desayuno</option><option>Almuerzo</option><option>Merienda</option><option>Cena</option><option>Pre-entreno</option><option>Post-entreno</option></select></div>
+          <div class="admin-field"><label>Categoría</label><select id="a-rec-cat"><option>Desayuno</option><option>Almuerzo</option><option>Merienda</option><option>Cena</option><option>Pre-entreno</option><option>Post-entreno</option></select></div>
           <div class="admin-field"><label>Nombre</label><input type="text" id="a-rec-nombre" placeholder="Bowl de avena proteico"/></div>
         </div>
         <div class="admin-row-4">
-          <div class="admin-field"><label>Calorias</label><input type="number" id="a-rec-kcal" placeholder="380"/></div>
-          <div class="admin-field"><label>Proteina (g)</label><input type="number" id="a-rec-prot" placeholder="28"/></div>
+          <div class="admin-field"><label>Calorías</label><input type="number" id="a-rec-kcal" placeholder="380"/></div>
+          <div class="admin-field"><label>Proteína (g)</label><input type="number" id="a-rec-prot" placeholder="28"/></div>
           <div class="admin-field"><label>Carbos (g)</label><input type="number" id="a-rec-carbs" placeholder="45"/></div>
           <div class="admin-field"><label>Grasas (g)</label><input type="number" id="a-rec-grasas" placeholder="8"/></div>
         </div>
-        <div class="admin-field"><label>Ingredientes: Ingrediente | Cantidad (una por linea)</label><textarea id="a-rec-ing" placeholder="Avena | 50g&#10;Proteina en polvo | 1 scoop"></textarea></div>
-        <div class="admin-field"><label>Preparacion</label><textarea id="a-rec-prep" placeholder="Mezclar avena con agua caliente..."></textarea></div>
-        <div class="admin-actions"><button class="btn-sm" onclick="addReceta()">+ Agregar receta</button></div>
+        <div class="admin-field"><label>Ingredientes: Ingrediente | Cantidad (una por línea)</label><textarea id="a-rec-ing" placeholder="Avena | 50g&#10;Proteína en polvo | 1 scoop"></textarea></div>
+        <div class="admin-field"><label>Preparación</label><textarea id="a-rec-prep" placeholder="Mezclar avena con agua caliente..."></textarea></div>
+        <div class="admin-actions"><button class="btn-sm" onclick="addReceta()">+ Agregar plato</button></div>
       </div>
+
       <div class="admin-card">
-        <h3>Recetas cargadas</h3>
-        <div id="recetas-list"><div style="color:var(--muted);font-size:.82rem">Ninguna receta cargada aun.</div></div>
-        <div class="admin-actions" style="margin-top:1.5rem"><button class="btn-gold" style="width:auto;padding:.7rem 2rem" onclick="saveRecetas()">Guardar recetas</button></div>
+        <h3>Platos cargados</h3>
+        <div id="recetas-list"><div style="color:var(--muted);font-size:.82rem">Ningún plato cargado aún.</div></div>
+        <div class="admin-actions" style="margin-top:1.5rem"><button class="btn-gold" style="width:auto;padding:.7rem 2rem" onclick="saveRecetas()">Guardar platos</button></div>
       </div>
     </div>
 
@@ -1284,39 +386,39 @@
       <div class="page-header"><div class="page-header-left"><div class="eyebrow">Admin</div><h2>Gestionar recursos</h2></div></div>
       <div class="admin-card">
         <h3>Nuevo recurso</h3>
-        <div class="admin-field"><label>Nombre</label><input type="text" id="a-res-nombre" placeholder="Rutina Mes 1 - PDF completo"/></div>
-        <div class="admin-field"><label>Descripcion</label><input type="text" id="a-res-desc" placeholder="Split 4 dias con instrucciones"/></div>
+        <div class="admin-field"><label>Nombre</label><input type="text" id="a-res-nombre" placeholder="Rutina Mes 1 — PDF completo"/></div>
+        <div class="admin-field"><label>Descripción</label><input type="text" id="a-res-desc" placeholder="Split 4 días con instrucciones"/></div>
         <div class="admin-field"><label>URL de descarga (Google Drive, etc.)</label><input type="url" id="a-res-url" placeholder="https://drive.google.com/..."/></div>
         <div class="admin-actions"><button class="btn-sm" onclick="addRecurso()">+ Agregar recurso</button></div>
       </div>
       <div class="admin-card">
         <h3>Recursos cargados</h3>
-        <div id="recursos-list"><div style="color:var(--muted);font-size:.82rem">Ningun recurso cargado aun.</div></div>
+        <div id="recursos-list"><div style="color:var(--muted);font-size:.82rem">Ningún recurso cargado aún.</div></div>
         <div class="admin-actions" style="margin-top:1.5rem"><button class="btn-gold" style="width:auto;padding:.7rem 2rem" onclick="saveRecursos()">Guardar recursos</button></div>
       </div>
     </div>
 
     <div class="admin-section" id="a-config">
-      <div class="page-header"><div class="page-header-left"><div class="eyebrow">Admin</div><h2>Configuracion</h2></div></div>
+      <div class="page-header"><div class="page-header-left"><div class="eyebrow">Admin</div><h2>Configuración</h2></div></div>
       <div class="admin-card">
-        <h3>Contrasenyas</h3>
+        <h3>Contraseñas</h3>
         <div class="admin-row">
-          <div class="admin-field"><label>Contrasena clientas VIP</label><input type="text" id="cfg-pass-vip"/></div>
-          <div class="admin-field"><label>Contrasena admin</label><input type="text" id="cfg-pass-admin"/></div>
+          <div class="admin-field"><label>Contraseña clientas VIP</label><input type="text" id="cfg-pass-vip"/></div>
+          <div class="admin-field"><label>Contraseña admin</label><input type="text" id="cfg-pass-admin"/></div>
         </div>
       </div>
       <div class="admin-card">
         <h3>Contacto</h3>
         <div class="admin-row">
-          <div class="admin-field"><label>WhatsApp (con codigo pais, ej: 5491112345678)</label><input type="text" id="cfg-wa" placeholder="5491112345678"/></div>
-          <div class="admin-field"><label>Horario de atencion</label><input type="text" id="cfg-horario" placeholder="lunes a viernes 12-20h"/></div>
+          <div class="admin-field"><label>WhatsApp (con código país, ej: 5491112345678)</label><input type="text" id="cfg-wa" placeholder="5491112345678"/></div>
+          <div class="admin-field"><label>Horario de atención</label><input type="text" id="cfg-horario" placeholder="lunes a viernes 12–20h"/></div>
         </div>
       </div>
-      <div class="admin-actions"><button class="btn-gold" style="width:auto;padding:.7rem 2rem" onclick="saveConfig()">Guardar configuracion</button></div>
+      <div class="admin-actions"><button class="btn-gold" style="width:auto;padding:.7rem 2rem" onclick="saveConfig()">Guardar configuración</button></div>
       <div class="divider"></div>
       <div class="admin-card" style="border-color:#3a2020">
-        <h3 style="color:#e05c5c">Zona de peligro</h3>
-        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem">Borra rutina, recetas y recursos. No se puede deshacer.</p>
+        <h3 style="color:var(--red)">Zona de peligro</h3>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem">Borra rutina, plan de alimentación y recursos. No se puede deshacer.</p>
         <button class="btn-danger" onclick="resetAll()">Borrar todos los datos</button>
       </div>
     </div>
@@ -1325,272 +427,149 @@
 </div>
 
 <script>
+/* ============ DATABASE ============ */
+let db = {
+  passVip:'vip2026', passAdmin:'admin2026',
+  whatsapp:'5491100000000', horario:'lunes a viernes 12–20h',
+  mes:'', semana:'1', semanasTotal:'4', diasEntreno:'4',
+  dias:[], recetas:[], recursos:[], planAlimentacion:null
+};
+let aDias=[], aRecetas=[], aRecursos=[];
 
-// ADMIN DB
-let db2={passVip:'vip2026',passAdmin:'admin2026',whatsapp:'5491100000000',horario:'lunes a viernes 12-20h',mes:'',semana:'3',semanasTotal:'4',diasEntreno:'4',dias:[],recetas:[],recursos:[]};
-let aDias=[],aRecetas=[],aRecursos=[];
-function loadDB2(){const s=localStorage.getItem('bm_vip_db');if(s){try{db2={...db2,...JSON.parse(s)};}catch(e){}}}
-function saveDB2(){localStorage.setItem('bm_vip_db',JSON.stringify(db2));}
-loadDB2();
+function loadDB(){
+  const s = localStorage.getItem('bm_vip_db');
+  if(s){ try{ db = Object.assign(db, JSON.parse(s)); }catch(e){} }
+}
+function saveDB(){ localStorage.setItem('bm_vip_db', JSON.stringify(db)); }
+loadDB();
 
-// Override login to use db2 passwords
-const _origDoLogin = doLogin;
+/* ============ SCREENS ============ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ============ TOAST ============ */
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ============ CLIENTA LOGIN ============ */
 function doLogin(){
-  loadDB2();
+  loadDB();
   const name=document.getElementById('input-name').value.trim();
   const pass=document.getElementById('input-pass').value;
   const err=document.getElementById('login-error');
-  if(pass!==db2.passVip){err.style.display='block';return;}
-  if(!name){alert('Ingresa tu nombre.');return;}
+  if(pass!==db.passVip){ err.style.display='block'; return; }
+  if(!name){ alert('Ingresá tu nombre.'); return; }
   err.style.display='none';
-  sessionStorage.setItem('vip_name',name);sessionStorage.setItem('vip_auth','1');
-  startApp2(name);
+  sessionStorage.setItem('vip_name', name);
+  sessionStorage.setItem('vip_auth', '1');
+  startApp(name);
+}
+document.getElementById('input-pass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('input-name').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+
+function doLogout(){
+  sessionStorage.clear();
+  showScreen('login-screen');
 }
 
-function showOnlyScreen(id){
-  ['login-screen','admin-login-screen','app','admin-app'].forEach(s=>{
-    const el=document.getElementById(s);
-    if(el) el.style.display=s===id?'flex':'none';
-  });
+function startApp(name){
+  showScreen('app');
+  document.getElementById('greeting-name').textContent = name;
+  document.getElementById('welcome-title').textContent = 'Hola, ' + name;
+  document.getElementById('whatsapp-link').href = 'https://wa.me/' + db.whatsapp;
+  document.getElementById('horario-texto').textContent = 'Horario de atención: ' + db.horario;
+  document.getElementById('stat-semana').innerHTML = db.semana + '<span class="stat-unit">/ ' + db.semanasTotal + '</span>';
+  document.getElementById('stat-mes').textContent = db.mes || '—';
+  document.getElementById('stat-dias').textContent = db.diasEntreno || '4';
+  document.getElementById('inicio-rutina-desc').textContent = db.dias.length ? (db.mes + ' · Split ' + db.diasEntreno + ' días') : 'Disponible pronto';
+  document.getElementById('inicio-recetas-h').textContent = db.planAlimentacion ? (db.planAlimentacion.titulo || 'Plan de alimentación') : (db.recetas.length ? db.recetas.length + ' platos cargados' : 'Plan de alimentación');
+  renderRutina();
+  renderRecetas();
+  renderRecursos();
+  loadProgress();
 }
 
-// Override startApp
-function startApp2(name){
-  showOnlyScreen('app');
-  document.getElementById('greeting-name').textContent=name;
-  document.getElementById('welcome-title').textContent='Hola, '+name;
-  const wael=document.getElementById('whatsapp-link');if(wael)wael.href='https://wa.me/'+db2.whatsapp;
-  const hor=document.getElementById('horario-texto');if(hor)hor.textContent='Horario de atencion: '+db2.horario;
-  const ss=document.getElementById('stat-semana');if(ss)ss.innerHTML=db2.semana+'<span class="stat-unit">/ '+db2.semanasTotal+'</span>';
-  const sm=document.getElementById('stat-mes');if(sm)sm.textContent=db2.mes||'-';
-  const sd=document.getElementById('stat-dias');if(sd)sd.textContent=db2.diasEntreno||'4';
-  const ird=document.getElementById('inicio-rutina-desc');if(ird)ird.textContent=db2.dias.length?db2.mes+' - Split '+db2.diasEntreno+' dias':'Disponible pronto';
-  const irh=document.getElementById('inicio-recetas-h');if(irh)irh.textContent=db2.recetas.length?db2.recetas.length+' recetas del mes':'Recetas del mes';
-  renderRutina2();renderRecetas2();renderRecursos2();loadProgress();
+if(sessionStorage.getItem('vip_auth')==='1'){
+  startApp(sessionStorage.getItem('vip_name') || '');
 }
 
-// Admin login
+/* ============ ADMIN LOGIN ============ */
 function doAdminLogin(){
-  loadDB2();
+  loadDB();
   const pass=document.getElementById('input-admin-pass').value;
   const err=document.getElementById('admin-login-error');
-  if(pass!==db2.passAdmin){err.style.display='block';return;}
-  err.style.display='none';startAdmin2();
+  if(pass!==db.passAdmin){ err.style.display='block'; return; }
+  err.style.display='none';
+  startAdmin();
 }
-document.getElementById('input-admin-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doAdminLogin();});
+document.getElementById('input-admin-pass').addEventListener('keydown', e=>{ if(e.key==='Enter') doAdminLogin(); });
 
-// Show admin login from client login page
-function showAdminLogin(){showOnlyScreen('admin-login-screen');}
-// Update the link in login screen
-const adminLink=document.querySelector('#login-screen p[onclick]');
-if(adminLink)adminLink.setAttribute('onclick','showAdminLogin()');
-
-function startAdmin2(){
-  showOnlyScreen('admin-app');
-  aDias=JSON.parse(JSON.stringify(db2.dias));
-  aRecetas=JSON.parse(JSON.stringify(db2.recetas));
-  aRecursos=JSON.parse(JSON.stringify(db2.recursos));
-  document.getElementById('cfg-pass-vip').value=db2.passVip;
-  document.getElementById('cfg-pass-admin').value=db2.passAdmin;
-  document.getElementById('cfg-wa').value=db2.whatsapp;
-  document.getElementById('cfg-horario').value=db2.horario;
-  document.getElementById('a-mes').value=db2.mes;
-  document.getElementById('a-semana').value=db2.semana;
-  document.getElementById('a-semanas-total').value=db2.semanasTotal;
-  document.getElementById('a-dias-entreno').value=db2.diasEntreno;
-  renderADias();renderARecetas();renderARecursos();
+function startAdmin(){
+  showScreen('admin-app');
+  aDias = JSON.parse(JSON.stringify(db.dias));
+  aRecetas = JSON.parse(JSON.stringify(db.recetas));
+  aRecursos = JSON.parse(JSON.stringify(db.recursos));
+  document.getElementById('cfg-pass-vip').value = db.passVip;
+  document.getElementById('cfg-pass-admin').value = db.passAdmin;
+  document.getElementById('cfg-wa').value = db.whatsapp;
+  document.getElementById('cfg-horario').value = db.horario;
+  document.getElementById('a-mes').value = db.mes;
+  document.getElementById('a-semana').value = db.semana;
+  document.getElementById('a-semanas-total').value = db.semanasTotal;
+  document.getElementById('a-dias-entreno').value = db.diasEntreno;
+  const status = document.getElementById('plan-status');
+  if(db.planAlimentacion){
+    status.textContent = '✓ Plan cargado: ' + (db.planAlimentacion.titulo || 'sin título');
+    status.style.color = 'var(--gold)';
+  } else {
+    status.textContent = '';
+  }
+  renderADias();
+  renderARecetas();
+  renderARecursos();
 }
 
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+/* ============ NAVIGATION (CLIENTA) ============ */
+function showSec(id, el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  if(el){ el.classList.add('active'); }
+  else {
+    document.querySelectorAll('.nav-item').forEach(n=>{
+      if(n.getAttribute('onclick') && n.getAttribute('onclick').indexOf("'"+id+"'")!==-1) n.classList.add('active');
+    });
+  }
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('ov1').classList.remove('open');
+}
 
-function showAdminSec(id,el){
+/* ============ NAVIGATION (ADMIN) ============ */
+function showAdminSec(id, el){
   document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.admin-nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById(id).classList.add('active');if(el)el.classList.add('active');
-  const asb=document.getElementById('admin-sidebar');if(asb)asb.classList.remove('open');
+  document.getElementById(id).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('admin-sidebar').classList.remove('open');
+  document.getElementById('ov2').classList.remove('open');
 }
 
-// RUTINA
+function toggleSB(sbId, ovId){
+  document.getElementById(sbId).classList.toggle('open');
+  document.getElementById(ovId).classList.toggle('open');
+}
+
+/* ============ RUTINA ============ */
 function addDia(){
-  const num=+document.getElementById('a-dia-num').value;
-  const nombre=document.getElementById('a-dia-nombre').value.trim();
-  const raw=document.getElementById('a-dia-ej').value.trim();
-  if(!num||!nombre||!raw){alert('Completa todos los campos.');return;}
-  const ejercicios=raw.split('\n').filter(l=>l.trim()).map(l=>{const p=l.split('|').map(x=>x.trim());return{nombre:p[0]||'',series:p[1]||'',reps:p[2]||'',notas:p[3]||''};});
-  aDias=aDias.filter(d=>d.num!==num);aDias.push({num,nombre,ejercicios});aDias.sort((a,b)=>a.num-b.num);
-  document.getElementById('a-dia-num').value='';document.getElementById('a-dia-nombre').value='';document.getElementById('a-dia-ej').value='';
-  renderADias();toast('Dia '+num+' agregado');
-}
-function removeDia(num){aDias=aDias.filter(d=>d.num!==num);renderADias();}
-function renderADias(){
-  const el=document.getElementById('dias-list');
-  if(!aDias.length){el.innerHTML='<div style="color:var(--muted);font-size:.82rem">Ningun dia cargado aun.</div>';return;}
-  el.innerHTML=aDias.map(d=>'<div class="existing-item"><div><div class="item-title">Dia '+d.num+' - '+d.nombre+'</div><div class="item-sub">'+d.ejercicios.length+' ejercicios</div></div><button class="btn-danger" onclick="removeDia('+d.num+')">Eliminar</button></div>').join('');
-}
-function saveRutina(){
-  db2.mes=document.getElementById('a-mes').value.trim();
-  db2.semana=document.getElementById('a-semana').value;
-  db2.semanasTotal=document.getElementById('a-semanas-total').value;
-  db2.diasEntreno=document.getElementById('a-dias-entreno').value;
-  db2.dias=aDias;saveDB2();toast('Rutina guardada');
-}
-function renderRutina2(){
-  const c=document.getElementById('rutina-container');
-  const ey=document.getElementById('rutina-eyebrow');if(ey&&db2.mes)ey.textContent=db2.mes;
-  if(!db2.dias.length){if(c)c.innerHTML='<div class="empty-state">La rutina del mes estara disponible pronto.</div>';return;}
-  if(c)c.innerHTML=db2.dias.map(d=>'<div class="routine-day"><div class="routine-day-header" onclick="toggleDay(this)"><div><div class="day-label">Dia '+d.num+'</div><div class="day-name">'+d.nombre+'</div></div><span class="chevron">&#9660;</span></div><div class="routine-day-body"><table class="exercises"><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Notas</th></tr>'+d.ejercicios.map(e=>'<tr><td>'+e.nombre+'</td><td>'+e.series+'</td><td>'+e.reps+'</td><td>'+e.notas+'</td></tr>').join('')+'</table></div></div>').join('');
-}
-
-// RECETAS
-function addReceta(){
-  const r={cat:document.getElementById('a-rec-cat').value,nombre:document.getElementById('a-rec-nombre').value.trim(),kcal:document.getElementById('a-rec-kcal').value,prot:document.getElementById('a-rec-prot').value,carbs:document.getElementById('a-rec-carbs').value,grasas:document.getElementById('a-rec-grasas').value,ingredientes:document.getElementById('a-rec-ing').value.trim().split('\n').filter(l=>l.trim()).map(l=>{const p=l.split('|').map(x=>x.trim());return{nombre:p[0]||'',cantidad:p[1]||''};}),prep:document.getElementById('a-rec-prep').value.trim()};
-  if(!r.nombre){alert('Ingresa el nombre.');return;}
-  aRecetas.push(r);['a-rec-nombre','a-rec-kcal','a-rec-prot','a-rec-carbs','a-rec-grasas','a-rec-ing','a-rec-prep'].forEach(id=>document.getElementById(id).value='');
-  renderARecetas();toast('Receta agregada');
-}
-function removeReceta(i){aRecetas.splice(i,1);renderARecetas();}
-function renderARecetas(){
-  const el=document.getElementById('recetas-list');
-  if(!aRecetas.length){el.innerHTML='<div style="color:var(--muted);font-size:.82rem">Ninguna receta cargada aun.</div>';return;}
-  el.innerHTML=aRecetas.map((r,i)=>'<div class="existing-item"><div><div class="item-title">'+r.cat+' - '+r.nombre+'</div><div class="item-sub">'+r.kcal+' kcal - '+r.prot+'g prot</div></div><button class="btn-danger" onclick="removeReceta('+i+')">Eliminar</button></div>').join('');
-}
-function saveRecetas(){db2.recetas=aRecetas;saveDB2();toast('Recetas guardadas');}
-function renderRecetas2(){
-  const c=document.getElementById('recetas-container');
-  if(!db2.recetas.length){if(c)c.innerHTML='<div class="empty-state">Las recetas estaran disponibles pronto.</div>';return;}
-  if(c)c.innerHTML=db2.recetas.map(r=>'<div class="recipe-card"><div class="card-eyebrow">'+r.cat+'</div><h3 style="font-family:Cormorant Garamond,serif;font-size:1.2rem;font-weight:300;margin-bottom:.5rem">'+r.nombre+'</h3><div class="macro-row"><div class="macro"><div class="val">'+r.kcal+'</div><div class="lbl">kcal</div></div><div class="macro"><div class="val">'+r.prot+'g</div><div class="lbl">prot</div></div><div class="macro"><div class="val">'+r.carbs+'g</div><div class="lbl">carbs</div></div><div class="macro"><div class="val">'+r.grasas+'g</div><div class="lbl">grasas</div></div></div>'+(r.ingredientes.length?'<ul class="ingredient-list">'+r.ingredientes.map(ing=>'<li>'+ing.nombre+'<span>'+ing.cantidad+'</span></li>').join('')+'</ul>':'')+(r.prep?'<p style="font-size:.78rem;color:var(--muted)">'+r.prep+'</p>':'')+'</div>').join('');
-}
-
-// RECURSOS
-function addRecurso(){
-  const r={nombre:document.getElementById('a-res-nombre').value.trim(),desc:document.getElementById('a-res-desc').value.trim(),url:document.getElementById('a-res-url').value.trim()};
-  if(!r.nombre){alert('Ingresa el nombre.');return;}
-  aRecursos.push(r);['a-res-nombre','a-res-desc','a-res-url'].forEach(id=>document.getElementById(id).value='');
-  renderARecursos();toast('Recurso agregado');
-}
-function removeRecurso(i){aRecursos.splice(i,1);renderARecursos();}
-function renderARecursos(){
-  const el=document.getElementById('recursos-list');
-  if(!aRecursos.length){el.innerHTML='<div style="color:var(--muted);font-size:.82rem">Ningun recurso cargado aun.</div>';return;}
-  el.innerHTML=aRecursos.map((r,i)=>'<div class="existing-item"><div><div class="item-title">'+r.nombre+'</div><div class="item-sub">'+r.desc+'</div></div><button class="btn-danger" onclick="removeRecurso('+i+')">Eliminar</button></div>').join('');
-}
-function saveRecursos(){db2.recursos=aRecursos;saveDB2();toast('Recursos guardados');}
-function renderRecursos2(){
-  const c=document.getElementById('recursos-container');
-  if(!db2.recursos.length){if(c)c.innerHTML='<div class="empty-state">Los recursos estaran disponibles pronto.</div>';return;}
-  if(c)c.innerHTML=db2.recursos.map(r=>'<div class="resource-item"><div class="resource-info"><div class="resource-name">'+r.nombre+'</div><div class="resource-desc">'+r.desc+'</div></div>'+(r.url?'<a class="download-btn" href="'+r.url+'" target="_blank">Descargar</a>':'<span class="download-btn" style="opacity:.4;cursor:default">Proximamente</span>')+'</div>').join('');
-}
-
-// CONFIG
-function saveConfig(){
-  db2.passVip=document.getElementById('cfg-pass-vip').value.trim()||db2.passVip;
-  db2.passAdmin=document.getElementById('cfg-pass-admin').value.trim()||db2.passAdmin;
-  db2.whatsapp=document.getElementById('cfg-wa').value.trim()||db2.whatsapp;
-  db2.horario=document.getElementById('cfg-horario').value.trim()||db2.horario;
-  saveDB2();toast('Configuracion guardada');
-}
-function resetAll(){
-  if(!confirm('Segura? Esto borra TODA la rutina, recetas y recursos.'))return;
-  db2.dias=[];db2.recetas=[];db2.recursos=[];db2.mes='';db2.semana='3';db2.semanasTotal='4';db2.diasEntreno='4';
-  aDias=[];aRecetas=[];aRecursos=[];saveDB2();
-  renderADias();renderARecetas();renderARecursos();toast('Datos borrados');
-}
-
-// On load, check session
-window.addEventListener('DOMContentLoaded',function(){
-  if(sessionStorage.getItem('vip_auth')==='1'){
-    startApp2(sessionStorage.getItem('vip_name')||'');
-  }
-});
-
-</script>
-
-<!-- VIDEO MODAL -->
-<div class="video-modal-bg" id="video-modal">
-  <div class="video-modal">
-    <div class="video-modal-header">
-      <span class="video-modal-title" id="video-modal-title">Ejecucion</span>
-      <button class="video-modal-close" onclick="closeVideo()">&#10005;</button>
-    </div>
-    <div class="video-embed">
-      <iframe id="video-iframe" src="" allowfullscreen allow="autoplay"></iframe>
-    </div>
-  </div>
-</div>
-
-<script>
-// PWA Service Worker
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
-  });
-}
-
-// VIDEO MODAL
-function openVideo(url, title){
-  if(!url) return;
-  // Convert YouTube watch URL to embed
-  let embedUrl = url;
-  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
-  if(ytMatch) embedUrl = 'https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=1';
-  // Convert Google Drive view URL to embed
-  const drMatch = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
-  if(drMatch) embedUrl = 'https://drive.google.com/file/d/' + drMatch[1] + '/preview';
-  
-  document.getElementById('video-iframe').src = embedUrl;
-  document.getElementById('video-modal-title').textContent = title || 'Ejecucion';
-  document.getElementById('video-modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeVideo(){
-  document.getElementById('video-modal').classList.remove('open');
-  document.getElementById('video-iframe').src = '';
-  document.body.style.overflow = '';
-}
-
-document.getElementById('video-modal').addEventListener('click', function(e){
-  if(e.target === this) closeVideo();
-});
-
-// Override renderRutina2 to include video buttons
-const _origRenderRutina2 = window.renderRutina2;
-window.renderRutina2 = function(){
-  const c = document.getElementById('rutina-container');
-  const ey = document.getElementById('rutina-eyebrow');
-  if(ey && db2.mes) ey.textContent = db2.mes;
-  if(!db2.dias.length){
-    if(c) c.innerHTML = '<div class="empty-state">La rutina del mes estara disponible pronto.</div>';
-    return;
-  }
-  if(c) c.innerHTML = db2.dias.map(d =>
-    '<div class="routine-day">' +
-    '<div class="routine-day-header" onclick="toggleDay(this)">' +
-    '<div><div class="day-label">Dia ' + d.num + '</div><div class="day-name">' + d.nombre + '</div></div>' +
-    '<span class="chevron">&#9660;</span></div>' +
-    '<div class="routine-day-body">' +
-    '<table class="exercises">' +
-    '<tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Notas</th><th></th></tr>' +
-    d.ejercicios.map(e =>
-      '<tr>' +
-      '<td>' + e.nombre + '</td>' +
-      '<td>' + e.series + '</td>' +
-      '<td>' + e.reps + '</td>' +
-      '<td>' + (e.notas||'') + '</td>' +
-      '<td class="td-video">' + (e.video ? '<button class="video-btn" onclick="openVideo(\''+e.video+'\',\''+e.nombre+'\')">&#9654; Ver</button>' : '') + '</td>' +
-      '</tr>'
-    ).join('') +
-    '</table></div></div>'
-  ).join('');
-};
-
-// Override addDia to read video URLs per exercise
-const _origAddDia = window.addDia;
-window.addDia = function(){
   const num = +document.getElementById('a-dia-num').value;
   const nombre = document.getElementById('a-dia-nombre').value.trim();
   const raw = document.getElementById('a-dia-ej').value.trim();
-  if(!num || !nombre || !raw){ alert('Completa todos los campos.'); return; }
+  if(!num || !nombre || !raw){ alert('Completá todos los campos.'); return; }
   const ejercicios = raw.split('\n').filter(l=>l.trim()).map(l=>{
     const p = l.split('|').map(x=>x.trim());
     return { nombre:p[0]||'', series:p[1]||'', reps:p[2]||'', notas:p[3]||'', video:p[4]||'' };
@@ -1602,9 +581,270 @@ window.addDia = function(){
   document.getElementById('a-dia-nombre').value='';
   document.getElementById('a-dia-ej').value='';
   renderADias();
-  toast('Dia ' + num + ' agregado');
-};
-</script>
+  toast('Día ' + num + ' agregado');
+}
+function removeDia(num){ aDias = aDias.filter(d=>d.num!==num); renderADias(); }
+function renderADias(){
+  const el = document.getElementById('dias-list');
+  if(!aDias.length){ el.innerHTML = '<div style="color:var(--muted);font-size:.82rem">Ningún día cargado aún.</div>'; return; }
+  el.innerHTML = aDias.map(d =>
+    '<div class="existing-item"><div><div class="item-title">Día '+d.num+' — '+d.nombre+'</div><div class="item-sub">'+d.ejercicios.length+' ejercicios</div></div><button class="btn-danger" onclick="removeDia('+d.num+')">Eliminar</button></div>'
+  ).join('');
+}
+function saveRutina(){
+  db.mes = document.getElementById('a-mes').value.trim();
+  db.semana = document.getElementById('a-semana').value;
+  db.semanasTotal = document.getElementById('a-semanas-total').value;
+  db.diasEntreno = document.getElementById('a-dias-entreno').value;
+  db.dias = aDias;
+  saveDB();
+  toast('✓ Rutina guardada');
+}
+function renderRutina(){
+  const c = document.getElementById('rutina-container');
+  const ey = document.getElementById('rutina-eyebrow');
+  if(ey && db.mes) ey.textContent = db.mes;
+  if(!db.dias.length){ c.innerHTML = '<div class="empty-state">La rutina del mes estará disponible pronto. 💪</div>'; return; }
+  c.innerHTML = db.dias.map(d =>
+    '<div class="routine-day"><div class="routine-day-header" onclick="toggleDay(this)"><div><div class="day-label">Día '+d.num+'</div><div class="day-name">'+d.nombre+'</div></div><span class="chevron">&#9660;</span></div>'+
+    '<div class="routine-day-body"><table class="exercises"><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Notas</th><th></th></tr>'+
+    d.ejercicios.map(e =>
+      '<tr><td>'+e.nombre+'</td><td>'+e.series+'</td><td>'+e.reps+'</td><td>'+(e.notas||'')+'</td><td class="td-video">'+
+      (e.video ? '<button class="video-btn" onclick="openVideo(\''+e.video.replace(/'/g,"\\'")+'\',\''+e.nombre.replace(/'/g,"\\'")+'\')">&#9654; Ver</button>' : '')+
+      '</td></tr>'
+    ).join('') +
+    '</table></div></div>'
+  ).join('');
+}
+function toggleDay(h){
+  const b=h.nextElementSibling, c=h.querySelector('.chevron'), o=b.classList.contains('open');
+  b.classList.toggle('open', !o);
+  c.classList.toggle('open', !o);
+}
 
+/* ============ VIDEO MODAL ============ */
+function openVideo(url, title){
+  if(!url) return;
+  let embedUrl = url;
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+  if(ytMatch) embedUrl = 'https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=1';
+  const drMatch = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if(drMatch) embedUrl = 'https://drive.google.com/file/d/' + drMatch[1] + '/preview';
+  document.getElementById('video-iframe').src = embedUrl;
+  document.getElementById('video-modal-title').textContent = title || 'Ejecución';
+  document.getElementById('video-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeVideo(){
+  document.getElementById('video-modal').classList.remove('open');
+  document.getElementById('video-iframe').src = '';
+  document.body.style.overflow = '';
+}
+document.getElementById('video-modal').addEventListener('click', function(e){ if(e.target===this) closeVideo(); });
+
+/* ============ PLAN DE ALIMENTACION (upload) ============ */
+function subirPlan(){
+  const fileInput = document.getElementById('a-plan-file');
+  const url = document.getElementById('a-plan-url').value.trim();
+  const titulo = document.getElementById('a-plan-titulo').value.trim() || 'Plan de alimentación';
+  const status = document.getElementById('plan-status');
+
+  if(fileInput.files.length > 0){
+    const file = fileInput.files[0];
+    const maxMB = 4;
+    if(file.size > maxMB*1024*1024){
+      status.textContent = 'El archivo es muy grande (máx 4MB). Usá la URL de Google Drive.';
+      status.style.color = 'var(--red)';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e){
+      db.planAlimentacion = { tipo: file.type, data: e.target.result, titulo: titulo, modo: 'base64' };
+      saveDB();
+      status.textContent = '✓ Plan guardado (' + (file.size/1024).toFixed(0) + ' KB)';
+      status.style.color = 'var(--gold)';
+      toast('Plan guardado');
+    };
+    reader.readAsDataURL(file);
+  } else if(url){
+    let embedUrl = url;
+    const drMatch = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+    if(drMatch) embedUrl = 'https://drive.google.com/file/d/' + drMatch[1] + '/preview';
+    db.planAlimentacion = { tipo:'url', data: embedUrl, titulo: titulo, modo:'url' };
+    saveDB();
+    status.textContent = '✓ Plan guardado como link';
+    status.style.color = 'var(--gold)';
+    toast('Plan guardado');
+  } else {
+    status.textContent = 'Seleccioná un archivo o pegá una URL.';
+    status.style.color = 'var(--red)';
+  }
+}
+function borrarPlan(){
+  if(!confirm('¿Borrar el plan cargado?')) return;
+  db.planAlimentacion = null;
+  saveDB();
+  document.getElementById('plan-status').textContent = 'Plan eliminado.';
+  document.getElementById('plan-status').style.color = 'var(--muted)';
+  toast('Plan eliminado');
+}
+
+/* ============ RECETAS (platos individuales) ============ */
+function addReceta(){
+  const r = {
+    cat: document.getElementById('a-rec-cat').value,
+    nombre: document.getElementById('a-rec-nombre').value.trim(),
+    kcal: document.getElementById('a-rec-kcal').value,
+    prot: document.getElementById('a-rec-prot').value,
+    carbs: document.getElementById('a-rec-carbs').value,
+    grasas: document.getElementById('a-rec-grasas').value,
+    ingredientes: document.getElementById('a-rec-ing').value.trim().split('\n').filter(l=>l.trim()).map(l=>{
+      const p=l.split('|').map(x=>x.trim()); return {nombre:p[0]||'', cantidad:p[1]||''};
+    }),
+    prep: document.getElementById('a-rec-prep').value.trim()
+  };
+  if(!r.nombre){ alert('Ingresá el nombre del plato.'); return; }
+  aRecetas.push(r);
+  ['a-rec-nombre','a-rec-kcal','a-rec-prot','a-rec-carbs','a-rec-grasas','a-rec-ing','a-rec-prep'].forEach(id=>document.getElementById(id).value='');
+  renderARecetas();
+  toast('Plato agregado');
+}
+function removeReceta(i){ aRecetas.splice(i,1); renderARecetas(); }
+function renderARecetas(){
+  const el = document.getElementById('recetas-list');
+  if(!aRecetas.length){ el.innerHTML = '<div style="color:var(--muted);font-size:.82rem">Ningún plato cargado aún.</div>'; return; }
+  el.innerHTML = aRecetas.map((r,i) =>
+    '<div class="existing-item"><div><div class="item-title">'+r.cat+' — '+r.nombre+'</div><div class="item-sub">'+r.kcal+' kcal · '+r.prot+'g prot</div></div><button class="btn-danger" onclick="removeReceta('+i+')">Eliminar</button></div>'
+  ).join('');
+}
+function saveRecetas(){ db.recetas = aRecetas; saveDB(); toast('✓ Plan guardado'); }
+
+function renderRecetas(){
+  const c = document.getElementById('recetas-container');
+  let html = '';
+
+  if(db.planAlimentacion){
+    const plan = db.planAlimentacion;
+    html += '<div style="margin-bottom:1.5rem">';
+    html += '<div style="font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">'+(plan.titulo||'Plan de alimentación')+'</div>';
+    if(plan.modo==='base64'){
+      if(plan.tipo==='application/pdf'){
+        html += '<iframe src="'+plan.data+'" style="width:100%;height:70vh;border:1px solid var(--border);border-radius:6px;background:#fff"></iframe>';
+      } else {
+        html += '<img src="'+plan.data+'" style="width:100%;border-radius:6px;border:1px solid var(--border)"/>';
+      }
+    } else {
+      html += '<iframe src="'+plan.data+'" style="width:100%;height:70vh;border:1px solid var(--border);border-radius:6px" allow="autoplay"></iframe>';
+    }
+    html += '</div>';
+  }
+
+  if(db.recetas && db.recetas.length){
+    html += db.recetas.map(r =>
+      '<div class="recipe-card"><div class="card-eyebrow">'+r.cat+'</div>'+
+      '<h3 style="font-family:\'Cormorant Garamond\',serif;font-size:1.2rem;font-weight:300;margin-bottom:.5rem">'+r.nombre+'</h3>'+
+      '<div class="macro-row">'+
+        '<div class="macro"><div class="val">'+r.kcal+'</div><div class="lbl">kcal</div></div>'+
+        '<div class="macro"><div class="val">'+r.prot+'g</div><div class="lbl">prot</div></div>'+
+        '<div class="macro"><div class="val">'+r.carbs+'g</div><div class="lbl">carbs</div></div>'+
+        '<div class="macro"><div class="val">'+r.grasas+'g</div><div class="lbl">grasas</div></div>'+
+      '</div>'+
+      (r.ingredientes && r.ingredientes.length ? '<ul class="ingredient-list">'+r.ingredientes.map(ing=>'<li>'+ing.nombre+'<span>'+ing.cantidad+'</span></li>').join('')+'</ul>' : '')+
+      (r.prep ? '<p style="font-size:.78rem;color:var(--muted)">'+r.prep+'</p>' : '')+
+      '</div>'
+    ).join('');
+  }
+
+  if(!html){ html = '<div class="empty-state">El plan de alimentación estará disponible pronto. 🥗</div>'; }
+  c.innerHTML = html;
+}
+
+/* ============ RECURSOS ============ */
+function addRecurso(){
+  const r = {
+    nombre: document.getElementById('a-res-nombre').value.trim(),
+    desc: document.getElementById('a-res-desc').value.trim(),
+    url: document.getElementById('a-res-url').value.trim()
+  };
+  if(!r.nombre){ alert('Ingresá el nombre.'); return; }
+  aRecursos.push(r);
+  ['a-res-nombre','a-res-desc','a-res-url'].forEach(id=>document.getElementById(id).value='');
+  renderARecursos();
+  toast('Recurso agregado');
+}
+function removeRecurso(i){ aRecursos.splice(i,1); renderARecursos(); }
+function renderARecursos(){
+  const el = document.getElementById('recursos-list');
+  if(!aRecursos.length){ el.innerHTML = '<div style="color:var(--muted);font-size:.82rem">Ningún recurso cargado aún.</div>'; return; }
+  el.innerHTML = aRecursos.map((r,i) =>
+    '<div class="existing-item"><div><div class="item-title">'+r.nombre+'</div><div class="item-sub">'+r.desc+'</div></div><button class="btn-danger" onclick="removeRecurso('+i+')">Eliminar</button></div>'
+  ).join('');
+}
+function saveRecursos(){ db.recursos = aRecursos; saveDB(); toast('✓ Recursos guardados'); }
+function renderRecursos(){
+  const c = document.getElementById('recursos-container');
+  if(!db.recursos.length){ c.innerHTML = '<div class="empty-state">Los recursos estarán disponibles pronto. 📥</div>'; return; }
+  c.innerHTML = db.recursos.map(r =>
+    '<div class="resource-item"><div class="resource-info"><div class="resource-name">'+r.nombre+'</div><div class="resource-desc">'+r.desc+'</div></div>'+
+    (r.url ? '<a class="download-btn" href="'+r.url+'" target="_blank">Descargar</a>' : '<span class="download-btn" style="opacity:.4;cursor:default">Próximamente</span>')+
+    '</div>'
+  ).join('');
+}
+
+/* ============ CONFIG ============ */
+function saveConfig(){
+  db.passVip = document.getElementById('cfg-pass-vip').value.trim() || db.passVip;
+  db.passAdmin = document.getElementById('cfg-pass-admin').value.trim() || db.passAdmin;
+  db.whatsapp = document.getElementById('cfg-wa').value.trim() || db.whatsapp;
+  db.horario = document.getElementById('cfg-horario').value.trim() || db.horario;
+  saveDB();
+  toast('✓ Configuración guardada');
+}
+function resetAll(){
+  if(!confirm('¿Segura? Esto borra TODA la rutina, plan de alimentación y recursos.')) return;
+  db.dias=[]; db.recetas=[]; db.recursos=[]; db.planAlimentacion=null;
+  db.mes=''; db.semana='1'; db.semanasTotal='4'; db.diasEntreno='4';
+  aDias=[]; aRecetas=[]; aRecursos=[];
+  saveDB();
+  renderADias(); renderARecetas(); renderARecursos();
+  document.getElementById('plan-status').textContent = '';
+  toast('Datos borrados');
+}
+
+/* ============ PROGRESO ============ */
+let progressData = [];
+function loadProgress(){
+  const s = localStorage.getItem('vip_progress');
+  if(s){ progressData = JSON.parse(s); renderLog(); }
+}
+function saveProgress(){
+  const entry = {
+    fecha: document.getElementById('p-fecha').value || new Date().toLocaleDateString('es-AR'),
+    peso: document.getElementById('p-peso').value,
+    cintura: document.getElementById('p-cintura').value,
+    cadera: document.getElementById('p-cadera').value,
+    muslo: document.getElementById('p-muslo').value
+  };
+  progressData.unshift(entry);
+  localStorage.setItem('vip_progress', JSON.stringify(progressData));
+  renderLog();
+  ['p-fecha','p-peso','p-cintura','p-cadera','p-muslo','p-brazo'].forEach(id=>document.getElementById(id).value='');
+  toast('✓ Medición guardada');
+}
+function renderLog(){
+  if(!progressData.length) return;
+  document.getElementById('progress-log').style.display = 'block';
+  document.getElementById('log-rows').innerHTML = progressData.map(e =>
+    '<div class="log-row"><span class="date">'+e.fecha+'</span><span>'+(e.peso?e.peso+' kg':'—')+'</span><span>'+(e.cintura?e.cintura+' cm':'—')+'</span><span class="col-hide">'+(e.cadera?e.cadera+' cm':'—')+'</span><span class="col-hide">'+(e.muslo?e.muslo+' cm':'—')+'</span></div>'
+  ).join('');
+}
+
+/* ============ PWA SERVICE WORKER ============ */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
 </body>
 </html>
