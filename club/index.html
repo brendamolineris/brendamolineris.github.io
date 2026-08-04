@@ -154,6 +154,27 @@ src="https://www.facebook.com/tr?id=1381162173938345&ev=PageView&noscript=1"
   .includes h3{font-size:20px;margin-bottom:10px;}
   .includes p{color:var(--gray);font-size:15px;}
 
+  /* quien soy */
+  .brenda-intro{padding:80px 0;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+  .brenda-img{width:100%;aspect-ratio:3/4;object-fit:cover;border:1px solid var(--line);border-radius:2px;}
+  .brenda-label{font-size:12px;letter-spacing:0.14em;color:var(--gold);font-weight:600;text-transform:uppercase;display:block;margin-bottom:18px;}
+  .brenda-title{font-family:Georgia,serif;font-size:clamp(26px,3.6vw,40px);margin-bottom:22px;}
+  .brenda-text{color:var(--gray);font-size:15px;line-height:1.9;margin-bottom:14px;}
+  @media(max-width:760px){.brenda-intro{grid-template-columns:1fr;gap:32px;}.brenda-img{aspect-ratio:4/3;max-height:380px;}}
+
+  /* whatsapp testimonials */
+  .whatsapp-section{padding:0 0 60px;}
+  .wa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .wa-grid img{width:100%;border-radius:2px;border:1px solid var(--line);}
+  @media(max-width:760px){.wa-grid{grid-template-columns:repeat(2,1fr);}}
+
+  /* video testimonials */
+  .video-testimonials{padding:0 0 60px;}
+  .vt-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+  .vt-item iframe{width:100%;aspect-ratio:9/16;border:none;border-radius:2px;}
+  @media(max-width:900px){.vt-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:600px){.vt-grid{grid-template-columns:repeat(2,1fr);}}
+
   /* fit / not fit */
   .fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
   .fit-col{background:var(--black-soft);padding:36px;}
@@ -259,6 +280,19 @@ src="https://www.facebook.com/tr?id=1381162173938345&ev=PageView&noscript=1"
   <div><div class="num">100%</div><div class="label">método natural</div></div>
 </div>
 
+<section>
+  <div class="wrap brenda-intro">
+    <img src="../brenda_competencia.jpg" alt="Brenda Molineris - Competidora fitness" class="brenda-img">
+    <div>
+      <span class="brenda-label">Quién soy</span>
+      <h2 class="brenda-title">No soy una <em>trainer</em> más. Soy tu mentora.</h2>
+      <p class="brenda-text">Soy Brenda Molineris, fitness coach y creadora del método TotalFit. Trabajo con mujeres de todo el mundo que están hartas de empezar y no ver resultados.</p>
+      <p class="brenda-text">No solo acompaño transformaciones: yo misma pasé por el proceso. Competí, entrené durante años, probé métodos, fallé y aprendí qué funciona de verdad en el cuerpo femenino.</p>
+      <p class="brenda-text">Hoy ayudo a mujeres a lograr un físico definido, estético y femenino, sin dietas extremas ni obsesión, trabajando cuerpo y mentalidad al mismo tiempo.</p>
+    </div>
+  </div>
+</section>
+
 <section id="programa">
   <div class="wrap">
     <div class="section-head">
@@ -289,6 +323,9 @@ src="https://www.facebook.com/tr?id=1381162173938345&ev=PageView&noscript=1"
     </div>
     <div style="text-align:center;margin-top:40px;">
       <div class="price-tag"><span class="amount">$50.000</span><span class="period">ARS / mes</span></div>
+      <div style="margin-top:24px;">
+        <a href="https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=f16cf5f8c2a542aca4ca88dec6f400bf" class="btn btn-gold" onclick="fbq('track', 'InitiateCheckout');">Pagar con Mercado Pago →</a>
+      </div>
     </div>
   </div>
 </section>
@@ -323,6 +360,16 @@ src="https://www.facebook.com/tr?id=1381162173938345&ev=PageView&noscript=1"
       <span class="eyebrow">Lo que dicen ellas</span>
       <h2>Sus palabras, no las <em>mías.</em></h2>
     </div>
+    <div class="whatsapp-section">
+      <div class="wa-grid">
+        <img src="../whatsapp_1.jpeg" alt="Testimonio clienta TotalFit">
+        <img src="../whatsapp_2.jpeg" alt="Testimonio clienta TotalFit">
+        <img src="../whatsapp_3.jpeg" alt="Testimonio clienta TotalFit">
+        <img src="../whatsapp_4.jpeg" alt="Testimonio clienta TotalFit">
+        <img src="../whatsapp_5.jpeg" alt="Testimonio clienta TotalFit">
+        <img src="../whatsapp_6.jpeg" alt="Testimonio clienta TotalFit">
+      </div>
+    </div>
     <div class="testi-grid">
       <div class="testi">
         <p>"Baje 4 kilos y 9cm de cintura en 15 días. No lo puedo creer, me siento feliz y con más energía."</p>
@@ -335,6 +382,15 @@ src="https://www.facebook.com/tr?id=1381162173938345&ev=PageView&noscript=1"
       <div class="testi">
         <p>"Brenda es auténtica y eso transmite confianza. Sabe mucho y siempre enseña cosas súper copadas."</p>
         <div class="who">Naara Prunes — Clienta online</div>
+      </div>
+    </div>
+    <div class="video-testimonials">
+      <div class="vt-grid">
+        <div class="vt-item"><iframe src="https://www.youtube.com/embed/7gGq62OHSUc" allowfullscreen title="Testimonio clienta Total Fit"></iframe></div>
+        <div class="vt-item"><iframe src="https://www.youtube.com/embed/ahliw7OyvK0" allowfullscreen title="Testimonio clienta Total Fit"></iframe></div>
+        <div class="vt-item"><iframe src="https://www.youtube.com/embed/9UFdqBt5tr4" allowfullscreen title="Testimonio clienta Total Fit"></iframe></div>
+        <div class="vt-item"><iframe src="https://www.youtube.com/embed/4PDGp1sfMgs" allowfullscreen title="Testimonio clienta Total Fit"></iframe></div>
+        <div class="vt-item"><iframe src="https://www.youtube.com/embed/Ckugmm5eEG8" allowfullscreen title="Testimonio clienta Total Fit"></iframe></div>
       </div>
     </div>
   </div>
