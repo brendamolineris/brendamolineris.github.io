@@ -554,5 +554,34 @@ src="https://www.facebook.com/tr?id=1381162173938345&ev=PageView&noscript=1"
   });
 </script>
 
+<!-- Purchase: se dispara cuando Stripe devuelve a la landing con ?ok=1 -->
+<script>
+  (function(){
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('ok') !== '1') return;
+
+    // evita contar dos veces si recarga la pagina
+    if (!sessionStorage.getItem('tf_purchase')) {
+      sessionStorage.setItem('tf_purchase','1');
+      if (typeof fbq === 'function') {
+        fbq('track','Purchase',{value:20.00, currency:'USD'});
+      }
+    }
+
+    // mensaje de confirmacion
+    var box = document.createElement('div');
+    box.setAttribute('role','status');
+    box.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(11,11,11,.96);display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;';
+    box.innerHTML = '<div style="max-width:460px;border:1px solid var(--gold);border-radius:4px;padding:44px 30px;background:var(--black-soft);">'
+      + '<div style="font-size:13px;letter-spacing:.18em;color:var(--gold);font-weight:700;margin-bottom:16px;">TOTAL FIT CLUB</div>'
+      + '<h2 style="font-size:30px;margin-bottom:16px;">Ya sos parte del <em>Club.</em></h2>'
+      + '<p style="color:var(--gray);font-size:16px;margin-bottom:26px;">En menos de 24 horas te llega el acceso a la comunidad por WhatsApp o email. Si tenés alguna duda, escribime.</p>'
+      + '<a href="https://wa.me/541123838704" class="btn btn-gold" style="display:inline-block;">Escribirme por WhatsApp</a>'
+      + '<div style="margin-top:18px;"><a href="/club/" style="color:var(--gray);font-size:13px;text-decoration:underline;">Volver a la página</a></div>'
+      + '</div>';
+    document.body.appendChild(box);
+  })();
+</script>
+
 </body>
 </html>
