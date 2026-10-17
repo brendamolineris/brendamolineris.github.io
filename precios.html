@@ -4,6 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Total Fit VIP — Precios</title>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1381162173938345');
+fbq('track', 'PageView');
+fbq('track', 'ViewContent', {content_name: 'Total Fit VIP precios'});
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1381162173938345&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--black:#0a0a0a;--card:#161616;--border:#2a2a2a;--gold:#C9A84C;--gold-light:#E2C97E;--white:#f5f5f0;--muted:#888}
@@ -66,7 +82,7 @@ li::before{content:"✓ ";color:var(--gold)}
         <li>1 videollamada 1:1 por mes</li>
         <li>Seguimiento por WhatsApp</li>
       </ul>
-      <button class="btn btn-gold" onclick="toggleBank()">Pagar por transferencia</button>
+      <button class="btn btn-gold" onclick="toggleBank(); fbq('track','InitiateCheckout',{value:300000,currency:'ARS',content_name:'VIP pago unico transferencia'})">Pagar por transferencia</button>
 
       <div class="bank" id="bank">
         <div class="row"><span class="lbl">Monto</span><span class="val monto">$300.000</span></div>
@@ -75,7 +91,7 @@ li::before{content:"✓ ";color:var(--gold)}
         <div class="row"><span class="lbl">Alias</span><span class="val">bren.molineris</span></div>
         <div class="row"><span class="lbl">Banco</span><span class="val">Naranja X (caja de ahorro en pesos)</span></div>
         <p>Cuando hagas la transferencia, mandanos el comprobante por WhatsApp para arrancar tu programa.</p>
-        <a class="btn btn-outline" href="https://wa.me/541122909562?text=Hola%20Brenda!%20Hice%20la%20transferencia%20de%20Total%20Fit%20VIP%20por%20%24300.000.%20Te%20mando%20el%20comprobante." target="_blank" rel="noopener">Ya transferí, mandar comprobante</a>
+        <a class="btn btn-outline" href="https://wa.me/541122909562?text=Hola%20Brenda!%20Hice%20la%20transferencia%20de%20Total%20Fit%20VIP%20por%20%24300.000.%20Te%20mando%20el%20comprobante." target="_blank" rel="noopener" onclick="fbq('track','Lead',{content_name:'transferencia_comprobante'})">Ya transferí, mandar comprobante</a>
       </div>
     </div>
 
@@ -89,7 +105,7 @@ li::before{content:"✓ ";color:var(--gold)}
         <li>Mismo acompañamiento y seguimiento</li>
         <li>Un débito el primer mes y otro el segundo mes</li>
       </ul>
-      <a class="btn btn-gold" href="https://mpago.la/1MXjnqJ" target="_blank" rel="noopener">Suscribirme en 2 pagos mensuales</a>
+      <a class="btn btn-gold" href="https://mpago.la/1MXjnqJ" target="_blank" rel="noopener" onclick="fbq('track','InitiateCheckout',{value:360000,currency:'ARS',content_name:'VIP suscripcion 2 pagos'})">Suscribirme en 2 pagos mensuales</a>
     </div>
 
   </div>
@@ -97,7 +113,7 @@ li::before{content:"✓ ";color:var(--gold)}
   <div class="doubts">
     <h3>¿Todavía tenés dudas?</h3>
     <p>Agendá una llamada de 20 minutos. Vemos tu situación y si el programa es para vos.</p>
-    <a class="btn btn-outline" href="https://wa.me/541122909562?text=Hola%20Brenda!%20Tengo%20dudas%20sobre%20Total%20Fit%20VIP." target="_blank" rel="noopener">Tengo dudas, hablar por WhatsApp</a>
+    <a class="btn btn-outline" href="https://wa.me/541122909562?text=Hola%20Brenda!%20Tengo%20dudas%20sobre%20Total%20Fit%20VIP." target="_blank" rel="noopener" onclick="fbq('track','Contact')">Tengo dudas, hablar por WhatsApp</a>
   </div>
 
   <div class="validity">Precios válidos hasta el 31 de octubre de 2026</div>
