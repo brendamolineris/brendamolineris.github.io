@@ -20,46 +20,43 @@ fbq('track', 'ViewContent', {content_name: 'Total Fit VIP precios USD'});
 </script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1381162173938345&ev=PageView&noscript=1"/></noscript>
 <!-- End Meta Pixel Code -->
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--black:#0a0a0a;--card:#161616;--border:#2a2a2a;--gold:#C9A84C;--gold-light:#E2C97E;--white:#f5f5f0;--muted:#888}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;padding:3rem 1.2rem}
-.wrap{max-width:820px;margin:0 auto}
+.wrap{max-width:960px;margin:0 auto}
 .eyebrow{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;text-align:center}
 h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:2.4rem;text-align:center;line-height:1.2;margin-bottom:.6rem}
 h1 em{color:var(--gold);font-style:italic}
 .sub{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:2.5rem}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start}
-.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.8rem 1.5rem;display:flex;flex-direction:column}
-.card.featured{border-color:rgba(201,168,76,.5)}
+.split{display:grid;grid-template-columns:1fr 1.3fr;gap:32px;align-items:start}
+.split img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top;border:1px solid rgba(201,168,76,.2);display:block}
+.card{background:var(--card);border:1px solid rgba(201,168,76,.5);border-radius:8px;padding:1.8rem 1.5rem}
 .card-tag{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}
 .card h2{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.5rem;margin-bottom:.4rem}
 .price{font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:var(--gold);margin:.8rem 0 .2rem}
 .price small{font-size:.9rem;color:var(--muted);font-family:'DM Sans',sans-serif}
 .note{font-size:.8rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.5}
-ul{list-style:none;margin-bottom:1.5rem;flex:1}
-li{font-size:.85rem;padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--white)}
-li::before{content:"✓ ";color:var(--gold)}
-.btn{display:block;width:100%;text-align:center;text-decoration:none;padding:.9rem;border-radius:4px;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;margin-top:.4rem;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:background .2s}
+.card .card-title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.6rem;line-height:1.15;margin-bottom:.5rem;text-align:center}
+.card-sub{color:var(--muted);font-size:.95rem;margin-bottom:1.5rem;text-align:center;padding-bottom:1.2rem;border-bottom:1px solid var(--border)}
+.card .card-tag{text-align:center}
+.price-block{border-top:1px solid var(--border);padding-top:1.2rem;margin-top:.5rem;text-align:center}
+.group{margin-bottom:22px}
+.group h4{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:600}
+.group ul{list-style:none}
+.group li{font-size:.85rem;padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--white);line-height:1.5}
+.group li::before{content:"✓ ";color:var(--gold)}
+.btn{display:block;width:100%;text-align:center;text-decoration:none;padding:.9rem;border-radius:4px;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;margin-top:1.2rem;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:background .2s}
 .btn-gold{background:var(--gold);color:#000}
 .btn-gold:hover{background:var(--gold-light)}
 .btn-outline{background:transparent;border:1px solid var(--gold);color:var(--gold)}
 .btn-outline:hover{background:rgba(201,168,76,.12)}
-.bank{display:none;margin-top:1rem;padding:1.2rem;background:var(--black);border:1px solid var(--border);border-radius:6px;font-size:.85rem}
-.bank.open{display:block}
-.bank .row{display:flex;justify-content:space-between;gap:1rem;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.bank .row:last-child{border-bottom:none}
-.bank .lbl{color:var(--muted);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
-.bank .val{color:var(--white);text-align:right;word-break:break-all}
-.bank .monto{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.2rem}
-.bank p{color:var(--muted);font-size:.78rem;margin-top:.9rem;line-height:1.5}
-.doubts{margin-top:2.5rem;padding:1.8rem;border:1px solid var(--border);border-radius:8px;text-align:center}
-.doubts h3{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.4rem;margin-bottom:.5rem}
-.doubts p{color:var(--muted);font-size:.85rem;margin-bottom:1.2rem;line-height:1.5}
-.doubts a{display:inline-block;width:auto;padding:.8rem 2rem}
-.validity{text-align:center;font-size:.75rem;color:var(--muted);margin-top:2rem;letter-spacing:.05em}
-@media(max-width:640px){.grid{grid-template-columns:1fr}h1{font-size:2rem}}
+.argentina{margin:2.5rem auto 0;max-width:520px;text-align:center;padding:1.8rem;border:1px solid var(--border);border-radius:8px}
+.argentina h3{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.5rem;margin-bottom:.6rem}
+.argentina p{color:var(--muted);font-size:.9rem;line-height:1.6;margin-bottom:.4rem}
+.argentina .btn{margin-top:1.2rem}
+@media(max-width:760px){.split{grid-template-columns:1fr;gap:24px}.split img{max-width:360px;margin:0 auto}h1{font-size:2rem}}
 </style>
 </head>
 <body>
@@ -67,34 +64,69 @@ li::before{content:"✓ ";color:var(--gold)}
 
   <div class="eyebrow">Total Fit VIP · 3 meses</div>
   <h1>Empezá tu <em>transformación</em></h1>
-  <p class="sub">Programa 1:1 online con entrenamiento, alimentación, suplementación y acompañamiento.</p>
+  <p class="sub">El único programa para mujeres con resultados REALES</p>
 
-  <div class="grid" style="grid-template-columns:1fr;max-width:420px;margin:0 auto">
+  <div class="split">
+    <img src="brenda_programa.jpg" alt="Brenda Molineris - Total Fit VIP">
 
-    <div class="card featured">
+    <div class="card">
       <div class="card-tag">Pago único</div>
-      <h2>Total Fit VIP</h2>
-      <div class="price">200 <small>USD</small></div>
-      <p class="note">Un solo pago en dólares.</p>
-      <ul>
-        <li>Programa completo de 3 meses</li>
-        <li>Entrenamiento y plan de alimentación personalizados</li>
-        <li>1 videollamada 1:1 por mes</li>
-        <li>Seguimiento por WhatsApp</li>
-      </ul>
-      <a class="btn btn-gold" href="https://buy.stripe.com/3cIfZi4FgfRwgdq52m2wU02" target="_blank" rel="noopener" onclick="fbq('track','InitiateCheckout',{value:200,currency:'USD',content_name:'VIP pago unico USD'})">Pagar 200 USD</a>
+      <h2 class="card-title">Total Fit VIP - Programa de 12 semanas</h2>
+      <p class="card-sub">Esto es todo lo que incluye:</p>
+
+      <div class="group">
+        <h4>01 · Entrenamiento</h4>
+        <ul>
+          <li>Rutinas personalizadas para casa o para gym: vos elegís dónde entrenás</li>
+          <li>Videos de cada ejercicio para que aprendas la técnica correcta</li>
+          <li>Ajustes durante los 3 meses según tu progreso</li>
+        </ul>
+      </div>
+      <div class="group">
+        <h4>02 · Alimentación y suplementación</h4>
+        <ul>
+          <li>Plan de alimentación personalizado para tu vida real: comidas simples, fáciles de hacer y rápidas de preparar para que no pierdas tiempo</li>
+          <li>Suplementación recomendada según tu caso</li>
+          <li>Guía de alimentos y lista de compras para el súper</li>
+          <li>Recetario saludable con más de 100 recetas para que puedas variar tus comidas</li>
+          <li>Ajustes del plan nutricional durante el programa: a medida que vas progresando vamos modificando tu plan de alimentación</li>
+        </ul>
+      </div>
+      <div class="group">
+        <h4>03 · Mentalidad</h4>
+        <ul>
+          <li>Psicología Fit: por qué empezás y abandonás, y cómo romper ese ciclo</li>
+          <li>Champion Mentality: la constancia de las que sostienen resultados</li>
+          <li>Sexy Poderosa y Magnética: autoimagen y confianza</li>
+          <li>Glow Up Protocolo: cuerpo, mente y hábitos integrados en tu día a día</li>
+        </ul>
+      </div>
+      <div class="group">
+        <h4>04 · Acompañamiento real</h4>
+        <ul>
+          <li>1 videollamada 1:1 por mes</li>
+          <li>Seguimiento activo por WhatsApp durante todo el proceso</li>
+          <li>Check-ins semanales para evaluar tu progreso</li>
+          <li>Corrección de técnica: podés enviarme videos cuando estás entrenando para que vea cómo lo realizás</li>
+          <li>Acceso a grupo privado con todas las chicas del equipo Total Fit VIP: no estás sola en este proceso</li>
+        </ul>
+      </div>
+
+      <div class="price-block">
+        <div class="price">200 <small>USD</small></div>
+        <p class="note">Un solo pago en dólares.</p>
+      </div>
+
+      <a class="btn btn-gold" href="https://buy.stripe.com/3cIfZi4FgfRwgdq52m2wU02" target="_blank" rel="noopener" onclick="fbq('track','InitiateCheckout',{value:200,currency:'USD',content_name:'VIP pago unico USD'})">Quiero empezar</a>
     </div>
-
   </div>
 
-  <div class="doubts">
-    <h3>¿Todavía tenés dudas?</h3>
-    <p>Agendá una llamada de 20 minutos. Vemos tu situación y si el programa es para vos.</p>
-    <a class="btn btn-outline" href="https://wa.me/541122909562?text=Hola%20Brenda!%20Tengo%20dudas%20sobre%20Total%20Fit%20VIP." target="_blank" rel="noopener" onclick="fbq('track','Contact')">Tengo dudas, hablar por WhatsApp</a>
+  <div class="argentina">
+    <h3>🇦🇷 ¿Estás en Argentina?</h3>
+    <p>También podés abonar en pesos argentinos y consultar las opciones de pago disponibles.</p>
+    <a class="btn btn-outline" href="https://wa.me/541122909562?text=Hola%20Brenda!%20Estoy%20en%20Argentina%20y%20quiero%20saber%20las%20opciones%20de%20pago%20para%20Total%20Fit%20VIP." target="_blank" rel="noopener" onclick="fbq('track','Contact')">Escribime por WhatsApp</a>
   </div>
-
 
 </div>
-
 </body>
 </html>
