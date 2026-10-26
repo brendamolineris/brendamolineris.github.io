@@ -108,7 +108,11 @@ const sb = createClient(
 
 let pin = null, alumnos = [], ejercicios = [], rutinas = [], alumnoSel = null, rutinaSel = null;
 const $ = id => document.getElementById(id);
-const el = (tag, props = {}) => Object.assign(document.createElement(tag), props);
+const el = (tag, props = {}, kids = []) => {
+  const n = Object.assign(document.createElement(tag), props);
+  kids.forEach(k => n.append(k));
+  return n;
+};
 
 async function rpc(nombre, args = {}) {
   const { data, error } = await sb.rpc(nombre, { p_pin: pin, ...args });
