@@ -90,6 +90,15 @@ details[open]>summary::after{content:' ▴'}
     <div id="grafico"></div>
   </details>
 
+  <details class="card">
+    <summary><h2 style="display:inline">Cambiar mi PIN</h2></summary>
+    <input id="pinActual" type="password" inputmode="numeric" maxlength="4" placeholder="PIN actual">
+    <input id="pinNuevo" type="password" inputmode="numeric" maxlength="4" placeholder="PIN nuevo (4 números)">
+    <input id="pinRepetir" type="password" inputmode="numeric" maxlength="4" placeholder="Repetí el PIN nuevo">
+    <button id="cambiarPin">Cambiar PIN</button>
+    <div class="mut" id="msgPin"></div>
+  </details>
+
   <button class="sec" id="salir">Salir</button>
 </div>
 
@@ -121,6 +130,20 @@ $('entrar').onclick = async () => {
 };
 
 $('salir').onclick = () => { sessionStorage.removeItem('tf'); location.reload(); };
+
+$('cambiarPin').onclick = async () => {
+  const msg = $('msgPin');
+  const actual = $('pinActual').value.trim(), nuevo = $('pinNuevo').value.trim(), rep = $('pinRepetir').value.trim();
+  if (!/^[0-9]{4}$/.test(nuevo)) { msg.textContent = 'El PIN nuevo tiene que tener 4 números'; return; }
+  if (nuevo !== rep) { msg.textContent = 'Los PIN nuevos no coinciden'; return; }
+  if (actual !== pin) { msg.textContent = 'El PIN actual no es correcto'; return; }
+  const { error } = await sb.rpc('alumno_cambiar_pin', { p_alumno: alumno, p_pin: pin, p_nuevo: nuevo });
+  if (error) { msg.textContent = 'No se pudo cambiar, probá de nuevo'; return; }
+  pin = nuevo;
+  sessionStorage.setItem('tf', JSON.stringify({ alumno, pin }));
+  $('pinActual').value = ''; $('pinNuevo').value = ''; $('pinRepetir').value = '';
+  msg.textContent = 'PIN cambiado. Desde ahora usá el nuevo.';
+};
 
 // ---------- CARGA GENERAL ----------
 async function cargar() {
