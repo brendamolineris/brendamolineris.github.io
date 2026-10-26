@@ -234,6 +234,7 @@ $('crearEj').onclick = async () => {
   $('nEj').value = '';
   ejercicios = await rpc('entrenador_listar_ejercicios');
   renderEjercicios();
+  if (rutinaSel) renderEditor();
 };
 
 $('importarEj').onclick = async () => {
@@ -255,6 +256,7 @@ $('importarEj').onclick = async () => {
   msg.textContent = `Importados: ${ok}${fail ? ' · con error: ' + fail : ''}`;
   ejercicios = await rpc('entrenador_listar_ejercicios');
   renderEjercicios();
+  if (rutinaSel) renderEditor();
 };
 
 // ---------- PLANTILLAS ----------
@@ -424,6 +426,11 @@ async function renderEditor() {
 
     ed.append(box);
   });
+
+  ed.append(el('button', { className: 'sec', textContent: '+ Agregar día', style: 'width:100%', onclick: async () => {
+    await rpc('entrenador_agregar_dia', { p_rutina: rutinaSel });
+    renderEditor();
+  }}));
 }
 
 // ---------- PLAN DE ALIMENTACIÓN ----------
