@@ -24,6 +24,7 @@ button.sec{background:transparent;color:var(--txt);border:1px solid var(--line)}
 .row2{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-bottom:8px}
 .mut{color:var(--mut);font-size:.85rem;margin-top:4px}
 .indic{color:var(--ac);font-size:.9rem;margin-top:6px}
+.video{display:inline-block;color:var(--ac);font-size:.85rem;margin-top:4px}
 .hidden{display:none}
 .err{color:#ff6b6b;min-height:1.2em}
 .nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
@@ -151,6 +152,7 @@ function filaEjercicio(ex) {
   const box = el('div', { className: 'ex' });
   box.append(el('strong', { textContent: ex.nombre }));
   box.append(el('div', { className: 'mut', textContent: `Objetivo: ${ex.series ?? '-'} series × ${ex.reps ?? '-'} reps` }));
+  if (ex.video) box.append(el('a', { href: ex.video, target: '_blank', rel: 'noopener', textContent: 'Ver cómo se hace ▸', className: 'video' }));
   if (ex.indicaciones) box.append(el('div', { className: 'indic', textContent: `Indicación: ${ex.indicaciones}` }));
 
   const ultima = el('div', { className: 'mut' });
