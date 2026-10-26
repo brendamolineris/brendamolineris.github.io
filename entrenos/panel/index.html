@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Total Fit - Panel entrenadora</title>
+<style>
+:root{color-scheme:dark;--bg:#0a0a0a;--card:#161616;--txt:#f5f5f5;--mut:#9a9a9a;--ac:#D9B93C;--acTxt:#0a0a0a;--line:#2a2a2a}
+*{box-sizing:border-box}
+body{margin:0 auto;padding:16px;max-width:620px;font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt)}
+h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ac)}
+h2{font-size:1rem;margin:0 0 10px;color:var(--ac)}
+h3{font-size:.95rem;margin:14px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+input,select{font:inherit;width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit;margin-bottom:6px}
+select option{background:var(--card);color:var(--txt)}
+button{font:inherit;background:var(--ac);color:var(--acTxt);font-weight:700;border:0;border-radius:8px;padding:9px 12px;cursor:pointer}
+button.sec{background:transparent;color:var(--txt);border:1px solid var(--line)}
+button.peligro{background:transparent;color:#ff6b6b;border:1px solid #5a2a2a}
+button:disabled{opacity:.5}
+.grid4{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lineaEj{display:grid;grid-template-columns:1fr 70px 90px;gap:6px;align-items:center;border-top:1px solid var(--line);padding:8px 0}
+.lineaEj input{margin:0}
+.indic{grid-column:1/-1}
+.acciones{display:flex;gap:6px;grid-column:1/-1;justify-content:flex-end}
+.dia{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+.item{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:8px 0;gap:8px}
+.item:first-child{border-top:0}
+.mut{color:var(--mut);font-size:.85rem}
+.err{color:#ff6b6b;min-height:1.2em}
+.hidden{display:none}
+details{margin-bottom:10px}
+summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <h1>Panel entrenadora</h1>
+  <div class="card">
+    <input id="pin" type="password" inputmode="numeric" placeholder="PIN de entrenadora">
+    <button id="entrar">Entrar</button>
+    <p class="err" id="errLogin"></p>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <h1>Panel entrenadora</h1>
+
+  <div class="card">
+    <h2>Alumnos</h2>
+    <select id="selAlumno"></select>
+    <details>
+      <summary>Nuevo alumno</summary>
+      <input id="nAlumno" placeholder="Nombre">
+      <input id="nPinAlumno" placeholder="PIN de 4 dígitos">
+      <button id="crearAlumno">Crear alumno</button>
+      <div class="mut" id="msgAlumno"></div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>Ejercicios</h2>
+    <div id="listaEj"></div>
+    <div class="grid4" style="margin-top:8px">
+      <input id="nEj" placeholder="Nuevo ejercicio">
+      <button id="crearEj">Agregar</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Rutinas de <span id="nomAlumno"></span></h2>
+    <div id="listaRut"></div>
+    <h3>Nueva rutina</h3>
+    <input id="rNombre" placeholder="Nombre (ej: Octubre - Fuerza)">
+    <div class="grid4">
+      <input id="rInicio" type="date" title="Inicio">
+      <input id="rFin" type="date" title="Fin">
+    </div>
+    <div class="grid4">
+      <input id="rDias" type="number" min="1" max="7" placeholder="Cantidad de días">
+      <button id="crearRut">Crear vacía</button>
+    </div>
+    <button class="sec" id="copiarRut" style="width:100%;margin-top:6px">Copiar la última rutina (con las fechas de arriba)</button>
+    <div class="mut" id="msgRut"></div>
+  </div>
+
+  <div id="editor"></div>
+
+  <button class="sec" id="salir">Salir</button>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const sb = createClient(
+  'https://oalwrseknjcbdxngzqgq.supabase.co',
+  'sb_publishable_pw9lAS5n8Vyv0V9EOowoDA_zT2lH0Ns'
+);
+
+let pin = null, alumnos = [], ejercicios = [], rutinas = [], alumnoSel = null, rutinaSel = null;
+const $ = id => document.getElementById(id);
+const el = (tag, props = {}) => Object.assign(document.createElement(tag), props);
+
+async function rpc(nombre, args = {}) {
+  const { data, error } = await sb.rpc(nombre, { p_pin: pin, ...args });
+  if (error) throw error;
+  return data;
+}
+
+// ---------- LOGIN ----------
+$('entrar').onclick = async () => {
+  $('errLogin').textContent = '';
+  const p = $('pin').value.trim();
+  const { data, error } = await sb.rpc('entrenador_login', { p_pin: p });
+  if (error || !data) { $('errLogin').textContent = 'PIN incorrecto'; return; }
+  pin = p;
+  sessionStorage.setItem('tfp', p);
+  await iniciar();
+};
+
+$('salir').onclick = () => { sessionStorage.removeItem('tfp'); location.reload(); };
+
+async function iniciar() {
+  $('login').classList.add('hidden');
+  $('app').classList.remove('hidden');
+  await cargarTodo();
+}
+
+async function cargarTodo() {
+  alumnos = await rpc('entrenador_listar_alumnos');
+  ejercicios = await rpc('entrenador_listar_ejercicios');
+  if (!alumnoSel || !alumnos.find(a => a.id === alumnoSel.id)) alumnoSel = alumnos[0] || null;
+  renderAlumnos();
+  renderEjercicios();
+  await renderRutinas();
+}
+
+// ---------- ALUMNOS ----------
+function renderAlumnos() {
+  const s = $('selAlumno');
+  s.replaceChildren();
+  alumnos.forEach(a => s.append(el('option', { value: a.id, textContent: a.nombre, selected: alumnoSel && a.id === alumnoSel.id })));
+  s.onchange = async () => {
+    alumnoSel = alumnos.find(a => a.id === s.value);
+    rutinaSel = null; $('editor').replaceChildren();
+    await renderRutinas();
+  };
+  $('nomAlumno').textContent = alumnoSel ? alumnoSel.nombre : '—';
+}
+
+$('crearAlumno').onclick = async () => {
+  const nombre = $('nAlumno').value.trim(), p = $('nPinAlumno').value.trim();
+  if (!nombre || !p) { $('msgAlumno').textContent = 'Completá nombre y PIN'; return; }
+  try {
+    await rpc('entrenador_crear_alumno', { p_nombre: nombre, p_alumno_pin: p });
+    $('nAlumno').value = ''; $('nPinAlumno').value = '';
+    $('msgAlumno').textContent = 'Alumno creado';
+    await cargarTodo();
+  } catch (e) { $('msgAlumno').textContent = 'Error: ' + e.message; }
+};
+
+// ---------- EJERCICIOS ----------
+function renderEjercicios() {
+  const l = $('listaEj');
+  l.replaceChildren();
+  ejercicios.forEach(e => l.append(el('div', { className: 'item', textContent: e.nombre })));
+}
+
+$('crearEj').onclick = async () => {
+  const nombre = $('nEj').value.trim();
+  if (!nombre) return;
+  await rpc('entrenador_crear_ejercicio', { p_nombre: nombre });
+  $('nEj').value = '';
+  ejercicios = await rpc('entrenador_listar_ejercicios');
+  renderEjercicios();
+};
+
+// ---------- RUTINAS ----------
+async function renderRutinas() {
+  const l = $('listaRut');
+  l.replaceChildren();
+  if (!alumnoSel) { l.textContent = 'Primero creá un alumno.'; return; }
+  rutinas = await rpc('entrenador_listar_rutinas', { p_alumno: alumnoSel.id });
+  if (!rutinas.length) { l.textContent = 'Este alumno todavía no tiene rutinas.'; return; }
+  rutinas.forEach(r => l.append(el('div', { className: 'item' }, [])));
+  l.replaceChildren();
+  rutinas.forEach(r => {
+    const fila = el('div', { className: 'item' });
+    fila.append(
+      el('div', { innerHTML: `<strong>${r.nombre}</strong><div class="mut">${r.fecha_inicio} → ${r.fecha_fin}</div>` }),
+      el('button', { className: 'sec', textContent: 'Editar', onclick: () => abrirRutina(r.id) })
+    );
+    l.append(fila);
+  });
+}
+
+$('crearRut').onclick = async () => {
+  const msg = $('msgRut');
+  const nombre = $('rNombre').value.trim(), ini = $('rInicio').value, fin = $('rFin').value, dias = Number($('rDias').value);
+  if (!alumnoSel || !nombre || !ini || !fin || !dias) { msg.textContent = 'Completá nombre, fechas y cantidad de días'; return; }
+  try {
+    const id = await rpc('entrenador_crear_rutina', { p_alumno: alumnoSel.id, p_nombre: nombre, p_inicio: ini, p_fin: fin, p_dias: dias });
+    msg.textContent = 'Rutina creada';
+    await renderRutinas();
+    abrirRutina(id);
+  } catch (e) { msg.textContent = 'Error: ' + e.message; }
+};
+
+$('copiarRut').onclick = async () => {
+  const msg = $('msgRut');
+  const nombre = $('rNombre').value.trim(), ini = $('rInicio').value, fin = $('rFin').value;
+  if (!rutinas.length) { msg.textContent = 'No hay rutina anterior para copiar'; return; }
+  if (!nombre || !ini || !fin) { msg.textContent = 'Completá nombre y fechas'; return; }
+  try {
+    const id = await rpc('entrenador_copiar_rutina', { p_origen: rutinas[0].id, p_nombre: nombre, p_inicio: ini, p_fin: fin });
+    msg.textContent = 'Rutina copiada';
+    await renderRutinas();
+    abrirRutina(id);
+  } catch (e) { msg.textContent = 'Error: ' + e.message; }
+};
+
+async function abrirRutina(id) {
+  rutinaSel = id;
+  await renderEditor();
+}
+
+// ---------- EDITOR DE RUTINA ----------
+async function renderEditor() {
+  const ed = $('editor');
+  ed.replaceChildren();
+  if (!rutinaSel) return;
+  const dias = await rpc('entrenador_rutina_detalle', { p_rutina: rutinaSel });
+
+  ed.append(el('h2', { textContent: 'Editar rutina' }));
+
+  dias.forEach(d => {
+    const box = el('div', { className: 'dia' });
+
+    const cab = el('div', { className: 'grid4' });
+    const nombreDia = el('input', { value: d.nombre || '', placeholder: `Nombre del día ${d.numero} (ej: Pierna)` });
+    const guardarDia = el('button', { className: 'sec', textContent: 'Guardar nombre', onclick: async () => {
+      await rpc('entrenador_renombrar_dia', { p_dia: d.id, p_nombre: nombreDia.value.trim() || null });
+    }});
+    cab.append(nombreDia, guardarDia);
+    box.append(el('h3', { textContent: `Día ${d.numero}` }), cab);
+
+    d.ejercicios.forEach(ex => {
+      const fila = el('div', { className: 'lineaEj' });
+      const series = el('input', { type: 'number', value: ex.series ?? '', placeholder: 'Series' });
+      const reps = el('input', { value: ex.reps ?? '', placeholder: 'Reps (8-10)' });
+      const indic = el('input', { className: 'indic', value: ex.indicaciones ?? '', placeholder: 'Indicación (ej: bajada lenta)' });
+      fila.append(el('div', { textContent: ex.nombre }), series, reps, indic,
+        el('div', { className: 'acciones' }, [
+          el('button', { className: 'sec', textContent: 'Guardar', onclick: async () => {
+            await rpc('entrenador_editar_ejercicio', {
+              p_re: ex.id,
+              p_series: series.value ? Number(series.value) : null,
+              p_reps: reps.value.trim() || null,
+              p_indicaciones: indic.value.trim() || null
+            });
+          }}),
+          el('button', { className: 'peligro', textContent: 'Quitar', onclick: async () => {
+            await rpc('entrenador_quitar_ejercicio', { p_re: ex.id });
+            renderEditor();
+          }})
+        ]));
+      box.append(fila);
+    });
+
+    // agregar ejercicio al día
+    const sel = el('select');
+    ejercicios.forEach(e => sel.append(el('option', { value: e.id, textContent: e.nombre })));
+    const sSeries = el('input', { type: 'number', placeholder: 'Series' });
+    const sReps = el('input', { placeholder: 'Reps (8-10)' });
+    const sIndic = el('input', { className: 'indic', placeholder: 'Indicación (opcional)' });
+    const agregar = el('button', { textContent: 'Agregar al día', onclick: async () => {
+      if (!sel.value) return;
+      await rpc('entrenador_agregar_ejercicio', {
+        p_dia: d.id, p_ejercicio: sel.value,
+        p_series: sSeries.value ? Number(sSeries.value) : null,
+        p_reps: sReps.value.trim() || null,
+        p_indicaciones: sIndic.value.trim() || null
+      });
+      renderEditor();
+    }});
+    const add = el('div', { className: 'lineaEj' });
+    add.append(sel, sSeries, sReps, sIndic, el('div', { className: 'acciones' }, [agregar]));
+    box.append(el('div', { className: 'mut', textContent: 'Agregar ejercicio' }), add);
+
+    ed.append(box);
+  });
+}
+
+// ---------- SESIÓN GUARDADA ----------
+const guardado = sessionStorage.getItem('tfp');
+if (guardado) { pin = guardado; await iniciar(); }
+</script>
+</body>
+</html>
