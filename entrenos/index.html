@@ -65,6 +65,7 @@ details[open]>summary::after{content:' ▴'}
   <details class="card" open>
     <summary><h2>Mi rutina</h2></summary>
     <div class="tabs" id="tabs" style="margin-top:10px"></div>
+    <div class="row2" style="margin-top:10px"><input type="date" id="fechaRutina" title="Fecha de los pesos" max=""></div>
     <div id="dia"></div>
   </details>
 
@@ -126,6 +127,8 @@ async function cargar() {
   $('login').classList.add('hidden');
   $('app').classList.remove('hidden');
 
+  $('fechaRutina').value = hoyStr();
+  $('fechaRutina').max = hoyStr();
   renderCardio();
   cargarCalendario();
   cargarPlan();
@@ -187,9 +190,10 @@ function filaEjercicio(ex) {
   btn.onclick = async () => {
     if (!peso.value || !reps.value) { msg.textContent = 'Cargá peso y reps'; return; }
     btn.disabled = true;
-    const { error } = await sb.rpc('registrar_serie', {
+    const { error } = await sb.rpc('registrar_serie_con_fecha', {
       p_alumno: alumno, p_pin: pin, p_ejercicio: ex.id,
-      p_peso: Number(peso.value), p_repeticiones: Number(reps.value)
+      p_peso: Number(peso.value), p_repeticiones: Number(reps.value),
+      p_fecha: $('fechaRutina').value || hoyStr()
     });
     btn.disabled = false;
     if (error) { msg.textContent = 'No se pudo guardar, probá de nuevo'; return; }
