@@ -8,7 +8,8 @@
 :root{color-scheme:dark;--bg:#0a0a0a;--card:#161616;--txt:#f5f5f5;--mut:#9a9a9a;--ac:#D9B93C;--acTxt:#0a0a0a;--line:#2a2a2a}
 *{box-sizing:border-box}
 body{margin:0 auto;padding:16px;max-width:520px;font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt)}
-h1{font-size:1.3rem;margin:.2rem 0 1rem}
+h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ac)}
+h2{font-size:1rem;margin:0 0 10px;color:var(--ac)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
 input{font:inherit;width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit}
 button{font:inherit;background:var(--ac);color:var(--acTxt);font-weight:700;border:0;border-radius:8px;padding:10px 14px;cursor:pointer}
@@ -20,10 +21,20 @@ button.sec{background:transparent;color:var(--txt);border:1px solid var(--line)}
 .ex{border-top:1px solid var(--line);padding:12px 0}
 .ex:first-child{border-top:0;padding-top:0}
 .row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-top:8px}
+.row2{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-bottom:8px}
 .mut{color:var(--mut);font-size:.85rem;margin-top:4px}
+.indic{color:var(--ac);font-size:.9rem;margin-top:6px}
 .hidden{display:none}
 .err{color:#ff6b6b;min-height:1.2em}
-h1{text-transform:uppercase;letter-spacing:.04em;color:var(--ac)}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.nav strong{text-transform:capitalize}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dow{text-align:center;color:var(--mut);font-size:.75rem}
+.dia{min-height:54px;border:1px solid var(--line);border-radius:8px;padding:4px;font-size:.8rem}
+.dia.hoy{border-color:var(--ac)}
+.num{color:var(--txt)}
+.ok{color:var(--ac);font-weight:700}
+.cmin{color:var(--mut);font-size:.72rem}
 </style>
 </head>
 <body>
@@ -42,12 +53,23 @@ h1{text-transform:uppercase;letter-spacing:.04em;color:var(--ac)}
 
 <div id="app" class="hidden">
   <h1>Total Fit - Mis entrenamientos</h1>
+
   <div class="tabs" id="tabs"></div>
   <div class="card" id="dia"></div>
+
+  <div class="card" id="cardio"></div>
+
   <div class="card">
+    <h2>Calendario</h2>
+    <div id="calendario"></div>
+  </div>
+
+  <div class="card">
+    <h2>Evolución</h2>
     <div class="tabs" id="ejSel"></div>
     <div id="grafico"></div>
   </div>
+
   <button class="sec" id="salir">Salir</button>
 </div>
 
@@ -60,8 +82,12 @@ const sb = createClient(
 );
 
 let alumno = null, pin = null, dias = [], diaIdx = 0, ejercicios = [], ejActivo = null;
+let mesVista = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
 const $ = id => document.getElementById(id);
 const el = (tag, props = {}) => Object.assign(document.createElement(tag), props);
+const hoyStr = () => new Date().toLocaleDateString('sv-SE');
+const fechaStr = d => d.toLocaleDateString('sv-SE');
 
 // ---------- LOGIN ----------
 $('entrar').onclick = async () => {
@@ -76,10 +102,13 @@ $('entrar').onclick = async () => {
 
 $('salir').onclick = () => { sessionStorage.removeItem('tf'); location.reload(); };
 
-// ---------- CARGA DE RUTINA ----------
+// ---------- CARGA GENERAL ----------
 async function cargar() {
   $('login').classList.add('hidden');
   $('app').classList.remove('hidden');
+
+  renderCardio();
+  cargarCalendario();
 
   const { data: rid, error } = await sb.rpc('alumno_rutina_vigente', { p_alumno: alumno, p_pin: pin });
   if (error) { $('dia').textContent = 'Error: ' + error.message; return; }
@@ -89,7 +118,6 @@ async function cargar() {
   if (e2) { $('dia').textContent = 'Error: ' + e2.message; return; }
 
   dias = det;
-  // lista única de ejercicios para el selector del gráfico
   const vistos = new Map();
   dias.forEach(d => d.ejercicios.forEach(e => vistos.set(e.id, e)));
   ejercicios = [...vistos.values()];
@@ -99,6 +127,7 @@ async function cargar() {
   renderSelectorGrafico();
 }
 
+// ---------- RUTINA ----------
 function renderTabsDias() {
   const t = $('tabs');
   t.replaceChildren();
@@ -122,6 +151,7 @@ function filaEjercicio(ex) {
   const box = el('div', { className: 'ex' });
   box.append(el('strong', { textContent: ex.nombre }));
   box.append(el('div', { className: 'mut', textContent: `Objetivo: ${ex.series ?? '-'} series × ${ex.reps ?? '-'} reps` }));
+  if (ex.indicaciones) box.append(el('div', { className: 'indic', textContent: `Indicación: ${ex.indicaciones}` }));
 
   const ultima = el('div', { className: 'mut' });
   box.append(ultima);
@@ -145,6 +175,7 @@ function filaEjercicio(ex) {
     msg.textContent = `Guardado: ${peso.value} kg × ${reps.value}`;
     ultima.textContent = `Última vez: ${peso.value} kg × ${reps.value}`;
     peso.value = ''; reps.value = '';
+    cargarCalendario();
     if (ejActivo === ex.id) verGrafico(ex.id);
   };
 
@@ -163,11 +194,87 @@ async function mostrarUltima(id, nodo) {
   }
 }
 
+// ---------- CARDIO ----------
+function renderCardio() {
+  const c = $('cardio');
+  c.replaceChildren();
+  c.append(el('h2', { textContent: 'Cardio de hoy' }));
+
+  const min = el('input', { type: 'number', placeholder: 'Minutos', inputMode: 'numeric' });
+  const nota = el('input', { placeholder: 'Nota (opcional)' });
+  const btn = el('button', { textContent: 'Guardar cardio' });
+  const msg = el('div', { className: 'mut' });
+
+  const fila = el('div', { className: 'row2' });
+  fila.append(min, nota);
+
+  btn.onclick = async () => {
+    if (!min.value) { msg.textContent = 'Poné los minutos'; return; }
+    btn.disabled = true;
+    const { error } = await sb.rpc('registrar_cardio', {
+      p_alumno: alumno, p_pin: pin, p_fecha: hoyStr(),
+      p_minutos: Number(min.value), p_nota: nota.value.trim() || null
+    });
+    btn.disabled = false;
+    msg.textContent = error ? 'No se pudo guardar' : `Guardado: ${min.value} min`;
+    if (!error) cargarCalendario();
+  };
+
+  c.append(fila, btn, msg);
+}
+
+// ---------- CALENDARIO ----------
+async function cargarCalendario() {
+  const cont = $('calendario');
+  const ini = new Date(mesVista.getFullYear(), mesVista.getMonth(), 1);
+  const fin = new Date(mesVista.getFullYear(), mesVista.getMonth() + 1, 0);
+
+  const { data, error } = await sb.rpc('calendario', {
+    p_alumno: alumno, p_pin: pin, p_desde: fechaStr(ini), p_hasta: fechaStr(fin)
+  });
+
+  cont.replaceChildren();
+
+  const nav = el('div', { className: 'nav' });
+  nav.append(
+    el('button', { className: 'sec', textContent: '←', onclick: () => {
+      mesVista = new Date(mesVista.getFullYear(), mesVista.getMonth() - 1, 1); cargarCalendario();
+    }}),
+    el('strong', { textContent: mesVista.toLocaleDateString('es-AR', { month: 'long', year: 'numeric' }) }),
+    el('button', { className: 'sec', textContent: '→', onclick: () => {
+      mesVista = new Date(mesVista.getFullYear(), mesVista.getMonth() + 1, 1); cargarCalendario();
+    }})
+  );
+  cont.append(nav);
+
+  if (error) { cont.append(el('div', { className: 'mut', textContent: 'No se pudo cargar el calendario' })); return; }
+
+  const entrenos = new Set((data.entrenos || []).map(e => e.fecha));
+  const cardio = new Map((data.cardio || []).map(c => [c.fecha, c]));
+
+  const grid = el('div', { className: 'grid' });
+  ['L', 'M', 'X', 'J', 'V', 'S', 'D'].forEach(d => grid.append(el('div', { className: 'dow', textContent: d })));
+
+  const offset = (ini.getDay() + 6) % 7;
+  for (let i = 0; i < offset; i++) grid.append(el('div'));
+
+  for (let d = 1; d <= fin.getDate(); d++) {
+    const f = fechaStr(new Date(ini.getFullYear(), ini.getMonth(), d));
+    const celda = el('div', { className: 'dia' + (f === hoyStr() ? ' hoy' : '') });
+    celda.append(el('div', { className: 'num', textContent: String(d) }));
+    if (entrenos.has(f)) celda.append(el('div', { className: 'ok', textContent: '✔' }));
+    const c = cardio.get(f);
+    if (c) celda.append(el('div', { className: 'cmin', textContent: `${c.minutos} min` }));
+    grid.append(celda);
+  }
+  cont.append(grid);
+}
+
 // ---------- GRÁFICO DE EVOLUCIÓN ----------
 function renderSelectorGrafico() {
   const s = $('ejSel');
   s.replaceChildren();
-  ejercicios.forEach((e, i) => s.append(el('button', {
+  ejercicios.forEach(e => s.append(el('button', {
     textContent: e.nombre,
     className: e.id === ejActivo ? 'on' : '',
     onclick: () => { verGrafico(e.id); renderSelectorGrafico(); }
