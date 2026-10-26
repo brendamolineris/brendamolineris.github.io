@@ -60,6 +60,13 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
   <div class="card">
     <h2>Alumnos</h2>
     <select id="selAlumno"></select>
+    <h3>Objetivo de cardio</h3>
+    <div class="grid4">
+      <input id="cDias" type="number" min="0" max="7" placeholder="Días por semana">
+      <input id="cMin" type="number" min="0" placeholder="Minutos aprox.">
+    </div>
+    <button class="sec" id="cGuardar">Guardar objetivo</button>
+    <div class="mut" id="msgCardio"></div>
     <details>
       <summary>Nuevo alumno</summary>
       <input id="nAlumno" placeholder="Nombre">
@@ -193,6 +200,7 @@ async function cargarTodo() {
   ejercicios = await rpc('entrenador_listar_ejercicios');
   if (!alumnoSel || !alumnos.find(a => a.id === alumnoSel.id)) alumnoSel = alumnos[0] || null;
   renderAlumnos();
+  await cargarObjetivo();
   renderEjercicios();
   await renderPlantillas();
   await renderRutinas();
@@ -200,6 +208,24 @@ async function cargarTodo() {
 }
 
 // ---------- ALUMNOS ----------
+async function cargarObjetivo() {
+  $('msgCardio').textContent = '';
+  if (!alumnoSel) { $('cDias').value = ''; $('cMin').value = ''; return; }
+  const d = await rpc('entrenador_obtener_cardio_objetivo', { p_alumno: alumnoSel.id });
+  const o = d?.[0];
+  $('cDias').value = o?.dias ?? '';
+  $('cMin').value = o?.minutos ?? '';
+}
+
+$('cGuardar').onclick = async () => {
+  if (!alumnoSel) return;
+  const dias = $('cDias').value === '' ? null : Number($('cDias').value);
+  const min = $('cMin').value === '' ? null : Number($('cMin').value);
+  try {
+    await rpc('entrenador_guardar_cardio_objetivo', { p_alumno: alumnoSel.id, p_dias: dias, p_minutos: min });
+    $('msgCardio').textContent = 'Objetivo guardado';
+  } catch (e) { $('msgCardio').textContent = 'Error: ' + e.message; }
+};
 function renderAlumnos() {
   const s = $('selAlumno');
   s.replaceChildren();
@@ -208,6 +234,7 @@ function renderAlumnos() {
     alumnoSel = alumnos.find(a => a.id === s.value);
     rutinaSel = null; $('editor').replaceChildren();
     $('nomPlan').textContent = alumnoSel ? alumnoSel.nombre : '—';
+    await cargarObjetivo();
     await renderRutinas();
     await cargarPlanes();
   };
