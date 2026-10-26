@@ -87,6 +87,11 @@ details[open]>summary::after{content:' ▴'}
   </details>
 
   <details class="card">
+    <summary><h2>Peso corporal</h2></summary>
+    <div id="pesoCorp" style="margin-top:10px"></div>
+  </details>
+
+  <details class="card">
     <summary><h2>Calendario</h2></summary>
     <div id="calendario" style="margin-top:10px"></div>
   </details>
@@ -160,6 +165,7 @@ async function cargar() {
   $('fechaRutina').value = hoyStr();
   $('fechaRutina').max = hoyStr();
   renderCardio();
+  renderPesoCorp();
   cargarCalendario();
   cargarPlan();
 
@@ -287,6 +293,54 @@ async function renderCardio() {
   };
 
   c.append(fila, nota, btn, msg);
+}
+
+// ---------- PESO CORPORAL ----------
+async function renderPesoCorp() {
+  const c = $('pesoCorp');
+  c.replaceChildren();
+
+  const fecha = el('input', { type: 'date', value: hoyStr(), max: hoyStr(), title: 'Fecha' });
+  const kg = el('input', { type: 'number', step: '0.1', placeholder: 'Peso kg', inputMode: 'decimal' });
+  fecha.style.minWidth = '0'; fecha.style.width = '100%';
+  kg.style.minWidth = '0'; kg.style.width = '100%';
+  const fila = el('div', { className: 'row2' });
+  fila.style.gridTemplateColumns = '1fr 1fr';
+  fila.append(fecha, kg);
+
+  const btn = el('button', { textContent: 'Guardar peso' });
+  const msg = el('div', { className: 'mut' });
+  const lista = el('div', { style: 'margin-top:12px' });
+
+  btn.onclick = async () => {
+    if (!kg.value) { msg.textContent = 'Poné tu peso'; return; }
+    btn.disabled = true;
+    const { error } = await sb.rpc('alumno_registrar_peso', {
+      p_alumno: alumno, p_pin: pin, p_fecha: fecha.value || hoyStr(), p_peso: Number(kg.value)
+    });
+    btn.disabled = false;
+    if (error) { msg.textContent = 'No se pudo guardar'; return; }
+    msg.textContent = `Guardado: ${kg.value} kg el ${fecha.value || hoyStr()}`;
+    kg.value = '';
+    cargarListaPeso(lista);
+  };
+
+  c.append(fila, btn, msg, lista);
+  cargarListaPeso(lista);
+}
+
+async function cargarListaPeso(nodo) {
+  const { data, error } = await sb.rpc('alumno_listar_peso', { p_alumno: alumno, p_pin: pin });
+  nodo.replaceChildren();
+  if (error) { nodo.textContent = 'No se pudo cargar el historial'; return; }
+  if (!data?.length) { nodo.textContent = 'Todavía no registraste tu peso.'; return; }
+  const ult = data[0];
+  nodo.append(el('div', { className: 'mut', textContent: `Último registro: ${ult.peso} kg (${ult.fecha})` }));
+  data.forEach(p => nodo.append(el('div', {
+    className: 'mut',
+    textContent: `${p.fecha} · ${p.peso} kg`,
+    style: 'border-top:1px solid var(--line);padding:6px 0'
+  })));
 }
 
 // ---------- CALENDARIO ----------
