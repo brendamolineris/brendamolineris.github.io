@@ -27,6 +27,11 @@ button.sec{background:transparent;color:var(--txt);border:1px solid var(--line)}
 .video{display:inline-block;color:var(--ac);font-size:.85rem;margin-top:4px}
 .plan{white-space:pre-wrap;line-height:1.5;font-size:.95rem}
 .planSel{background:var(--card);color:var(--txt);margin-bottom:10px}
+details>summary{cursor:pointer;list-style:none;color:var(--ac)}
+details>summary h2{display:inline;font-size:1rem;margin:0;color:var(--ac)}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:' ▾';color:var(--mut)}
+details[open]>summary::after{content:' ▴'}
 .hidden{display:none}
 .err{color:#ff6b6b;min-height:1.2em}
 .nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
@@ -57,26 +62,32 @@ button.sec{background:transparent;color:var(--txt);border:1px solid var(--line)}
 <div id="app" class="hidden">
   <h1>Total Fit - Mis entrenamientos</h1>
 
-  <div class="tabs" id="tabs"></div>
-  <div class="card" id="dia"></div>
+  <details class="card" open>
+    <summary><h2>Mi rutina</h2></summary>
+    <div class="tabs" id="tabs" style="margin-top:10px"></div>
+    <div id="dia"></div>
+  </details>
 
-  <div class="card" id="cardio"></div>
+  <details class="card">
+    <summary><h2>Plan de alimentación</h2></summary>
+    <div id="plan" style="margin-top:10px"></div>
+  </details>
 
-  <div class="card">
-    <h2>Calendario</h2>
-    <div id="calendario"></div>
-  </div>
+  <details class="card">
+    <summary><h2>Cardio</h2></summary>
+    <div id="cardio" style="margin-top:10px"></div>
+  </details>
 
-  <div class="card">
-    <h2>Evolución</h2>
-    <div class="tabs" id="ejSel"></div>
+  <details class="card">
+    <summary><h2>Calendario</h2></summary>
+    <div id="calendario" style="margin-top:10px"></div>
+  </details>
+
+  <details class="card">
+    <summary><h2>Evolución de cargas/fuerza</h2></summary>
+    <div class="tabs" id="ejSel" style="margin-top:10px"></div>
     <div id="grafico"></div>
-  </div>
-
-  <div class="card">
-    <h2>Plan de alimentación</h2>
-    <div id="plan"></div>
-  </div>
+  </details>
 
   <button class="sec" id="salir">Salir</button>
 </div>
@@ -208,7 +219,6 @@ async function mostrarUltima(id, nodo) {
 function renderCardio() {
   const c = $('cardio');
   c.replaceChildren();
-  c.append(el('h2', { textContent: 'Cardio de hoy' }));
 
   const min = el('input', { type: 'number', placeholder: 'Minutos', inputMode: 'numeric' });
   const nota = el('input', { placeholder: 'Nota (opcional)' });
