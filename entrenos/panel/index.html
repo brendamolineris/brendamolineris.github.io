@@ -63,6 +63,13 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
   <div class="card">
     <h2>Ejercicios</h2>
     <div id="listaEj"></div>
+    <details style="margin-top:10px">
+      <summary>Importar varios desde Google Sheets</summary>
+      <p class="mut">En la hoja: columna A = nombre del ejercicio, columna B = link del video (opcional). Seleccioná las filas, copiá y pegalas acá. Una fila por ejercicio.</p>
+      <textarea id="pegarEj" rows="6" style="width:100%;font:inherit;background:transparent;color:inherit;border:1px solid var(--line);border-radius:8px;padding:9px"></textarea>
+      <button id="importarEj" style="margin-top:6px;width:100%">Importar</button>
+      <div class="mut" id="msgImport"></div>
+    </details>
     <div class="grid4" style="margin-top:8px">
       <input id="nEj" placeholder="Nuevo ejercicio">
       <button id="crearEj">Agregar</button>
@@ -173,6 +180,27 @@ $('crearEj').onclick = async () => {
   if (!nombre) return;
   await rpc('entrenador_crear_ejercicio', { p_nombre: nombre });
   $('nEj').value = '';
+  ejercicios = await rpc('entrenador_listar_ejercicios');
+  renderEjercicios();
+};
+
+$('importarEj').onclick = async () => {
+  const msg = $('msgImport');
+  const filas = $('pegarEj').value.split('\n').map(l => l.trim()).filter(Boolean);
+  if (!filas.length) { msg.textContent = 'Pegá las filas primero'; return; }
+  let ok = 0, fail = 0;
+  for (const f of filas) {
+    const cols = f.includes('\t') ? f.split('\t') : f.split(';');
+    const nombre = (cols[0] || '').trim();
+    const video = (cols[1] || '').trim() || null;
+    if (!nombre || nombre.toLowerCase() === 'nombre') continue;
+    try {
+      await rpc('entrenador_crear_ejercicio', { p_nombre: nombre, p_video: video });
+      ok++;
+    } catch (e) { fail++; }
+  }
+  $('pegarEj').value = '';
+  msg.textContent = `Importados: ${ok}${fail ? ' · con error: ' + fail : ''}`;
   ejercicios = await rpc('entrenador_listar_ejercicios');
   renderEjercicios();
 };
