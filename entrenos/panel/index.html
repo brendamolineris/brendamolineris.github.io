@@ -13,8 +13,9 @@ h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:
 h2{font-size:1rem;margin:0 0 10px;color:var(--ac)}
 h3{font-size:.95rem;margin:14px 0 8px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
-input,select{font:inherit;width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit;margin-bottom:6px}
+input,select,textarea{font:inherit;width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit;margin-bottom:6px}
 select option{background:var(--card);color:var(--txt)}
+textarea{font-family:inherit;min-height:160px;white-space:pre-wrap}
 button{font:inherit;background:var(--ac);color:var(--acTxt);font-weight:700;border:0;border-radius:8px;padding:9px 12px;cursor:pointer}
 button.sec{background:transparent;color:var(--txt);border:1px solid var(--line)}
 button.peligro{background:transparent;color:#ff6b6b;border:1px solid #5a2a2a}
@@ -32,6 +33,8 @@ button:disabled{opacity:.5}
 .hidden{display:none}
 details{margin-bottom:10px}
 summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chips button{background:transparent;color:var(--txt);border:1px solid var(--line);font-weight:400;padding:6px 10px}
 </style>
 </head>
 <body>
@@ -66,7 +69,7 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
     <details style="margin-top:10px">
       <summary>Importar varios desde Google Sheets</summary>
       <p class="mut">En la hoja: columna A = nombre del ejercicio, columna B = link del video (opcional). Seleccioná las filas, copiá y pegalas acá. Una fila por ejercicio.</p>
-      <textarea id="pegarEj" rows="6" style="width:100%;font:inherit;background:transparent;color:inherit;border:1px solid var(--line);border-radius:8px;padding:9px"></textarea>
+      <textarea id="pegarEj" rows="6"></textarea>
       <button id="importarEj" style="margin-top:6px;width:100%">Importar</button>
       <div class="mut" id="msgImport"></div>
     </details>
@@ -77,20 +80,51 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
   </details>
 
   <div class="card">
+    <h2>Plantillas</h2>
+    <p class="mut">Rutinas base (3, 4, 5 o 6 días) que después usás para cualquier alumno.</p>
+    <div id="listaPlant"></div>
+    <details style="margin-top:8px">
+      <summary>Crear plantilla en blanco</summary>
+      <input id="pNombre" placeholder="Nombre (ej: Plantilla 4 días)">
+      <div class="grid4">
+        <input id="pDias" type="number" min="1" max="7" placeholder="Cantidad de días">
+        <button id="crearPlant">Crear</button>
+      </div>
+      <div class="mut" id="msgPlant"></div>
+    </details>
+  </div>
+
+  <div class="card">
     <h2>Rutinas de <span id="nomAlumno"></span></h2>
     <div id="listaRut"></div>
     <h3>Nueva rutina</h3>
-    <input id="rNombre" placeholder="Nombre (ej: Octubre - Fuerza)">
+    <select id="rOrigen"></select>
+    <input id="rNombre" placeholder="Nombre (ej: Noviembre - Fuerza)">
     <div class="grid4">
       <input id="rInicio" type="date" title="Inicio">
       <input id="rFin" type="date" title="Fin">
     </div>
     <div class="grid4">
-      <input id="rDias" type="number" min="1" max="7" placeholder="Cantidad de días">
-      <button id="crearRut">Crear vacía</button>
+      <input id="rDias" type="number" min="1" max="7" placeholder="Días (sólo si es en blanco)">
+      <button id="crearRut">Crear</button>
     </div>
-    <button class="sec" id="copiarRut" style="width:100%;margin-top:6px">Copiar la última rutina (con las fechas de arriba)</button>
     <div class="mut" id="msgRut"></div>
+  </div>
+
+  <div class="card">
+    <h2>Plan de alimentación de <span id="nomPlan"></span></h2>
+    <div class="grid4">
+      <input id="planMes" type="month" title="Mes">
+      <button class="sec" id="planCargar">Ver este mes</button>
+    </div>
+    <textarea id="planTexto" placeholder="Pegá acá el plan desde Canva"></textarea>
+    <div class="grid4">
+      <button class="sec" id="planCopiar">Copiar del mes anterior</button>
+      <button id="planGuardar">Guardar plan</button>
+    </div>
+    <div class="mut" id="msgPlan"></div>
+    <h3>Planes anteriores</h3>
+    <div class="chips" id="listaPlanes"></div>
   </div>
 
   <div id="editor"></div>
@@ -106,12 +140,20 @@ const sb = createClient(
   'sb_publishable_pw9lAS5n8Vyv0V9EOowoDA_zT2lH0Ns'
 );
 
-let pin = null, alumnos = [], ejercicios = [], rutinas = [], alumnoSel = null, rutinaSel = null;
+let pin = null, alumnos = [], ejercicios = [], rutinas = [], plantillas = [], todas = [], planes = [];
+let alumnoSel = null, rutinaSel = null;
+
 const $ = id => document.getElementById(id);
 const el = (tag, props = {}, kids = []) => {
   const n = Object.assign(document.createElement(tag), props);
   kids.forEach(k => n.append(k));
   return n;
+};
+const mesActualStr = () => new Date().toLocaleDateString('sv-SE').slice(0, 7);
+const mesAnteriorStr = m => {
+  const [y, mm] = m.split('-').map(Number);
+  const d = new Date(y, mm - 2, 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 };
 
 async function rpc(nombre, args = {}) {
@@ -136,6 +178,7 @@ $('salir').onclick = () => { sessionStorage.removeItem('tfp'); location.reload()
 async function iniciar() {
   $('login').classList.add('hidden');
   $('app').classList.remove('hidden');
+  $('planMes').value = mesActualStr();
   await cargarTodo();
 }
 
@@ -145,7 +188,9 @@ async function cargarTodo() {
   if (!alumnoSel || !alumnos.find(a => a.id === alumnoSel.id)) alumnoSel = alumnos[0] || null;
   renderAlumnos();
   renderEjercicios();
+  await renderPlantillas();
   await renderRutinas();
+  await cargarPlanes();
 }
 
 // ---------- ALUMNOS ----------
@@ -156,9 +201,12 @@ function renderAlumnos() {
   s.onchange = async () => {
     alumnoSel = alumnos.find(a => a.id === s.value);
     rutinaSel = null; $('editor').replaceChildren();
+    $('nomPlan').textContent = alumnoSel ? alumnoSel.nombre : '—';
     await renderRutinas();
+    await cargarPlanes();
   };
   $('nomAlumno').textContent = alumnoSel ? alumnoSel.nombre : '—';
+  $('nomPlan').textContent = alumnoSel ? alumnoSel.nombre : '—';
 }
 
 $('crearAlumno').onclick = async () => {
@@ -209,45 +257,72 @@ $('importarEj').onclick = async () => {
   renderEjercicios();
 };
 
-// ---------- RUTINAS ----------
+// ---------- PLANTILLAS ----------
+async function renderPlantillas() {
+  plantillas = await rpc('entrenador_listar_plantillas');
+  const l = $('listaPlant');
+  l.replaceChildren();
+  if (!plantillas.length) { l.append(el('div', { className: 'mut', textContent: 'Todavía no hay plantillas.' })); }
+  plantillas.forEach(p => l.append(el('div', { className: 'item' }, [
+    el('div', { innerHTML: `<strong>${p.nombre}</strong><div class="mut">${p.dias} días</div>` }),
+    el('button', { className: 'sec', textContent: 'Editar', onclick: () => abrirRutina(p.id) })
+  ])));
+  await renderOrigenes();
+}
+
+$('crearPlant').onclick = async () => {
+  const msg = $('msgPlant');
+  const nombre = $('pNombre').value.trim(), dias = Number($('pDias').value);
+  if (!nombre || !dias) { msg.textContent = 'Completá nombre y cantidad de días'; return; }
+  try {
+    const id = await rpc('entrenador_crear_plantilla', { p_nombre: nombre, p_dias: dias });
+    $('pNombre').value = ''; $('pDias').value = '';
+    msg.textContent = 'Plantilla creada';
+    await renderPlantillas();
+    abrirRutina(id);
+  } catch (e) { msg.textContent = 'Error: ' + e.message; }
+};
+
+// ---------- RUTINAS DEL ALUMNO ----------
 async function renderRutinas() {
   const l = $('listaRut');
   l.replaceChildren();
   if (!alumnoSel) { l.textContent = 'Primero creá un alumno.'; return; }
   rutinas = await rpc('entrenador_listar_rutinas', { p_alumno: alumnoSel.id });
-  if (!rutinas.length) { l.textContent = 'Este alumno todavía no tiene rutinas.'; return; }
-  rutinas.forEach(r => l.append(el('div', { className: 'item' }, [])));
-  l.replaceChildren();
-  rutinas.forEach(r => {
-    const fila = el('div', { className: 'item' });
-    fila.append(
-      el('div', { innerHTML: `<strong>${r.nombre}</strong><div class="mut">${r.fecha_inicio} → ${r.fecha_fin}</div>` }),
-      el('button', { className: 'sec', textContent: 'Editar', onclick: () => abrirRutina(r.id) })
-    );
-    l.append(fila);
-  });
+  if (!rutinas.length) { l.append(el('div', { className: 'mut', textContent: 'Este alumno todavía no tiene rutinas.' })); }
+  rutinas.forEach(r => l.append(el('div', { className: 'item' }, [
+    el('div', { innerHTML: `<strong>${r.nombre}</strong><div class="mut">${r.fecha_inicio} → ${r.fecha_fin}</div>` }),
+    el('button', { className: 'sec', textContent: 'Editar', onclick: () => abrirRutina(r.id) })
+  ])));
+  await renderOrigenes();
+}
+
+// Desplegable de origen: en blanco + todas las rutinas y plantillas
+async function renderOrigenes() {
+  todas = await rpc('entrenador_listar_rutinas_todas');
+  const s = $('rOrigen');
+  const actual = s.value;
+  s.replaceChildren();
+  s.append(el('option', { value: 'blank', textContent: 'En blanco' }));
+  todas.forEach(t => s.append(el('option', { value: t.id, textContent: t.etiqueta })));
+  if (actual && [...s.options].some(o => o.value === actual)) s.value = actual;
 }
 
 $('crearRut').onclick = async () => {
   const msg = $('msgRut');
+  const origen = $('rOrigen').value;
   const nombre = $('rNombre').value.trim(), ini = $('rInicio').value, fin = $('rFin').value, dias = Number($('rDias').value);
-  if (!alumnoSel || !nombre || !ini || !fin || !dias) { msg.textContent = 'Completá nombre, fechas y cantidad de días'; return; }
+  if (!alumnoSel || !nombre || !ini || !fin) { msg.textContent = 'Completá nombre y fechas'; return; }
   try {
-    const id = await rpc('entrenador_crear_rutina', { p_alumno: alumnoSel.id, p_nombre: nombre, p_inicio: ini, p_fin: fin, p_dias: dias });
+    let id;
+    if (origen === 'blank') {
+      if (!dias) { msg.textContent = 'Poné la cantidad de días'; return; }
+      id = await rpc('entrenador_crear_rutina', { p_alumno: alumnoSel.id, p_nombre: nombre, p_inicio: ini, p_fin: fin, p_dias: dias });
+    } else {
+      id = await rpc('entrenador_copiar_rutina_a', { p_origen: origen, p_alumno: alumnoSel.id, p_nombre: nombre, p_inicio: ini, p_fin: fin });
+    }
+    $('rNombre').value = '';
     msg.textContent = 'Rutina creada';
-    await renderRutinas();
-    abrirRutina(id);
-  } catch (e) { msg.textContent = 'Error: ' + e.message; }
-};
-
-$('copiarRut').onclick = async () => {
-  const msg = $('msgRut');
-  const nombre = $('rNombre').value.trim(), ini = $('rInicio').value, fin = $('rFin').value;
-  if (!rutinas.length) { msg.textContent = 'No hay rutina anterior para copiar'; return; }
-  if (!nombre || !ini || !fin) { msg.textContent = 'Completá nombre y fechas'; return; }
-  try {
-    const id = await rpc('entrenador_copiar_rutina', { p_origen: rutinas[0].id, p_nombre: nombre, p_inicio: ini, p_fin: fin });
-    msg.textContent = 'Rutina copiada';
     await renderRutinas();
     abrirRutina(id);
   } catch (e) { msg.textContent = 'Error: ' + e.message; }
@@ -265,18 +340,28 @@ async function renderEditor() {
   if (!rutinaSel) return;
   const dias = await rpc('entrenador_rutina_detalle', { p_rutina: rutinaSel });
 
-  ed.append(el('h2', { textContent: 'Editar rutina' }));
+  const cab = el('div', { className: 'item' }, [
+    el('h2', { textContent: 'Editar rutina' }),
+    el('button', { className: 'sec', textContent: 'Guardar como plantilla', onclick: async () => {
+      const nombre = prompt('Nombre de la plantilla:');
+      if (!nombre) return;
+      await rpc('entrenador_guardar_como_plantilla', { p_origen: rutinaSel, p_nombre: nombre.trim() });
+      await renderPlantillas();
+      alert('Plantilla guardada');
+    }})
+  ]);
+  ed.append(cab);
 
   dias.forEach(d => {
     const box = el('div', { className: 'dia' });
 
-    const cab = el('div', { className: 'grid4' });
+    const cabDia = el('div', { className: 'grid4' });
     const nombreDia = el('input', { value: d.nombre || '', placeholder: `Nombre del día ${d.numero} (ej: Pierna)` });
     const guardarDia = el('button', { className: 'sec', textContent: 'Guardar nombre', onclick: async () => {
       await rpc('entrenador_renombrar_dia', { p_dia: d.id, p_nombre: nombreDia.value.trim() || null });
     }});
-    cab.append(nombreDia, guardarDia);
-    box.append(el('h3', { textContent: `Día ${d.numero}` }), cab);
+    cabDia.append(nombreDia, guardarDia);
+    box.append(el('h3', { textContent: `Día ${d.numero}` }), cabDia);
 
     d.ejercicios.forEach(ex => {
       const fila = el('div', { className: 'lineaEj' });
@@ -324,6 +409,50 @@ async function renderEditor() {
     ed.append(box);
   });
 }
+
+// ---------- PLAN DE ALIMENTACIÓN ----------
+async function cargarPlanes() {
+  if (!alumnoSel) return;
+  planes = await rpc('entrenador_listar_planes', { p_alumno: alumnoSel.id });
+  const l = $('listaPlanes');
+  l.replaceChildren();
+  if (!planes.length) l.append(el('div', { className: 'mut', textContent: 'Todavía no hay planes cargados.' }));
+  planes.forEach(p => {
+    const m = p.mes.slice(0, 7);
+    l.append(el('button', { textContent: m, onclick: () => verMes(m) }));
+  });
+  verMes($('planMes').value || mesActualStr());
+}
+
+function verMes(m) {
+  $('planMes').value = m;
+  const p = planes.find(x => x.mes.slice(0, 7) === m);
+  $('planTexto').value = p ? p.texto : '';
+  $('msgPlan').textContent = p ? '' : 'No hay plan cargado para ese mes';
+}
+
+$('planMes').onchange = () => verMes($('planMes').value);
+$('planCargar').onclick = () => verMes($('planMes').value);
+
+$('planCopiar').onclick = () => {
+  const actual = $('planMes').value;
+  const anterior = mesAnteriorStr(actual);
+  const p = planes.find(x => x.mes.slice(0, 7) === anterior);
+  if (!p) { $('msgPlan').textContent = 'No hay plan del mes anterior'; return; }
+  $('planTexto').value = p.texto;
+  $('msgPlan').textContent = 'Copiado del mes anterior. Editalo y guardá.';
+};
+
+$('planGuardar').onclick = async () => {
+  const m = $('planMes').value;
+  if (!alumnoSel || !m) return;
+  try {
+    await rpc('entrenador_guardar_plan', { p_alumno: alumnoSel.id, p_mes: m + '-01', p_texto: $('planTexto').value });
+    $('msgPlan').textContent = 'Plan guardado';
+    await cargarPlanes();
+    verMes(m);
+  } catch (e) { $('msgPlan').textContent = 'Error: ' + e.message; }
+};
 
 // ---------- SESIÓN GUARDADA ----------
 const guardado = sessionStorage.getItem('tfp');
