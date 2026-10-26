@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Total Fit - Mis entrenamientos</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Total Fit">
+<meta name="theme-color" content="#0a0a0a">
 <style>
 :root{color-scheme:dark;--bg:#0a0a0a;--card:#161616;--txt:#f5f5f5;--mut:#9a9a9a;--ac:#D9B93C;--acTxt:#0a0a0a;--line:#2a2a2a}
 *{box-sizing:border-box}
@@ -43,11 +47,13 @@ details[open]>summary::after{content:' ▴'}
 .num{color:var(--txt)}
 .ok{color:var(--ac);font-weight:700}
 .cmin{color:var(--mut);font-size:.72rem}
+.logo{display:block;width:96px;height:96px;border-radius:50%;margin:0 auto 12px}
 </style>
 </head>
 <body>
 
 <div id="login">
+  <img class="logo" src="logo.png" alt="Total Fit">
   <h1>Total Fit - Mis entrenamientos</h1>
   <div class="card">
     <input id="nombre" placeholder="Tu nombre" autocomplete="username">
@@ -60,6 +66,7 @@ details[open]>summary::after{content:' ▴'}
 </div>
 
 <div id="app" class="hidden">
+  <img class="logo" src="logo.png" alt="Total Fit" style="width:64px;height:64px;margin-bottom:8px">
   <h1>Total Fit - Mis entrenamientos</h1>
 
   <details class="card" open>
