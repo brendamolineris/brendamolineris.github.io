@@ -216,31 +216,38 @@ async function mostrarUltima(id, nodo) {
 }
 
 // ---------- CARDIO ----------
-function renderCardio() {
+async function renderCardio() {
   const c = $('cardio');
   c.replaceChildren();
 
+  const { data: obj } = await sb.rpc('alumno_cardio_objetivo', { p_alumno: alumno, p_pin: pin });
+  const o = obj?.[0];
+  if (o && (o.dias || o.minutos)) {
+    c.append(el('div', { className: 'mut', textContent: `Objetivo: ${o.dias ?? '-'} días por semana · ${o.minutos ?? '-'} min aprox.` }));
+  }
+
+  const fecha = el('input', { type: 'date', value: hoyStr(), max: hoyStr(), title: 'Fecha' });
   const min = el('input', { type: 'number', placeholder: 'Minutos', inputMode: 'numeric' });
   const nota = el('input', { placeholder: 'Nota (opcional)' });
   const btn = el('button', { textContent: 'Guardar cardio' });
   const msg = el('div', { className: 'mut' });
 
   const fila = el('div', { className: 'row2' });
-  fila.append(min, nota);
+  fila.append(fecha, min);
 
   btn.onclick = async () => {
     if (!min.value) { msg.textContent = 'Poné los minutos'; return; }
     btn.disabled = true;
     const { error } = await sb.rpc('registrar_cardio', {
-      p_alumno: alumno, p_pin: pin, p_fecha: hoyStr(),
+      p_alumno: alumno, p_pin: pin, p_fecha: fecha.value || hoyStr(),
       p_minutos: Number(min.value), p_nota: nota.value.trim() || null
     });
     btn.disabled = false;
-    msg.textContent = error ? 'No se pudo guardar' : `Guardado: ${min.value} min`;
-    if (!error) cargarCalendario();
+    msg.textContent = error ? 'No se pudo guardar' : `Guardado: ${min.value} min el ${fecha.value || hoyStr()}`;
+    if (!error) { min.value = ''; nota.value = ''; cargarCalendario(); }
   };
 
-  c.append(fila, btn, msg);
+  c.append(fila, nota, btn, msg);
 }
 
 // ---------- CALENDARIO ----------
