@@ -67,6 +67,15 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
     </div>
     <button class="sec" id="cGuardar">Guardar objetivo</button>
     <div class="mut" id="msgCardio"></div>
+    <details style="margin-top:10px">
+      <summary>Resetear PIN del alumno</summary>
+      <p class="mut">Usalo si la alumna lo olvidó. Ponele un PIN nuevo de 4 números y avisale.</p>
+      <div class="grid4">
+        <input id="rPin" type="password" inputmode="numeric" maxlength="4" placeholder="PIN nuevo">
+        <button class="sec" id="rPinBtn">Resetear</button>
+      </div>
+      <div class="mut" id="msgRPin"></div>
+    </details>
     <details>
       <summary>Nuevo alumno</summary>
       <input id="nAlumno" placeholder="Nombre">
@@ -208,6 +217,19 @@ async function cargarTodo() {
 }
 
 // ---------- ALUMNOS ----------
+$('rPinBtn').onclick = async () => {
+  if (!alumnoSel) return;
+  const nuevo = $('rPin').value.trim();
+  const msg = $('msgRPin');
+  if (!/^[0-9]{4}$/.test(nuevo)) { msg.textContent = 'Tiene que tener 4 números'; return; }
+  if (!confirm(`¿Cambiar el PIN de ${alumnoSel.nombre}?`)) return;
+  try {
+    await rpc('entrenador_resetear_pin_alumno', { p_alumno: alumnoSel.id, p_nuevo: nuevo });
+    $('rPin').value = '';
+    msg.textContent = `PIN de ${alumnoSel.nombre} cambiado`;
+  } catch (e) { msg.textContent = 'Error: ' + e.message; }
+};
+
 async function cargarObjetivo() {
   $('msgCardio').textContent = '';
   if (!alumnoSel) { $('cDias').value = ''; $('cMin').value = ''; return; }
