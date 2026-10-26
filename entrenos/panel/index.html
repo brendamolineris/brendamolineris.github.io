@@ -68,6 +68,10 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
     <button class="sec" id="cGuardar">Guardar objetivo</button>
     <div class="mut" id="msgCardio"></div>
     <details style="margin-top:10px">
+      <summary>Peso corporal</summary>
+      <div id="listaPeso"></div>
+    </details>
+    <details style="margin-top:10px">
       <summary>Resetear PIN del alumno</summary>
       <p class="mut">Usalo si la alumna lo olvidó. Ponele un PIN nuevo de 4 números y avisale.</p>
       <div class="grid4">
@@ -237,6 +241,16 @@ async function cargarObjetivo() {
   const o = d?.[0];
   $('cDias').value = o?.dias ?? '';
   $('cMin').value = o?.minutos ?? '';
+  await cargarPesoPanel();
+}
+
+async function cargarPesoPanel() {
+  const l = $('listaPeso');
+  l.replaceChildren();
+  if (!alumnoSel) return;
+  const datos = await rpc('entrenador_listar_peso', { p_alumno: alumnoSel.id });
+  if (!datos.length) { l.append(el('div', { className: 'mut', textContent: 'Todavía no hay pesos registrados.' })); return; }
+  datos.forEach(p => l.append(el('div', { className: 'item', textContent: `${p.fecha} · ${p.peso} kg` })));
 }
 
 $('cGuardar').onclick = async () => {
