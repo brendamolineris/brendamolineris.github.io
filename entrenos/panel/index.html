@@ -265,7 +265,10 @@ async function renderPlantillas() {
   if (!plantillas.length) { l.append(el('div', { className: 'mut', textContent: 'Todavía no hay plantillas.' })); }
   plantillas.forEach(p => l.append(el('div', { className: 'item' }, [
     el('div', { innerHTML: `<strong>${p.nombre}</strong><div class="mut">${p.dias} días</div>` }),
-    el('button', { className: 'sec', textContent: 'Editar', onclick: () => abrirRutina(p.id) })
+    el('div', { style: 'display:flex;gap:6px' }, [
+      el('button', { className: 'sec', textContent: 'Editar', onclick: () => abrirRutina(p.id) }),
+      el('button', { className: 'peligro', textContent: 'Borrar', onclick: () => borrarRutina(p.id, p.nombre) })
+    ])
   ])));
   await renderOrigenes();
 }
@@ -292,7 +295,10 @@ async function renderRutinas() {
   if (!rutinas.length) { l.append(el('div', { className: 'mut', textContent: 'Este alumno todavía no tiene rutinas.' })); }
   rutinas.forEach(r => l.append(el('div', { className: 'item' }, [
     el('div', { innerHTML: `<strong>${r.nombre}</strong><div class="mut">${r.fecha_inicio} → ${r.fecha_fin}</div>` }),
-    el('button', { className: 'sec', textContent: 'Editar', onclick: () => abrirRutina(r.id) })
+    el('div', { style: 'display:flex;gap:6px' }, [
+      el('button', { className: 'sec', textContent: 'Editar', onclick: () => abrirRutina(r.id) }),
+      el('button', { className: 'peligro', textContent: 'Borrar', onclick: () => borrarRutina(r.id, r.nombre) })
+    ])
   ])));
   await renderOrigenes();
 }
@@ -327,6 +333,16 @@ $('crearRut').onclick = async () => {
     abrirRutina(id);
   } catch (e) { msg.textContent = 'Error: ' + e.message; }
 };
+
+async function borrarRutina(id, nombre) {
+  if (!confirm(`¿Borrar "${nombre}"? Se quitan sus días y ejercicios.`)) return;
+  try {
+    await rpc('entrenador_borrar_rutina', { p_rutina: id });
+    if (rutinaSel === id) { rutinaSel = null; $('editor').replaceChildren(); }
+    await renderPlantillas();
+    await renderRutinas();
+  } catch (e) { alert('Error: ' + e.message); }
+}
 
 async function abrirRutina(id) {
   rutinaSel = id;
