@@ -267,6 +267,11 @@ async function renderCardio() {
   const msg = el('div', { className: 'mut' });
 
   const fila = el('div', { className: 'row2' });
+  fila.style.gridTemplateColumns = '1fr 1fr';
+  fecha.style.minWidth = '0';
+  fecha.style.width = '100%';
+  min.style.minWidth = '0';
+  min.style.width = '100%';
   fila.append(fecha, min);
 
   btn.onclick = async () => {
