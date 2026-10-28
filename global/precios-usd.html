@@ -53,10 +53,10 @@ h1 em{color:var(--gold);font-style:italic}
 .btn-gold:hover{background:var(--gold-light)}
 .btn-outline{background:transparent;border:1px solid var(--gold);color:var(--gold)}
 .btn-outline:hover{background:rgba(201,168,76,.12)}
-.argentina{margin:2.5rem auto 0;max-width:520px;text-align:center;padding:1.8rem;border:1px solid var(--border);border-radius:8px}
-.argentina h3{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.5rem;margin-bottom:.6rem}
-.argentina p{color:var(--muted);font-size:.9rem;line-height:1.6;margin-bottom:.4rem}
-.argentina .btn{margin-top:1.2rem}
+.ars-block{margin-top:1.6rem;padding-top:1.2rem;border-top:1px solid var(--border);text-align:center}
+.ars-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.9rem;line-height:1.2;margin-bottom:.4rem;color:var(--white)}
+.ars-block .price{font-size:2.6rem}
+.ars-block .btn{margin-top:.7rem}
 @media(max-width:760px){.split{grid-template-columns:1fr;gap:24px}.split img{max-width:360px;margin:0 auto}h1{font-size:2rem}}
 </style>
 </head>
@@ -80,6 +80,7 @@ h1 em{color:var(--gold);font-style:italic}
           <li>Rutinas personalizadas para casa o para gym: vos elegís dónde entrenás</li>
           <li>Videos de cada ejercicio para que aprendas la técnica correcta</li>
           <li>Ajustes durante los 3 meses según tu progreso</li>
+          <li>App exclusiva Total Fit: tu rutina, el registro de tus cargas, tu cardio, tu peso corporal, y tu evolución en todo momento</li>
         </ul>
       </div>
       <div class="group">
@@ -113,19 +114,20 @@ h1 em{color:var(--gold);font-style:italic}
       </div>
 
       <div class="price-block">
-        <div class="price">200 <small>USD</small></div>
+        <div class="price">$200 <small>USD</small></div>
         <p class="note">Un solo pago en dólares.</p>
       </div>
 
       <a class="btn btn-gold" href="https://buy.stripe.com/3cIfZi4FgfRwgdq52m2wU02" target="_blank" rel="noopener" onclick="fbq('track','InitiateCheckout',{value:200,currency:'USD',content_name:'VIP pago unico USD'})">Pagar con Stripe</a>
       <p class="pay-note">Pago online seguro. Una vez confirmado, recibirás las instrucciones para comenzar tu programa.</p>
-    </div>
-  </div>
 
-  <div class="argentina">
-    <h3>🇦🇷 ¿Estás en Argentina?</h3>
-    <p>También podés abonar en pesos argentinos y consultar las opciones de pago disponibles.</p>
-    <a class="btn btn-outline" href="https://wa.me/541122909562?text=Hola%20Brenda!%20Estoy%20en%20Argentina%20y%20quiero%20saber%20las%20opciones%20de%20pago%20para%20Total%20Fit%20VIP." target="_blank" rel="noopener" onclick="fbq('track','Contact')">Escribime por WhatsApp</a>
+      <div class="ars-block">
+        <p class="ars-title">🇦🇷 ¿Estás en Argentina?</p>
+        <div class="price">$300.000 <small>ARS</small></div>
+        <p class="note">Pago único en pesos, o 2 cuotas de $180.000 ARS.</p>
+        <a class="btn btn-gold" href="https://wa.me/541122909562?text=Hola%20Brenda!%20Estoy%20en%20Argentina%20y%20quiero%20pagar%20el%20VIP%20en%20pesos%20ARS.%20%C2%BFMe%20pas%C3%A1s%20los%20datos%3F" target="_blank" rel="noopener" onclick="fbq('track','Contact')">Pagar en pesos ARS</a>
+      </div>
+    </div>
   </div>
 
 </div>
