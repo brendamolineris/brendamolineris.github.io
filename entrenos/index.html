@@ -92,6 +92,11 @@ details[open]>summary::after{content:' ▴'}
   </details>
 
   <details class="card">
+    <summary><h2>Mis datos</h2></summary>
+    <div id="misDatos" style="margin-top:10px"></div>
+  </details>
+
+  <details class="card">
     <summary><h2>Calendario</h2></summary>
     <div id="calendario" style="margin-top:10px"></div>
   </details>
@@ -166,6 +171,7 @@ async function cargar() {
   $('fechaRutina').max = hoyStr();
   renderCardio();
   renderPesoCorp();
+  renderPerfil();
   cargarCalendario();
   cargarPlan();
 
@@ -323,10 +329,13 @@ async function renderPesoCorp() {
     msg.textContent = `Guardado: ${kg.value} kg el ${fecha.value || hoyStr()}`;
     kg.value = '';
     cargarListaPeso(lista);
+    renderGraficoPeso();
   };
 
-  c.append(fila, btn, msg, lista);
+  const grafico = el('div', { id: 'pesoGrafico', style: 'margin-top:10px' });
+  c.append(fila, btn, msg, lista, grafico);
   cargarListaPeso(lista);
+  renderGraficoPeso();
 }
 
 async function cargarListaPeso(nodo) {
@@ -341,6 +350,43 @@ async function cargarListaPeso(nodo) {
     textContent: `${p.fecha} · ${p.peso} kg`,
     style: 'border-top:1px solid var(--line);padding:6px 0'
   })));
+}
+
+// ---------- GRÁFICO Y DATOS ----------
+function svgLinea(puntos) {
+  const d = document.createElement('div');
+  if (puntos.length < 2) { d.className = 'mut'; d.textContent = 'El gráfico aparece cuando haya al menos 2 pesos.'; return d; }
+  const W = 320, H = 160, P = 28;
+  const vals = puntos.map(p => Number(p.peso));
+  const min = Math.min(...vals), max = Math.max(...vals), rango = (max - min) || 1;
+  const x = i => P + i * (W - 2 * P) / (puntos.length - 1);
+  const y = v => H - P - (v - min) / rango * (H - 2 * P);
+  const pts = puntos.map((p, i) => `${x(i)},${y(Number(p.peso))}`).join(' ');
+  const dots = puntos.map((p, i) => `<circle cx="${x(i)}" cy="${y(Number(p.peso))}" r="3" fill="#D9B93C"/>`).join('');
+  d.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%"><polyline points="${pts}" fill="none" stroke="#D9B93C" stroke-width="2"/>${dots}<text x="${P}" y="${H - 6}" fill="#888" font-size="11">${puntos[0].fecha}</text><text x="${W - P}" y="${H - 6}" text-anchor="end" fill="#888" font-size="11">${puntos[puntos.length - 1].fecha}</text><text x="2" y="12" fill="#888" font-size="11">${max} kg</text><text x="2" y="${H - P}" fill="#888" font-size="11">${min} kg</text></svg>`;
+  return d;
+}
+
+async function renderGraficoPeso() {
+  const g = $('pesoGrafico');
+  if (!g) return;
+  const { data } = await sb.rpc('alumno_listar_peso', { p_alumno: alumno, p_pin: pin });
+  g.replaceChildren(svgLinea([...(data || [])].reverse()));
+}
+
+async function renderPerfil() {
+  const c = $('misDatos');
+  c.replaceChildren();
+  const { data } = await sb.rpc('alumno_perfil', { p_alumno: alumno, p_pin: pin });
+  const o = data?.[0];
+  const filas = o ? [
+    ['Objetivo', o.objetivo],
+    ['Altura', o.altura_cm ? o.altura_cm + ' cm' : null],
+    ['Peso inicial', o.peso_inicial ? o.peso_inicial + ' kg' : null],
+    ['Inicio del programa', o.fecha_inicio]
+  ].filter(f => f[1]) : [];
+  if (!filas.length) { c.textContent = 'Todavía no cargaste tus datos.'; return; }
+  filas.forEach(([k, v]) => c.append(el('div', { className: 'mut', textContent: `${k}: ${v}` })));
 }
 
 // ---------- CALENDARIO ----------
