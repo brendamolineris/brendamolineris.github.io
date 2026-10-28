@@ -41,6 +41,16 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
   #app>h1,#app>#editor,#app>button{grid-column:1/-1}
   #app>.card,#app>details{margin-bottom:0}
 }
+#reporte{display:none}
+@media print{
+  body>*{display:none !important}
+  body{background:#fff !important}
+  #reporte{display:block !important;color:#000;background:#fff;font-size:12pt}
+  #reporte *{color:#000 !important}
+  #reporte polyline{stroke:#000 !important}
+  #reporte circle{fill:#000 !important}
+  #reporte h2{margin-top:18px;border-bottom:1px solid #000}
+}
 </style>
 </head>
 <body>
@@ -70,6 +80,29 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
     <details style="margin-top:10px">
       <summary>Peso corporal</summary>
       <div id="listaPeso"></div>
+    </details>
+    <details style="margin-top:10px">
+      <summary>Datos de la alumna</summary>
+      <input id="dObj" placeholder="Objetivo (ej: bajar 5 kg)">
+      <div class="grid4">
+        <input id="dAlt" type="number" placeholder="Altura (cm)">
+        <input id="dPesoIni" type="number" step="0.1" placeholder="Peso inicial (kg)">
+      </div>
+      <div class="grid4">
+        <input id="dInicio" type="date" title="Inicio del programa">
+        <input id="dMail" type="email" placeholder="Mail">
+      </div>
+      <input id="dTel" placeholder="Teléfono">
+      <button id="dGuardar">Guardar datos</button>
+      <div class="mut" id="msgDatos"></div>
+    </details>
+    <details style="margin-top:10px">
+      <summary>Exportar informe (PDF)</summary>
+      <p class="mut">Elegí el mes y tocá Exportar. Se abre la vista de impresión: elegí "Guardar como PDF".</p>
+      <div class="grid4">
+        <input id="repMes" type="month" title="Mes">
+        <button id="repExport">Exportar</button>
+      </div>
     </details>
     <details style="margin-top:10px">
       <summary>Resetear PIN del alumno</summary>
@@ -156,6 +189,7 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
   <div id="editor"></div>
 
   <button class="sec" id="salir">Salir</button>
+  <div id="reporte"></div>
 </div>
 
 <script type="module">
@@ -220,6 +254,98 @@ async function cargarTodo() {
   await cargarPlanes();
 }
 
+// ---------- DATOS, GRÁFICO E INFORME ----------
+function svgLinea(puntos) {
+  const d = document.createElement('div');
+  if (puntos.length < 2) { d.className = 'mut'; d.textContent = 'El gráfico aparece cuando haya al menos 2 pesos.'; return d; }
+  const W = 320, H = 160, P = 28;
+  const vals = puntos.map(p => Number(p.peso));
+  const min = Math.min(...vals), max = Math.max(...vals), rango = (max - min) || 1;
+  const x = i => P + i * (W - 2 * P) / (puntos.length - 1);
+  const y = v => H - P - (v - min) / rango * (H - 2 * P);
+  const pts = puntos.map((p, i) => `${x(i)},${y(Number(p.peso))}`).join(' ');
+  const dots = puntos.map((p, i) => `<circle cx="${x(i)}" cy="${y(Number(p.peso))}" r="3" fill="#D9B93C"/>`).join('');
+  d.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%"><polyline points="${pts}" fill="none" stroke="#D9B93C" stroke-width="2"/>${dots}<text x="${P}" y="${H - 6}" fill="#888" font-size="11">${puntos[0].fecha}</text><text x="${W - P}" y="${H - 6}" text-anchor="end" fill="#888" font-size="11">${puntos[puntos.length - 1].fecha}</text><text x="2" y="12" fill="#888" font-size="11">${max} kg</text><text x="2" y="${H - P}" fill="#888" font-size="11">${min} kg</text></svg>`;
+  return d;
+}
+
+async function cargarPerfil() {
+  if (!alumnoSel) return;
+  const d = await rpc('entrenador_obtener_perfil', { p_alumno: alumnoSel.id });
+  const o = d?.[0] || {};
+  $('dObj').value = o.objetivo ?? '';
+  $('dAlt').value = o.altura_cm ?? '';
+  $('dPesoIni').value = o.peso_inicial ?? '';
+  $('dInicio').value = o.fecha_inicio ?? '';
+  $('dMail').value = o.mail ?? '';
+  $('dTel').value = o.telefono ?? '';
+  $('msgDatos').textContent = '';
+}
+
+$('dGuardar').onclick = async () => {
+  if (!alumnoSel) return;
+  const v = id => $(id).value.trim();
+  try {
+    await rpc('entrenador_guardar_perfil', {
+      p_alumno: alumnoSel.id,
+      p_objetivo: v('dObj') || null,
+      p_altura: v('dAlt') ? Number(v('dAlt')) : null,
+      p_peso_inicial: v('dPesoIni') ? Number(v('dPesoIni')) : null,
+      p_fecha_inicio: v('dInicio') || null,
+      p_mail: v('dMail') || null,
+      p_telefono: v('dTel') || null
+    });
+    $('msgDatos').textContent = 'Datos guardados';
+  } catch (e) { $('msgDatos').textContent = 'Error: ' + e.message; }
+};
+
+function construirReporte(r, mes) {
+  const rep = $('reporte');
+  rep.replaceChildren();
+  const p = r.perfil || {};
+  rep.append(el('h1', { textContent: `Informe de seguimiento · ${p.nombre || ''}` }));
+  rep.append(el('div', { className: 'mut', textContent: `Mes: ${mes}` }));
+
+  rep.append(el('h2', { textContent: 'Datos' }));
+  const filas = [
+    ['Objetivo', p.objetivo],
+    ['Altura', p.altura ? p.altura + ' cm' : null],
+    ['Peso inicial', p.peso_inicial ? p.peso_inicial + ' kg' : null],
+    ['Inicio del programa', p.fecha_inicio],
+    ['Mail', p.mail],
+    ['Teléfono', p.telefono]
+  ].filter(f => f[1]);
+  filas.forEach(([k, v]) => rep.append(el('div', { textContent: `${k}: ${v}` })));
+
+  rep.append(el('h2', { textContent: 'Evolución del peso corporal' }));
+  rep.append(svgLinea(r.pesos || []));
+
+  rep.append(el('h2', { textContent: 'Cardio del mes' }));
+  if (!(r.cardio || []).length) rep.append(el('div', { textContent: 'Sin cardio registrado' }));
+  (r.cardio || []).forEach(c => rep.append(el('div', { textContent: `${c.fecha}: ${c.minutos} min${c.nota ? ' · ' + c.nota : ''}` })));
+
+  rep.append(el('h2', { textContent: 'Cargas por ejercicio' }));
+  if (!(r.registros || []).length) rep.append(el('div', { textContent: 'Sin cargas registradas' }));
+  let ultimo = null;
+  (r.registros || []).forEach(x => {
+    if (x.ejercicio !== ultimo) { rep.append(el('h3', { textContent: x.ejercicio })); ultimo = x.ejercicio; }
+    rep.append(el('div', { textContent: `${x.fecha} · ${x.peso} kg × ${x.reps}` }));
+  });
+}
+
+$('repExport').onclick = async () => {
+  if (!alumnoSel) return;
+  const m = $('repMes').value || mesActualStr();
+  const [y, mm] = m.split('-').map(Number);
+  const desde = `${m}-01`;
+  const hasta = new Date(y, mm, 0).toLocaleDateString('sv-SE');
+  try {
+    const r = await rpc('entrenador_reporte_mes', { p_alumno: alumnoSel.id, p_desde: desde, p_hasta: hasta });
+    construirReporte(r, m);
+    window.print();
+  } catch (e) { alert('Error: ' + e.message); }
+};
+
 // ---------- ALUMNOS ----------
 $('rPinBtn').onclick = async () => {
   if (!alumnoSel) return;
@@ -242,6 +368,7 @@ async function cargarObjetivo() {
   $('cDias').value = o?.dias ?? '';
   $('cMin').value = o?.minutos ?? '';
   await cargarPesoPanel();
+  await cargarPerfil();
 }
 
 async function cargarPesoPanel() {
