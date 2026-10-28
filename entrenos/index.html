@@ -377,16 +377,32 @@ async function renderGraficoPeso() {
 async function renderPerfil() {
   const c = $('misDatos');
   c.replaceChildren();
-  const { data } = await sb.rpc('alumno_perfil', { p_alumno: alumno, p_pin: pin });
-  const o = data?.[0];
-  const filas = o ? [
-    ['Objetivo', o.objetivo],
-    ['Altura', o.altura_cm ? o.altura_cm + ' cm' : null],
-    ['Peso inicial', o.peso_inicial ? o.peso_inicial + ' kg' : null],
-    ['Inicio del programa', o.fecha_inicio]
-  ].filter(f => f[1]) : [];
-  if (!filas.length) { c.textContent = 'Todavía no cargaste tus datos.'; return; }
-  filas.forEach(([k, v]) => c.append(el('div', { className: 'mut', textContent: `${k}: ${v}` })));
+  const { data, error } = await sb.rpc('alumno_obtener_datos', { p_alumno: alumno, p_pin: pin });
+  if (error) { c.textContent = 'No se pudieron cargar tus datos'; return; }
+  const o = data?.[0] || {};
+  const obj = el('input', { placeholder: 'Objetivo (ej: bajar 5 kg)', value: o.objetivo ?? '' });
+  const alt = el('input', { type: 'number', placeholder: 'Altura (cm)', value: o.altura_cm ?? '' });
+  const pesoIni = el('input', { type: 'number', step: '0.1', placeholder: 'Peso inicial (kg)', value: o.peso_inicial ?? '' });
+  const inicio = el('input', { type: 'date', title: 'Inicio del programa', value: o.fecha_inicio ?? '' });
+  const mail = el('input', { type: 'email', placeholder: 'Mail', value: o.mail ?? '' });
+  const tel = el('input', { placeholder: 'Teléfono', value: o.telefono ?? '' });
+  const btn = el('button', { textContent: 'Guardar mis datos' });
+  const msg = el('div', { className: 'mut' });
+  btn.onclick = async () => {
+    btn.disabled = true;
+    const { error } = await sb.rpc('alumno_guardar_datos', {
+      p_alumno: alumno, p_pin: pin,
+      p_objetivo: obj.value.trim() || null,
+      p_altura: alt.value ? Number(alt.value) : null,
+      p_peso_inicial: pesoIni.value ? Number(pesoIni.value) : null,
+      p_fecha_inicio: inicio.value || null,
+      p_mail: mail.value.trim() || null,
+      p_telefono: tel.value.trim() || null
+    });
+    btn.disabled = false;
+    msg.textContent = error ? 'No se pudo guardar' : 'Datos guardados';
+  };
+  c.append(obj, alt, pesoIni, inicio, mail, tel, btn, msg);
 }
 
 // ---------- CALENDARIO ----------
