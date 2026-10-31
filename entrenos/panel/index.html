@@ -61,6 +61,13 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
     <input id="pin" type="password" inputmode="numeric" placeholder="PIN de entrenadora">
     <button id="entrar">Entrar</button>
     <p class="err" id="errLogin"></p>
+    <details>
+      <summary>¿Olvidaste la clave?</summary>
+      <input id="rcCodigo" type="password" placeholder="Código de recuperación">
+      <input id="rcNueva" type="password" placeholder="Clave nueva">
+      <button id="rcBtn">Cambiar clave</button>
+      <p class="err" id="errRec"></p>
+    </details>
   </div>
 </div>
 
@@ -188,6 +195,14 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
 
   <div id="editor"></div>
 
+  <details class="card">
+    <summary><h2 style="display:inline">Código de recuperación</h2></summary>
+    <p class="mut">Sirve para cambiar la clave desde la pantalla de entrada si la olvidás. Usá al menos 8 caracteres y guardalo en un lugar seguro, distinto de la clave.</p>
+    <input id="rCodigo" type="password" placeholder="Código nuevo (mínimo 8 caracteres)">
+    <button id="rGuardar">Guardar código</button>
+    <div class="mut" id="msgRec"></div>
+  </details>
+
   <button class="sec" id="salir">Salir</button>
   <div id="reporte"></div>
 </div>
@@ -234,6 +249,27 @@ $('entrar').onclick = async () => {
 };
 
 $('salir').onclick = () => { sessionStorage.removeItem('tfp'); location.reload(); };
+
+$('rcBtn').onclick = async () => {
+  const c = $('rcCodigo').value.trim(), n = $('rcNueva').value.trim();
+  if (!c || !n) { $('errRec').textContent = 'Completá el código y la clave nueva'; return; }
+  try {
+    await sb.rpc('entrenador_recuperar_pin', { p_codigo: c, p_nuevo: n });
+    $('errRec').textContent = 'Clave cambiada. Ingresá con la clave nueva.';
+    $('rcCodigo').value = ''; $('rcNueva').value = '';
+  } catch (e) { $('errRec').textContent = 'Código incorrecto o clave muy corta'; }
+};
+
+$('rGuardar').onclick = async () => {
+  const c = $('rCodigo').value.trim();
+  const msg = $('msgRec');
+  if (c.length < 8) { msg.textContent = 'Tiene que tener al menos 8 caracteres'; return; }
+  try {
+    await rpc('entrenador_fijar_recuperacion', { p_codigo: c });
+    $('rCodigo').value = '';
+    msg.textContent = 'Código guardado';
+  } catch (e) { msg.textContent = 'Error: ' + e.message; }
+};
 
 async function iniciar() {
   $('login').classList.add('hidden');
