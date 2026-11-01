@@ -111,6 +111,15 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
       <div class="mut" id="msgDatos"></div>
     </details>
     <details style="margin-top:10px">
+      <summary>Cargas registradas</summary>
+      <p class="mut">Elegí el mes para ver los pesos y repeticiones que cargó la alumna.</p>
+      <div class="grid4">
+        <input id="cargasMes" type="month" title="Mes">
+        <button class="sec" id="cargasVer">Ver</button>
+      </div>
+      <div id="listaCargas"></div>
+    </details>
+    <details style="margin-top:10px">
       <summary>Exportar informe (PDF)</summary>
       <p class="mut">Elegí el mes y tocá Exportar. Se abre la vista de impresión: elegí "Guardar como PDF".</p>
       <div class="grid4">
@@ -282,6 +291,7 @@ async function iniciar() {
   $('login').classList.add('hidden');
   $('app').classList.remove('hidden');
   $('planMes').value = mesActualStr();
+  $('cargasMes').value = mesActualStr();
   await cargarTodo();
 }
 
@@ -296,6 +306,28 @@ async function cargarTodo() {
   await renderRutinas();
   await cargarPlanes();
 }
+
+// ---------- CARGAS REGISTRADAS ----------
+async function verCargas() {
+  if (!alumnoSel) return;
+  const m = $('cargasMes').value || mesActualStr();
+  const [y, mm] = m.split('-').map(Number);
+  const desde = `${m}-01`;
+  const hasta = new Date(y, mm, 0).toLocaleDateString('sv-SE');
+  const l = $('listaCargas');
+  try {
+    const r = await rpc('entrenador_reporte_mes', { p_alumno: alumnoSel.id, p_desde: desde, p_hasta: hasta });
+    l.replaceChildren();
+    const regs = r.registros || [];
+    if (!regs.length) { l.append(el('div', { className: 'mut', textContent: 'No hay cargas en ese mes.' })); return; }
+    let ultimo = null;
+    regs.forEach(x => {
+      if (x.ejercicio !== ultimo) { l.append(el('h3', { textContent: x.ejercicio })); ultimo = x.ejercicio; }
+      l.append(el('div', { className: 'mut', textContent: `${x.fecha} · ${x.peso} kg × ${x.reps}` }));
+    });
+  } catch (e) { l.textContent = 'Error: ' + e.message; }
+}
+$('cargasVer').onclick = verCargas;
 
 // ---------- DATOS, GRÁFICO E INFORME ----------
 function svgLinea(puntos) {
