@@ -105,6 +105,8 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
         <input id="dMail" type="email" placeholder="Mail">
       </div>
       <input id="dTel" placeholder="Teléfono">
+      <textarea id="suplTexto" placeholder="Suplementación natural (lo que ve la alumna)" style="min-height:110px"></textarea>
+      <button class="sec" id="suplGuardar">Guardar suplementación</button>
       <button id="dGuardar">Guardar datos</button>
       <div class="mut" id="msgDatos"></div>
     </details>
@@ -321,7 +323,17 @@ async function cargarPerfil() {
   $('dMail').value = o.mail ?? '';
   $('dTel').value = o.telefono ?? '';
   $('msgDatos').textContent = '';
+  const s = await rpc('entrenador_obtener_suplementacion', { p_alumno: alumnoSel.id });
+  $('suplTexto').value = s ?? '';
 }
+
+$('suplGuardar').onclick = async () => {
+  if (!alumnoSel) return;
+  try {
+    await rpc('entrenador_guardar_suplementacion', { p_alumno: alumnoSel.id, p_texto: $('suplTexto').value });
+    $('msgDatos').textContent = 'Suplementación guardada';
+  } catch (e) { $('msgDatos').textContent = 'Error: ' + e.message; }
+};
 
 $('dGuardar').onclick = async () => {
   if (!alumnoSel) return;
