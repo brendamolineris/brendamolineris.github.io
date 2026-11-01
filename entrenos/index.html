@@ -84,6 +84,17 @@ h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:
 
   <section class="tabpage on" data-tab="entreno">
     <div class="card">
+      <h2>Entrada en calor</h2>
+      <p class="mut">Realizar 5 minutos de movilidad articular antes de comenzar la rutina.</p>
+      <a class="video" href="https://youtube.com/shorts/WsMMQ9HveSg" target="_blank" rel="noopener">Tren superior ▸</a><br>
+      <a class="video" href="https://youtube.com/shorts/Xi8LBATgXco" target="_blank" rel="noopener">Tren inferior ▸</a>
+    </div>
+    <div class="card">
+      <h2>Estiramiento</h2>
+      <p class="mut">Realizar 5 minutos de estiramiento al terminar la rutina.</p>
+      <a class="video" href="https://youtube.com/shorts/bDFnY5WschI" target="_blank" rel="noopener">Ver estiramiento ▸</a>
+    </div>
+    <div class="card">
       <h2>Entrenamiento</h2>
       <div class="tabs" id="tabs" style="margin-top:10px"></div>
       <div class="row2" style="margin-top:10px"><input type="date" id="fechaRutina" title="Fecha de los pesos" max=""></div>
@@ -112,12 +123,32 @@ h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:
       <h2>Plan de alimentación</h2>
       <div id="plan" style="margin-top:10px"></div>
     </div>
+    <div class="card">
+      <h2>Suplementación natural</h2>
+      <div id="suplementacion" class="plan" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h2>Material descargable</h2>
+      <p class="mut">PDFs para descargar.</p>
+      <a href="https://drive.google.com/drive/folders/1d7bzpVHNGwPn9y3pF269LU3_KfwRkeLs?usp=drive_link" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;background:var(--ac);color:var(--acTxt);padding:10px 14px;border-radius:8px;font-weight:700;text-decoration:none">Ver y descargar ▸</a>
+    </div>
   </section>
 
   <section class="tabpage" data-tab="calendario">
     <div class="card">
       <h2>Tracker de entrenamiento y cardio</h2>
       <div id="calendario" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <section class="tabpage" data-tab="temporizador">
+    <div class="card">
+      <h2>Temporizador</h2>
+      <div class="row2" style="margin-top:8px"><input id="tTrab" type="number" value="20" placeholder="Trabajo (seg)"><input id="tDesc" type="number" value="10" placeholder="Descanso (seg)"></div>
+      <div class="row2"><input id="tRondas" type="number" value="8" placeholder="Rondas"><button id="tInicio">Iniciar</button></div>
+      <div id="tDisplay" style="font-size:3rem;text-align:center;font-weight:900;margin:12px 0">00</div>
+      <div class="mut" id="tEstado" style="text-align:center">Listo</div>
+      <button class="sec" id="tReset" style="width:100%;margin-top:8px">Reiniciar</button>
     </div>
   </section>
 
@@ -146,6 +177,7 @@ h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:
     <button data-go="cardio"><span>🏃</span>Cardio</button>
     <button data-go="plan"><span>🥗</span>Plan de alimentación</button>
     <button data-go="calendario"><span>📅</span>Calendario</button>
+    <button data-go="temporizador"><span>⏱️</span>Temporizador</button>
     <button data-go="perfil"><span>👤</span>Perfil</button>
   </nav>
 </div>
@@ -165,6 +197,49 @@ const $ = id => document.getElementById(id);
 const el = (tag, props = {}) => Object.assign(document.createElement(tag), props);
 const hoyStr = () => new Date().toLocaleDateString('sv-SE');
 const fechaStr = d => d.toLocaleDateString('sv-SE');
+
+// ---------- SUPLEMENTACIÓN ----------
+async function cargarSuple() {
+  const { data, error } = await sb.rpc('alumno_suplementacion', { p_alumno: alumno, p_pin: pin });
+  $('suplementacion').textContent = error ? 'No se pudo cargar' : (data || 'Todavía no tenés suplementación cargada.');
+}
+
+// ---------- TEMPORIZADOR ----------
+let tTimer = null;
+function tStop() { clearInterval(tTimer); tTimer = null; }
+function tBeep(f = 880, d = 200) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.value = f; o.connect(g); g.connect(ctx.destination);
+    g.gain.value = 0.3; o.start(); o.stop(ctx.currentTime + d / 1000);
+  } catch (e) {}
+}
+$('tInicio').onclick = () => {
+  tStop();
+  const trab = Number($('tTrab').value) || 20, desc = Number($('tDesc').value) || 10, total = Number($('tRondas').value) || 8;
+  let ronda = 1, fase = 'TRABAJO', seg = trab;
+  const mostrar = () => {
+    $('tDisplay').textContent = String(seg).padStart(2, '0');
+    $('tEstado').textContent = `${fase} · ronda ${ronda} de ${total}`;
+  };
+  mostrar(); tBeep(660, 200);
+  tTimer = setInterval(() => {
+    seg--;
+    if (seg <= 0) {
+      if (fase === 'TRABAJO') {
+        if (ronda >= total) {
+          tStop(); $('tDisplay').textContent = '00'; $('tEstado').textContent = '¡Terminaste!'; tBeep(990, 600); return;
+        }
+        fase = 'DESCANSO'; seg = desc; tBeep(440, 300);
+      } else {
+        ronda++; fase = 'TRABAJO'; seg = trab; tBeep(880, 300);
+      }
+    }
+    mostrar();
+  }, 1000);
+};
+$('tReset').onclick = () => { tStop(); $('tDisplay').textContent = '00'; $('tEstado').textContent = 'Listo'; };
 
 // ---------- NAVEGACIÓN POR PESTAÑAS ----------
 function irA(tab) {
@@ -228,6 +303,7 @@ async function cargar() {
   renderPerfil();
   cargarCalendario();
   cargarPlan();
+  cargarSuple();
 
   const { data: rid, error } = await sb.rpc('alumno_rutina_vigente', { p_alumno: alumno, p_pin: pin });
   if (error) { $('dia').textContent = 'Error: ' + error.message; return; }
