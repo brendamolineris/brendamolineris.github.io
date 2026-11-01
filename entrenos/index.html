@@ -82,7 +82,20 @@ h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:
     <h1>Total Fit</h1>
   </header>
 
-  <section class="tabpage on" data-tab="entreno">
+  <section class="tabpage on" data-tab="inicio">
+    <div class="card">
+      <h2>Cómo usar la app</h2>
+      <ol class="mut" style="padding-left:20px;line-height:1.7">
+        <li><strong>Entrenamiento:</strong> elegí el día con las pestañas. Antes de empezar, hacé la entrada en calor. Para cargar un día anterior, cambiá la fecha. En cada ejercicio poné peso y repeticiones, y tocá Guardar. Al terminar, hacé el estiramiento.</li>
+        <li><strong>Cardio:</strong> cargá los minutos y la fecha. Arriba ves tu objetivo.</li>
+        <li><strong>Plan de alimentación:</strong> tu plan del mes y tu suplementación. Abajo está el botón para descargar los PDFs.</li>
+        <li><strong>Calendario:</strong> los ✔ marcan los días que entrenaste. Ahí también está el temporizador para circuitos.</li>
+        <li><strong>Perfil:</strong> tu peso corporal, tus datos y el cambio de PIN. Salir también está acá.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="tabpage" data-tab="entreno">
     <div class="card">
       <h2>Entrada en calor</h2>
       <p class="mut">Realizar 5 minutos de movilidad articular antes de comenzar la rutina.</p>
@@ -90,15 +103,15 @@ h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:
       <a class="video" href="https://youtube.com/shorts/Xi8LBATgXco" target="_blank" rel="noopener">Tren inferior ▸</a>
     </div>
     <div class="card">
-      <h2>Estiramiento</h2>
-      <p class="mut">Realizar 5 minutos de estiramiento al terminar la rutina.</p>
-      <a class="video" href="https://youtube.com/shorts/bDFnY5WschI" target="_blank" rel="noopener">Ver estiramiento ▸</a>
-    </div>
-    <div class="card">
-      <h2>Entrenamiento</h2>
+      <h2>Rutina de entrenamiento</h2>
       <div class="tabs" id="tabs" style="margin-top:10px"></div>
       <div class="row2" style="margin-top:10px"><input type="date" id="fechaRutina" title="Fecha de los pesos" max=""></div>
       <div id="dia"></div>
+    </div>
+    <div class="card">
+      <h2>Estiramiento</h2>
+      <p class="mut">Realizar 5 minutos de estiramiento al terminar la rutina.</p>
+      <a class="video" href="https://youtube.com/shorts/bDFnY5WschI" target="_blank" rel="noopener">Ver estiramiento ▸</a>
     </div>
     <div class="card">
       <h2>Evolución de cargas/fuerza</h2>
@@ -136,19 +149,23 @@ h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:
 
   <section class="tabpage" data-tab="calendario">
     <div class="card">
-      <h2>Tracker de entrenamiento y cardio</h2>
-      <div id="calendario" style="margin-top:10px"></div>
-    </div>
-  </section>
-
-  <section class="tabpage" data-tab="temporizador">
-    <div class="card">
       <h2>Temporizador</h2>
-      <div class="row2" style="margin-top:8px"><input id="tTrab" type="number" value="20" placeholder="Trabajo (seg)"><input id="tDesc" type="number" value="10" placeholder="Descanso (seg)"></div>
-      <div class="row2"><input id="tRondas" type="number" value="8" placeholder="Rondas"><button id="tInicio">Iniciar</button></div>
+      <p class="mut">Trabajo: segundos que hacés cada ejercicio. Descanso: segundos de pausa entre ejercicios. Rondas: cuántas veces repetís el circuito.</p>
+      <div class="row2" style="margin-top:8px">
+        <label class="mut" style="display:block">Trabajo (seg)<input id="tTrab" type="number" value="20"></label>
+        <label class="mut" style="display:block">Descanso (seg)<input id="tDesc" type="number" value="10"></label>
+      </div>
+      <div class="row2">
+        <label class="mut" style="display:block">Rondas<input id="tRondas" type="number" value="8"></label>
+        <button id="tInicio" style="align-self:end">Iniciar</button>
+      </div>
       <div id="tDisplay" style="font-size:3rem;text-align:center;font-weight:900;margin:12px 0">00</div>
       <div class="mut" id="tEstado" style="text-align:center">Listo</div>
       <button class="sec" id="tReset" style="width:100%;margin-top:8px">Reiniciar</button>
+    </div>
+    <div class="card">
+      <h2>Calendario</h2>
+      <div id="calendario" style="margin-top:10px"></div>
     </div>
   </section>
 
@@ -173,11 +190,11 @@ h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:
   </section>
 
   <nav class="tabbar">
-    <button data-go="entreno" class="on"><span>🏋️</span>Entrenamiento</button>
+    <button data-go="inicio" class="on"><span>🏠</span>Inicio</button>
+    <button data-go="entreno"><span>🏋️</span>Entrenamiento</button>
     <button data-go="cardio"><span>🏃</span>Cardio</button>
     <button data-go="plan"><span>🥗</span>Plan de alimentación</button>
     <button data-go="calendario"><span>📅</span>Calendario</button>
-    <button data-go="temporizador"><span>⏱️</span>Temporizador</button>
     <button data-go="perfil"><span>👤</span>Perfil</button>
   </nav>
 </div>
