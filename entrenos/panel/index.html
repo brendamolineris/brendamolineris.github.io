@@ -491,7 +491,20 @@ $('crearAlumno').onclick = async () => {
 function renderEjercicios() {
   const l = $('listaEj');
   l.replaceChildren();
-  ejercicios.forEach(e => l.append(el('div', { className: 'item', textContent: e.nombre })));
+  ejercicios.forEach(e => l.append(el('div', { className: 'item' }, [
+    el('span', { textContent: e.nombre }),
+    el('button', { className: 'peligro', textContent: 'Borrar', onclick: () => borrarEjercicio(e) })
+  ])));
+}
+
+async function borrarEjercicio(e) {
+  if (!confirm(`¿Borrar el ejercicio "${e.nombre}"?`)) return;
+  try {
+    await rpc('entrenador_borrar_ejercicio', { p_ejercicio: e.id });
+    ejercicios = await rpc('entrenador_listar_ejercicios');
+    renderEjercicios();
+    if (rutinaSel) renderEditor();
+  } catch (err) { alert(err.message); }
 }
 
 $('crearEj').onclick = async () => {
