@@ -649,6 +649,13 @@ async function renderEditor() {
     }})
   ]);
   ed.append(cab);
+  ed.append(el('button', {
+    className: 'peligro', textContent: 'Borrar esta rutina', style: 'width:100%;margin-bottom:12px',
+    onclick: () => {
+      const t = todas.find(x => x.id === rutinaSel);
+      borrarRutina(rutinaSel, t ? t.etiqueta : 'esta rutina');
+    }
+  }));
 
   dias.forEach(d => {
     const box = el('div', { className: 'dia' });
