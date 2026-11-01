@@ -181,11 +181,11 @@ $('entrar').onclick = async () => {
   const { data, error } = await sb.rpc('login_alumno', { p_nombre: n, p_pin: p });
   if (error || !data) { $('errLogin').textContent = 'Nombre o PIN incorrecto'; return; }
   alumno = data; pin = p;
-  sessionStorage.setItem('tf', JSON.stringify({ alumno, pin }));
+  localStorage.setItem('tf', JSON.stringify({ alumno, pin }));
   await cargar();
 };
 
-$('salir').onclick = () => { sessionStorage.removeItem('tf'); location.reload(); };
+$('salir').onclick = () => { localStorage.removeItem('tf'); location.reload(); };
 
 $('cambiarPin').onclick = async () => {
   const msg = $('msgPin');
@@ -196,7 +196,7 @@ $('cambiarPin').onclick = async () => {
   const { error } = await sb.rpc('alumno_cambiar_pin', { p_alumno: alumno, p_pin: pin, p_nuevo: nuevo });
   if (error) { msg.textContent = 'No se pudo cambiar, probá de nuevo'; return; }
   pin = nuevo;
-  sessionStorage.setItem('tf', JSON.stringify({ alumno, pin }));
+  localStorage.setItem('tf', JSON.stringify({ alumno, pin }));
   $('pinActual').value = ''; $('pinNuevo').value = ''; $('pinRepetir').value = '';
   msg.textContent = 'PIN cambiado. Desde ahora usá el nuevo.';
 };
@@ -205,7 +205,7 @@ $('cambiarPin').onclick = async () => {
 async function cargar() {
   const { data: est, error: eEst } = await sb.rpc('alumno_estado', { p_alumno: alumno, p_pin: pin });
   if (eEst || !est || est === 'baja_bloqueada') {
-    sessionStorage.removeItem('tf');
+    localStorage.removeItem('tf');
     alumno = null; pin = null;
     $('login').classList.remove('hidden');
     $('app').classList.add('hidden');
@@ -571,7 +571,7 @@ async function cargarPlan() {
 }
 
 // ---------- SESIÓN GUARDADA ----------
-const s = JSON.parse(sessionStorage.getItem('tf') || 'null');
+const s = JSON.parse(localStorage.getItem('tf') || 'null');
 if (s) { alumno = s.alumno; pin = s.pin; await cargar(); }
 </script>
 </body>
