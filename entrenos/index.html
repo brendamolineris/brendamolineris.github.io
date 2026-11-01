@@ -151,13 +151,17 @@ h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:
   <section class="tabpage" data-tab="calendario">
     <div class="card">
       <h2>Temporizador</h2>
-      <p class="mut">Trabajo: segundos que hacés cada ejercicio. Descanso: segundos de pausa entre ejercicios. Rondas: cuántas veces repetís el circuito.</p>
+      <p class="mut">Trabajo: segundos de cada ejercicio. Descanso entre ejercicios: pausa corta dentro de la ronda. Ejercicios por ronda: cuántos ejercicios tiene el circuito. Descanso entre rondas: pausa larga al terminar cada ronda. Rondas: cuántas veces repetís el circuito.</p>
       <div class="row2" style="margin-top:8px">
         <label class="mut" style="display:block">Trabajo (seg)<input id="tTrab" type="number" value="20"></label>
-        <label class="mut" style="display:block">Descanso (seg)<input id="tDesc" type="number" value="10"></label>
+        <label class="mut" style="display:block">Descanso entre ejercicios (seg)<input id="tDesc" type="number" value="10"></label>
       </div>
       <div class="row2">
-        <label class="mut" style="display:block">Rondas<input id="tRondas" type="number" value="8"></label>
+        <label class="mut" style="display:block">Ejercicios por ronda<input id="tEjs" type="number" value="4"></label>
+        <label class="mut" style="display:block">Rondas<input id="tRondas" type="number" value="3"></label>
+      </div>
+      <div class="row2">
+        <label class="mut" style="display:block">Descanso entre rondas (seg)<input id="tDescRonda" type="number" value="60"></label>
         <button id="tInicio" style="align-self:end">Iniciar</button>
       </div>
       <div id="tDisplay" style="font-size:3rem;text-align:center;font-weight:900;margin:12px 0">00</div>
@@ -225,34 +229,66 @@ async function cargarSuple() {
 // ---------- TEMPORIZADOR ----------
 let tTimer = null;
 function tStop() { clearInterval(tTimer); tTimer = null; }
-function tBeep(f = 880, d = 200) {
+let tAudio = null;
+// Sonidos: inicio, trabajo, fin de ejercicio, fin de ronda y final
+const TONOS = {
+  inicio: [[660, 150], [880, 150], [1100, 250]],
+  trabajo: [[880, 120]],
+  finEjercicio: [[440, 250]],
+  finRonda: [[660, 150], [660, 150]],
+  final: [[990, 300], [1320, 500]]
+};
+function tSonido(tipo) {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = ctx.createOscillator(), g = ctx.createGain();
-    o.frequency.value = f; o.connect(g); g.connect(ctx.destination);
-    g.gain.value = 0.3; o.start(); o.stop(ctx.currentTime + d / 1000);
+    tAudio = tAudio || new (window.AudioContext || window.webkitAudioContext)();
+    let t = tAudio.currentTime;
+    (TONOS[tipo] || []).forEach(([f, d]) => {
+      const o = tAudio.createOscillator(), g = tAudio.createGain();
+      o.frequency.value = f; o.connect(g); g.connect(tAudio.destination);
+      g.gain.value = 0.3; o.start(t); o.stop(t + d / 1000);
+      t += d / 1000 + 0.08;
+    });
   } catch (e) {}
 }
 $('tInicio').onclick = () => {
   tStop();
-  const trab = Number($('tTrab').value) || 20, desc = Number($('tDesc').value) || 10, total = Number($('tRondas').value) || 8;
-  let ronda = 1, fase = 'TRABAJO', seg = trab;
+  const trab = Number($('tTrab').value) || 20;
+  const descEj = Number($('tDesc').value) || 10;
+  const ejs = Number($('tEjs').value) || 1;
+  const descRonda = Number($('tDescRonda').value) || 60;
+  const rondas = Number($('tRondas').value) || 3;
+
+  // Armo la secuencia completa de pasos
+  const pasos = [];
+  for (let r = 1; r <= rondas; r++) {
+    for (let e = 1; e <= ejs; e++) {
+      pasos.push({ fase: 'TRABAJO', seg: trab, txt: `Ronda ${r} de ${rondas} · ejercicio ${e} de ${ejs}`, sonido: pasos.length === 0 ? 'inicio' : 'trabajo' });
+      if (e < ejs) pasos.push({ fase: 'DESCANSO', seg: descEj, txt: `Ronda ${r} de ${rondas} · descanso entre ejercicios`, sonido: 'finEjercicio' });
+    }
+    if (r < rondas) pasos.push({ fase: 'DESCANSO ENTRE RONDAS', seg: descRonda, txt: `Terminaste la ronda ${r}. Próxima: ronda ${r + 1}`, sonido: 'finRonda' });
+  }
+
+  let idx = 0, seg = 0;
   const mostrar = () => {
     $('tDisplay').textContent = String(seg).padStart(2, '0');
-    $('tEstado').textContent = `${fase} · ronda ${ronda} de ${total}`;
+    $('tEstado').textContent = `${pasos[idx].fase} · ${pasos[idx].txt}`;
   };
-  mostrar(); tBeep(660, 200);
+  const cargarPaso = () => {
+    seg = pasos[idx].seg;
+    tSonido(pasos[idx].sonido);
+    mostrar();
+  };
+  cargarPaso();
   tTimer = setInterval(() => {
     seg--;
     if (seg <= 0) {
-      if (fase === 'TRABAJO') {
-        if (ronda >= total) {
-          tStop(); $('tDisplay').textContent = '00'; $('tEstado').textContent = '¡Terminaste!'; tBeep(990, 600); return;
-        }
-        fase = 'DESCANSO'; seg = desc; tBeep(440, 300);
-      } else {
-        ronda++; fase = 'TRABAJO'; seg = trab; tBeep(880, 300);
+      idx++;
+      if (idx >= pasos.length) {
+        tStop(); $('tDisplay').textContent = '00'; $('tEstado').textContent = '¡Terminaste la rutina!'; tSonido('final');
+        return;
       }
+      cargarPaso();
+      return;
     }
     mostrar();
   }, 1000);
