@@ -77,6 +77,11 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
   <div class="card">
     <h2>Alumnos</h2>
     <select id="selAlumno"></select>
+    <select id="estadoAl" title="Estado de la alumna" style="margin-top:6px">
+      <option value="activa">Activa</option>
+      <option value="baja_bloqueada">De baja · bloqueada (no puede entrar)</option>
+      <option value="baja_lectura">De baja · solo lectura (ve su historial)</option>
+    </select>
     <h3>Objetivo de cardio</h3>
     <div class="grid4">
       <input id="cDias" type="number" min="0" max="7" placeholder="Días por semana">
@@ -405,7 +410,24 @@ async function cargarObjetivo() {
   $('cMin').value = o?.minutos ?? '';
   await cargarPesoPanel();
   await cargarPerfil();
+  await cargarEstado();
 }
+
+async function cargarEstado() {
+  if (!alumnoSel) return;
+  const lista = await rpc('entrenador_estados');
+  const o = lista.find(x => x.id === alumnoSel.id);
+  $('estadoAl').value = o?.estado ?? 'activa';
+}
+
+$('estadoAl').onchange = async () => {
+  if (!alumnoSel) return;
+  const v = $('estadoAl').value;
+  if (v !== 'activa' && !confirm(`¿Dar de baja a ${alumnoSel.nombre}?`)) { await cargarEstado(); return; }
+  try {
+    await rpc('entrenador_cambiar_estado', { p_alumno: alumnoSel.id, p_estado: v });
+  } catch (e) { alert('Error: ' + e.message); await cargarEstado(); }
+};
 
 async function cargarPesoPanel() {
   const l = $('listaPeso');
