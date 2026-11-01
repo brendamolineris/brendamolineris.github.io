@@ -47,6 +47,13 @@ details[open]>summary::after{content:' ▴'}
 .num{color:var(--txt)}
 .ok{color:var(--ac);font-weight:700}
 .cmin{color:var(--mut);font-size:.72rem}
+.tabpage{display:none}
+.tabpage.on{display:block}
+#app{padding-bottom:96px}
+.tabbar{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:50;max-width:520px;margin:0 auto}
+.tabbar button{flex:1;background:transparent;color:var(--mut);font-weight:400;font-size:10.5px;line-height:1.2;padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;border-radius:8px}
+.tabbar button span{font-size:20px;line-height:1.1}
+.tabbar button.on{color:var(--ac);font-weight:700;background:rgba(217,185,60,0.12)}
 .logo{display:block;width:96px;height:96px;border-radius:50%;margin:0 auto 12px}
 </style>
 </head>
@@ -66,57 +73,73 @@ details[open]>summary::after{content:' ▴'}
 </div>
 
 <div id="app" class="hidden">
-  <img class="logo" src="logo.png" alt="Total Fit" style="width:64px;height:64px;margin-bottom:8px">
-  <h1>Total Fit - Mis entrenamientos</h1>
+  <header class="appHead">
+    <img class="logo" src="logo.png" alt="Total Fit" style="width:64px;height:64px;margin-bottom:8px">
+    <h1>Total Fit - Mis entrenamientos</h1>
+  </header>
 
-  <details class="card" open>
-    <summary><h2>Mi rutina</h2></summary>
-    <div class="tabs" id="tabs" style="margin-top:10px"></div>
-    <div class="row2" style="margin-top:10px"><input type="date" id="fechaRutina" title="Fecha de los pesos" max=""></div>
-    <div id="dia"></div>
-  </details>
+  <section class="tabpage on" data-tab="entreno">
+    <div class="card">
+      <h2>Entrenamiento</h2>
+      <div class="tabs" id="tabs" style="margin-top:10px"></div>
+      <div class="row2" style="margin-top:10px"><input type="date" id="fechaRutina" title="Fecha de los pesos" max=""></div>
+      <div id="dia"></div>
+    </div>
+    <div class="card">
+      <h2>Evolución de cargas/fuerza</h2>
+      <select id="ejSel" style="margin-top:10px"></select>
+      <div id="grafico"></div>
+    </div>
+  </section>
 
-  <details class="card">
-    <summary><h2>Plan de alimentación</h2></summary>
-    <div id="plan" style="margin-top:10px"></div>
-  </details>
+  <section class="tabpage" data-tab="cardio">
+    <div class="card">
+      <h2>Cardio</h2>
+      <div id="cardio" style="margin-top:10px"></div>
+    </div>
+  </section>
 
-  <details class="card">
-    <summary><h2>Cardio</h2></summary>
-    <div id="cardio" style="margin-top:10px"></div>
-  </details>
+  <section class="tabpage" data-tab="plan">
+    <div class="card">
+      <h2>Plan de alimentación</h2>
+      <div id="plan" style="margin-top:10px"></div>
+    </div>
+  </section>
 
-  <details class="card">
-    <summary><h2>Peso corporal</h2></summary>
-    <div id="pesoCorp" style="margin-top:10px"></div>
-  </details>
+  <section class="tabpage" data-tab="calendario">
+    <div class="card">
+      <h2>Calendario</h2>
+      <div id="calendario" style="margin-top:10px"></div>
+    </div>
+  </section>
 
-  <details class="card">
-    <summary><h2>Mis datos</h2></summary>
-    <div id="misDatos" style="margin-top:10px"></div>
-  </details>
+  <section class="tabpage" data-tab="perfil">
+    <div class="card">
+      <h2>Peso corporal</h2>
+      <div id="pesoCorp" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h2>Mis datos</h2>
+      <div id="misDatos" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h2>Cambiar mi PIN</h2>
+      <input id="pinActual" type="password" inputmode="numeric" maxlength="4" placeholder="PIN actual">
+      <input id="pinNuevo" type="password" inputmode="numeric" maxlength="4" placeholder="PIN nuevo (4 números)">
+      <input id="pinRepetir" type="password" inputmode="numeric" maxlength="4" placeholder="Repetí el PIN nuevo">
+      <button id="cambiarPin">Cambiar PIN</button>
+      <div class="mut" id="msgPin"></div>
+    </div>
+    <button class="sec" id="salir">Salir</button>
+  </section>
 
-  <details class="card">
-    <summary><h2>Calendario</h2></summary>
-    <div id="calendario" style="margin-top:10px"></div>
-  </details>
-
-  <details class="card">
-    <summary><h2>Evolución de cargas/fuerza</h2></summary>
-    <select id="ejSel" style="margin-top:10px"></select>
-    <div id="grafico"></div>
-  </details>
-
-  <details class="card">
-    <summary><h2 style="display:inline">Cambiar mi PIN</h2></summary>
-    <input id="pinActual" type="password" inputmode="numeric" maxlength="4" placeholder="PIN actual">
-    <input id="pinNuevo" type="password" inputmode="numeric" maxlength="4" placeholder="PIN nuevo (4 números)">
-    <input id="pinRepetir" type="password" inputmode="numeric" maxlength="4" placeholder="Repetí el PIN nuevo">
-    <button id="cambiarPin">Cambiar PIN</button>
-    <div class="mut" id="msgPin"></div>
-  </details>
-
-  <button class="sec" id="salir">Salir</button>
+  <nav class="tabbar">
+    <button data-go="entreno" class="on"><span>🏋️</span>Entrenamiento</button>
+    <button data-go="cardio"><span>🏃</span>Cardio</button>
+    <button data-go="plan"><span>🥗</span>Plan de alimentación</button>
+    <button data-go="calendario"><span>📅</span>Calendario</button>
+    <button data-go="perfil"><span>👤</span>Perfil</button>
+  </nav>
 </div>
 
 <script type="module">
@@ -134,6 +157,14 @@ const $ = id => document.getElementById(id);
 const el = (tag, props = {}) => Object.assign(document.createElement(tag), props);
 const hoyStr = () => new Date().toLocaleDateString('sv-SE');
 const fechaStr = d => d.toLocaleDateString('sv-SE');
+
+// ---------- NAVEGACIÓN POR PESTAÑAS ----------
+function irA(tab) {
+  document.querySelectorAll('.tabpage').forEach(s => s.classList.toggle('on', s.dataset.tab === tab));
+  document.querySelectorAll('.tabbar button').forEach(b => b.classList.toggle('on', b.dataset.go === tab));
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll('.tabbar button').forEach(b => b.onclick = () => irA(b.dataset.go));
 
 // ---------- LOGIN ----------
 $('entrar').onclick = async () => {
