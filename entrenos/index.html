@@ -84,6 +84,7 @@ h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:
 
   <section class="tabpage on" data-tab="inicio">
     <div class="card">
+      <p id="estadoAlumna" style="color:var(--ac);font-weight:700;margin-bottom:8px"></p>
       <h2>Cómo usar la app</h2>
       <ol class="mut" style="padding-left:20px;line-height:1.7">
         <li><strong>Entrenamiento:</strong> elegí el día con las pestañas. Antes de empezar, hacé la entrada en calor. Para cargar un día anterior, cambiá la fecha. En cada ejercicio poné peso y repeticiones, y tocá Guardar. Al terminar, hacé el estiramiento.</li>
@@ -309,6 +310,7 @@ async function cargar() {
   $('login').classList.add('hidden');
   $('app').classList.remove('hidden');
   $('app').classList.toggle('solo-lectura', est === 'baja_lectura');
+  $('estadoAlumna').textContent = est === 'activa' ? 'Estado: Activa' : 'Estado: De baja (solo lectura)';
   if (est === 'baja_lectura' && !$('avisoBaja')) {
     document.querySelector('.appHead').append(el('div', { id: 'avisoBaja', className: 'mut', textContent: 'Tu cuenta está de baja: podés ver tu historial, pero no cargar datos.' }));
   }
