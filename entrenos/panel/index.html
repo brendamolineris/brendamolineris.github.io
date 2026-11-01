@@ -504,7 +504,21 @@ async function borrarEjercicio(e) {
     ejercicios = await rpc('entrenador_listar_ejercicios');
     renderEjercicios();
     if (rutinaSel) renderEditor();
-  } catch (err) { alert(err.message); }
+  } catch (err) {
+    if (!err.message.includes('cargas')) { alert(err.message); return; }
+    const nombreDestino = prompt(`"${e.nombre}" tiene cargas de alumnas, así que no se puede borrar directo.\n\nSi es un repetido, escribí el nombre EXACTO del ejercicio que queda. Sus cargas y rutinas pasan a ese, y "${e.nombre}" se borra.`);
+    if (!nombreDestino) return;
+    const dest = ejercicios.find(x => x.nombre.trim().toLowerCase() === nombreDestino.trim().toLowerCase());
+    if (!dest || dest.id === e.id) { alert('No encontré ese ejercicio. Escribilo igual que aparece en la lista.'); return; }
+    if (!confirm(`¿Pasar todo de "${e.nombre}" a "${dest.nombre}" y borrar "${e.nombre}"?`)) return;
+    try {
+      await rpc('entrenador_fusionar_ejercicio', { p_origen: e.id, p_destino: dest.id });
+      ejercicios = await rpc('entrenador_listar_ejercicios');
+      renderEjercicios();
+      if (rutinaSel) renderEditor();
+      alert('Listo: se fusionaron los ejercicios.');
+    } catch (err2) { alert(err2.message); }
+  }
 }
 
 $('crearEj').onclick = async () => {
