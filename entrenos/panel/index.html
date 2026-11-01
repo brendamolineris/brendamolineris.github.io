@@ -249,11 +249,11 @@ $('entrar').onclick = async () => {
   const { data, error } = await sb.rpc('entrenador_login', { p_pin: p });
   if (error || !data) { $('errLogin').textContent = 'PIN incorrecto'; return; }
   pin = p;
-  sessionStorage.setItem('tfp', p);
+  localStorage.setItem('tfp', p);
   await iniciar();
 };
 
-$('salir').onclick = () => { sessionStorage.removeItem('tfp'); location.reload(); };
+$('salir').onclick = () => { localStorage.removeItem('tfp'); location.reload(); };
 
 $('rcBtn').onclick = async () => {
   const c = $('rcCodigo').value.trim(), n = $('rcNueva').value.trim();
@@ -733,7 +733,7 @@ $('planGuardar').onclick = async () => {
 };
 
 // ---------- SESIÓN GUARDADA ----------
-const guardado = sessionStorage.getItem('tfp');
+const guardado = localStorage.getItem('tfp');
 if (guardado) { pin = guardado; await iniciar(); }
 </script>
 </body>
