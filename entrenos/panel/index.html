@@ -3,205 +3,224 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Total Fit - Mis entrenamientos</title>
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="apple-mobile-web-app-title" content="Total Fit">
-<meta name="theme-color" content="#0a0a0a">
-<!-- fuente del sistema -->
+<meta name="robots" content="noindex">
+<title>Total Fit - Panel entrenadora</title>
 <style>
 :root{color-scheme:dark;--bg:#0a0a0a;--card:#161616;--txt:#f5f5f5;--mut:#9a9a9a;--ac:#D9B93C;--acTxt:#0a0a0a;--line:#2a2a2a}
 *{box-sizing:border-box}
-body{margin:0 auto;padding:16px;max-width:520px;font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt)}
+body{margin:0 auto;padding:16px;max-width:620px;font-family:system-ui,sans-serif;transition:max-width .2s;background:var(--bg);color:var(--txt)}
 h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ac)}
 h2{font-size:1rem;margin:0 0 10px;color:var(--ac)}
+h3{font-size:.95rem;margin:14px 0 8px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
-input{font:inherit;width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit}
-button{font:inherit;background:var(--ac);color:var(--acTxt);font-weight:700;border:0;border-radius:8px;padding:10px 14px;cursor:pointer}
-button:disabled{opacity:.5}
+input,select,textarea{font:inherit;width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit;margin-bottom:6px}
+select option{background:var(--card);color:var(--txt)}
+textarea{font-family:inherit;min-height:160px;white-space:pre-wrap}
+button{font:inherit;background:var(--ac);color:var(--acTxt);font-weight:700;border:0;border-radius:8px;padding:9px 12px;cursor:pointer}
 button.sec{background:transparent;color:var(--txt);border:1px solid var(--line)}
-.tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px}
-.tabs button{white-space:nowrap;background:transparent;color:var(--txt);border:1px solid var(--line)}
-.tabs button.on{background:var(--ac);color:var(--acTxt)}
-.ex{border-top:1px solid var(--line);padding:12px 0}
-.ex:first-child{border-top:0;padding-top:0}
-.row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-top:8px}
-.row2{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-bottom:8px}
-.mut{color:var(--mut);font-size:.85rem;margin-top:4px}
-.indic{color:var(--ac);font-size:.9rem;margin-top:6px}
-.video{display:inline-block;color:var(--ac);font-size:.85rem;margin-top:4px}
-.plan{white-space:pre-wrap;line-height:1.5;font-size:.95rem}
-.planSel{background:var(--card);color:var(--txt);margin-bottom:10px}
-details>summary{cursor:pointer;list-style:none;color:var(--ac)}
-details>summary h2{display:inline;font-size:1rem;margin:0;color:var(--ac)}
-details>summary::-webkit-details-marker{display:none}
-details>summary::after{content:' ▾';color:var(--mut)}
-details[open]>summary::after{content:' ▴'}
-.hidden{display:none}
+button.peligro{background:transparent;color:#ff6b6b;border:1px solid #5a2a2a}
+button:disabled{opacity:.5}
+.grid4{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lineaEj{display:grid;grid-template-columns:1fr 70px 90px;gap:6px;align-items:center;border-top:1px solid var(--line);padding:8px 0}
+.lineaEj input{margin:0}
+.indic{grid-column:1/-1}
+.acciones{display:flex;gap:6px;grid-column:1/-1;justify-content:flex-end}
+.dia{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+.item{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:8px 0;gap:8px}
+.item:first-child{border-top:0}
+.mut{color:var(--mut);font-size:.85rem}
 .err{color:#ff6b6b;min-height:1.2em}
-.nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.nav strong{text-transform:capitalize}
-.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.dow{text-align:center;color:var(--mut);font-size:.75rem}
-.dia{min-height:54px;border:1px solid var(--line);border-radius:8px;padding:4px;font-size:.8rem}
-.dia.hoy{border-color:var(--ac)}
-.num{color:var(--txt)}
-.ok{color:var(--ac);font-weight:700}
-.cmin{color:var(--mut);font-size:.72rem}
-.tabpage{display:none}
-.tabpage.on{display:block}
-#app{padding-bottom:96px}
-.tabbar{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:50;max-width:520px;margin:0 auto}
-.tabbar button{flex:1;background:transparent;color:var(--mut);font-weight:400;font-size:10.5px;line-height:1.2;padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;border-radius:8px}
-.tabbar button span{font-size:20px;line-height:1.1}
-.tabbar button.on{color:var(--ac);font-weight:700;background:rgba(217,185,60,0.12)}
-h1{font-size:1.3rem;margin:.2rem 0 1rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ac);text-align:center}
-#app.solo-lectura button:not(.tabbar button):not(.tabs button):not(.nav button):not(#salir){display:none}
-#app.solo-lectura input{display:none}
-.logo{display:block;width:96px;height:96px;border-radius:50%;margin:0 auto 12px}
+.hidden{display:none}
+details{margin-bottom:10px}
+summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chips button{background:transparent;color:var(--txt);border:1px solid var(--line);font-weight:400;padding:6px 10px}
+@media (min-width:900px){
+  body{max-width:1280px}
+  #app:not(.hidden){display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+  #app>h1,#app>#editor,#app>button{grid-column:1/-1}
+  #app>.card,#app>details{margin-bottom:0}
+}
+#reporte{display:none}
+@media print{
+  body>*{display:none !important}
+  body{background:#fff !important}
+  #reporte{display:block !important;color:#000;background:#fff;font-size:12pt}
+  #reporte *{color:#000 !important}
+  #reporte polyline{stroke:#000 !important}
+  #reporte circle{fill:#000 !important}
+  #reporte h2{margin-top:18px;border-bottom:1px solid #000}
+}
 </style>
 </head>
 <body>
 
 <div id="login">
-  <img class="logo" src="logo.png" alt="Total Fit">
-  <h1>Total Fit</h1>
+  <h1>Panel entrenadora</h1>
   <div class="card">
-    <input id="nombre" placeholder="Tu nombre" autocomplete="username">
-    <br><br>
-    <input id="pin" placeholder="PIN" type="password" inputmode="numeric" autocomplete="current-password">
-    <br><br>
+    <input id="pin" type="password" inputmode="numeric" placeholder="PIN de entrenadora">
     <button id="entrar">Entrar</button>
     <p class="err" id="errLogin"></p>
+    <details>
+      <summary>¿Olvidaste la clave?</summary>
+      <input id="rcCodigo" type="password" placeholder="Código de recuperación">
+      <input id="rcNueva" type="password" placeholder="Clave nueva">
+      <button id="rcBtn">Cambiar clave</button>
+      <p class="err" id="errRec"></p>
+    </details>
   </div>
 </div>
 
 <div id="app" class="hidden">
-  <header class="appHead" style="text-align:center">
-    <img class="logo" src="logo.png" alt="Total Fit" style="width:64px;height:64px;margin-bottom:8px">
-    <h1>Total Fit</h1>
-  </header>
+  <h1>Panel entrenadora</h1>
 
-  <section class="tabpage on" data-tab="inicio">
-    <div class="card">
-      <p id="estadoAlumna" style="color:var(--ac);font-weight:700;margin-bottom:8px"></p>
-      <h2>Cómo usar la app</h2>
-      <ol class="mut" style="padding-left:20px;line-height:1.7">
-        <li><strong>Entrenamiento:</strong> elegí el día con las pestañas. Antes de empezar, hacé la entrada en calor. Para cargar un día anterior, cambiá la fecha. En cada ejercicio poné peso y repeticiones, y tocá Guardar. Al terminar, hacé el estiramiento.</li>
-        <li><strong>Cardio:</strong> cargá los minutos y la fecha. Arriba ves tu objetivo.</li>
-        <li><strong>Plan de alimentación:</strong> tu plan del mes y tu suplementación. Abajo está el botón para descargar los PDFs.</li>
-        <li><strong>Calendario:</strong> los ✔ marcan los días que entrenaste. Ahí también está el temporizador para circuitos.</li>
-        <li><strong>Perfil:</strong> tu peso corporal, tus datos y el cambio de PIN. Salir también está acá.</li>
-      </ol>
+  <div class="card">
+    <h2>Alumnos</h2>
+    <select id="selAlumno"></select>
+    <select id="estadoAl" title="Estado de la alumna" style="margin-top:6px">
+      <option value="activa">Activa</option>
+      <option value="baja_bloqueada">De baja · bloqueada (no puede entrar)</option>
+      <option value="baja_lectura">De baja · solo lectura (ve su historial)</option>
+    </select>
+    <h3>Objetivo de cardio</h3>
+    <div class="grid4">
+      <input id="cDias" type="number" min="0" max="7" placeholder="Días por semana">
+      <input id="cMin" type="number" min="0" placeholder="Minutos aprox.">
     </div>
-  </section>
-
-  <section class="tabpage" data-tab="entreno">
-    <div class="card">
-      <h2>Entrada en calor</h2>
-      <p class="mut">Realizar 5 minutos de movilidad articular antes de comenzar la rutina.</p>
-      <a class="video" href="https://youtube.com/shorts/WsMMQ9HveSg" target="_blank" rel="noopener">Tren superior ▸</a><br>
-      <a class="video" href="https://youtube.com/shorts/Xi8LBATgXco" target="_blank" rel="noopener">Tren inferior ▸</a>
-    </div>
-    <div class="card">
-      <h2>Rutina de entrenamiento</h2>
-      <div class="tabs" id="tabs" style="margin-top:10px"></div>
-      <div class="row2" style="margin-top:10px"><input type="date" id="fechaRutina" title="Fecha de los pesos" max=""></div>
-      <div id="dia"></div>
-    </div>
-    <div class="card">
-      <h2>Estiramiento</h2>
-      <p class="mut">Realizar 5 minutos de estiramiento al terminar la rutina.</p>
-      <a class="video" href="https://youtube.com/shorts/bDFnY5WschI" target="_blank" rel="noopener">Ver estiramiento ▸</a>
-    </div>
-    <div class="card">
-      <h2>Evolución de cargas/fuerza</h2>
-      <select id="ejSel" style="margin-top:10px"></select>
-      <div id="grafico"></div>
-    </div>
-  </section>
-
-  <section class="tabpage" data-tab="cardio">
-    <div class="card">
-      <h2>Cardio</h2>
-      <div id="cardio" style="margin-top:10px"></div>
-    </div>
-    <div class="card">
-      <h2>Calendario de cardio</h2>
-      <div id="calendarioCardio" style="margin-top:10px"></div>
-    </div>
-  </section>
-
-  <section class="tabpage" data-tab="plan">
-    <div class="card">
-      <h2>Plan de alimentación</h2>
-      <div id="plan" style="margin-top:10px"></div>
-    </div>
-    <div class="card">
-      <h2>Suplementación natural</h2>
-      <div id="suplementacion" class="plan" style="margin-top:10px"></div>
-    </div>
-    <div class="card">
-      <h2>Material descargable</h2>
-      <p class="mut">PDFs para descargar.</p>
-      <a href="https://drive.google.com/drive/folders/1d7bzpVHNGwPn9y3pF269LU3_KfwRkeLs?usp=drive_link" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;background:var(--ac);color:var(--acTxt);padding:10px 14px;border-radius:8px;font-weight:700;text-decoration:none">Ver y descargar ▸</a>
-    </div>
-  </section>
-
-  <section class="tabpage" data-tab="calendario">
-    <div class="card">
-      <h2>Temporizador</h2>
-      <p class="mut">Trabajo: segundos de cada ejercicio. Descanso entre ejercicios: pausa corta dentro de la ronda. Ejercicios por ronda: cuántos ejercicios tiene el circuito. Descanso entre rondas: pausa larga al terminar cada ronda. Rondas: cuántas veces repetís el circuito.</p>
-      <div class="row2" style="margin-top:8px">
-        <label class="mut" style="display:block">Trabajo (seg)<input id="tTrab" type="number" value="20"></label>
-        <label class="mut" style="display:block">Descanso entre ejercicios (seg)<input id="tDesc" type="number" value="10"></label>
+    <button class="sec" id="cGuardar">Guardar objetivo</button>
+    <div class="mut" id="msgCardio"></div>
+    <details style="margin-top:10px" open>
+      <summary>Peso corporal</summary>
+      <div id="listaPeso"></div>
+    </details>
+    <details style="margin-top:10px" open>
+      <summary>Datos de la alumna</summary>
+      <input id="dObj" placeholder="Objetivo (ej: bajar 5 kg)">
+      <div class="grid4">
+        <input id="dAlt" type="number" placeholder="Altura (cm)">
+        <input id="dPesoIni" type="number" step="0.1" placeholder="Peso inicial (kg)">
       </div>
-      <div class="row2">
-        <label class="mut" style="display:block">Ejercicios por ronda<input id="tEjs" type="number" value="4"></label>
-        <label class="mut" style="display:block">Rondas<input id="tRondas" type="number" value="3"></label>
+      <div class="grid4">
+        <input id="dInicio" type="date" title="Inicio del programa">
+        <input id="dMail" type="email" placeholder="Mail">
       </div>
-      <div class="row2">
-        <label class="mut" style="display:block">Descanso entre rondas (seg)<input id="tDescRonda" type="number" value="60"></label>
-        <button id="tInicio" style="align-self:end">Iniciar</button>
+      <input id="dTel" placeholder="Teléfono">
+      <textarea id="suplTexto" placeholder="Suplementación natural (lo que ve la alumna)" style="min-height:110px"></textarea>
+      <button class="sec" id="suplGuardar">Guardar suplementación</button>
+      <button id="dGuardar">Guardar datos</button>
+      <div class="mut" id="msgDatos"></div>
+    </details>
+    <details style="margin-top:10px">
+      <summary>Cargas registradas</summary>
+      <p class="mut">Elegí el mes para ver los pesos y repeticiones que cargó la alumna.</p>
+      <div class="grid4">
+        <input id="cargasMes" type="month" title="Mes">
+        <button class="sec" id="cargasVer">Ver</button>
       </div>
-      <div id="tDisplay" style="font-size:3rem;text-align:center;font-weight:900;margin:12px 0">00</div>
-      <div class="mut" id="tEstado" style="text-align:center">Listo</div>
-      <button class="sec" id="tReset" style="width:100%;margin-top:8px">Reiniciar</button>
-    </div>
-    <div class="card">
-      <h2>Tracker de entrenamiento y cardio</h2>
-      <div id="calendario" style="margin-top:10px"></div>
-    </div>
-  </section>
+      <div id="listaCargas"></div>
+    </details>
+    <details style="margin-top:10px">
+      <summary>Exportar informe (PDF)</summary>
+      <p class="mut">Elegí el mes y tocá Exportar. Se abre la vista de impresión: elegí "Guardar como PDF".</p>
+      <div class="grid4">
+        <input id="repMes" type="month" title="Mes">
+        <button id="repExport">Exportar</button>
+      </div>
+    </details>
+    <details style="margin-top:10px">
+      <summary>Resetear PIN del alumno</summary>
+      <p class="mut">Usalo si la alumna lo olvidó. Ponele un PIN nuevo de 4 números y avisale.</p>
+      <div class="grid4">
+        <input id="rPin" type="password" inputmode="numeric" maxlength="4" placeholder="PIN nuevo">
+        <button class="sec" id="rPinBtn">Resetear</button>
+      </div>
+      <div class="mut" id="msgRPin"></div>
+    </details>
+    <details>
+      <summary>Nuevo alumno</summary>
+      <input id="nAlumno" placeholder="Nombre">
+      <input id="nPinAlumno" placeholder="PIN de 4 dígitos">
+      <button id="crearAlumno">Crear alumno</button>
+      <div class="mut" id="msgAlumno"></div>
+    </details>
+  </div>
 
-  <section class="tabpage" data-tab="perfil">
-    <div class="card">
-      <h2>Peso corporal</h2>
-      <div id="pesoCorp" style="margin-top:10px"></div>
+  <details class="card">
+    <summary><h2 style="display:inline">Ejercicios</h2></summary>
+    <div id="listaEj" style="margin-top:10px"></div>
+    <details style="margin-top:10px">
+      <summary>Importar varios desde Google Sheets</summary>
+      <p class="mut">En la hoja: columna A = nombre del ejercicio, columna B = link del video (opcional). Seleccioná las filas, copiá y pegalas acá. Una fila por ejercicio.</p>
+      <textarea id="pegarEj" rows="6"></textarea>
+      <button id="importarEj" style="margin-top:6px;width:100%">Importar</button>
+      <div class="mut" id="msgImport"></div>
+    </details>
+    <div class="grid4" style="margin-top:8px">
+      <input id="nEj" placeholder="Nuevo ejercicio">
+      <button id="crearEj">Agregar</button>
     </div>
-    <div class="card">
-      <h2>Mis datos</h2>
-      <div id="misDatos" style="margin-top:10px"></div>
-    </div>
-    <div class="card">
-      <h2>Cambiar mi PIN</h2>
-      <input id="pinActual" type="password" inputmode="numeric" maxlength="4" placeholder="PIN actual">
-      <input id="pinNuevo" type="password" inputmode="numeric" maxlength="4" placeholder="PIN nuevo (4 números)">
-      <input id="pinRepetir" type="password" inputmode="numeric" maxlength="4" placeholder="Repetí el PIN nuevo">
-      <button id="cambiarPin">Cambiar PIN</button>
-      <div class="mut" id="msgPin"></div>
-    </div>
-    <button class="sec" id="salir">Salir</button>
-  </section>
+  </details>
 
-  <nav class="tabbar">
-    <button data-go="inicio" class="on"><span>🏠</span>Inicio</button>
-    <button data-go="entreno"><span>🏋️</span>Entrenamiento</button>
-    <button data-go="cardio"><span>🏃</span>Cardio</button>
-    <button data-go="plan"><span>🥗</span>Plan de alimentación</button>
-    <button data-go="calendario"><span>📅</span>Calendario</button>
-    <button data-go="perfil"><span>👤</span>Perfil</button>
-  </nav>
+  <div class="card">
+    <h2>Plantillas</h2>
+    <p class="mut">Rutinas base (3, 4, 5 o 6 días) que después usás para cualquier alumno.</p>
+    <div id="listaPlant"></div>
+    <details style="margin-top:8px">
+      <summary>Crear plantilla en blanco</summary>
+      <input id="pNombre" placeholder="Nombre (ej: Plantilla 4 días)">
+      <div class="grid4">
+        <input id="pDias" type="number" min="1" max="7" placeholder="Cantidad de días">
+        <button id="crearPlant">Crear</button>
+      </div>
+      <div class="mut" id="msgPlant"></div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>Rutinas de <span id="nomAlumno"></span></h2>
+    <div id="listaRut"></div>
+    <h3>Nueva rutina</h3>
+    <select id="rOrigen"></select>
+    <input id="rNombre" placeholder="Nombre (ej: Noviembre - Fuerza)">
+    <div class="grid4">
+      <input id="rInicio" type="date" title="Inicio">
+      <input id="rFin" type="date" title="Fin">
+    </div>
+    <div class="grid4">
+      <input id="rDias" type="number" min="1" max="7" placeholder="Días (sólo si es en blanco)">
+      <button id="crearRut">Crear</button>
+    </div>
+    <div class="mut" id="msgRut"></div>
+  </div>
+
+  <div class="card">
+    <h2>Plan de alimentación de <span id="nomPlan"></span></h2>
+    <div class="grid4">
+      <input id="planMes" type="month" title="Mes">
+      <button class="sec" id="planCargar">Ver este mes</button>
+    </div>
+    <textarea id="planTexto" placeholder="Pegá acá el plan desde Canva"></textarea>
+    <div class="grid4">
+      <button class="sec" id="planCopiar">Copiar del mes anterior</button>
+      <button id="planGuardar">Guardar plan</button>
+    </div>
+    <div class="mut" id="msgPlan"></div>
+    <h3>Planes anteriores</h3>
+    <div class="chips" id="listaPlanes"></div>
+  </div>
+
+  <div id="editor"></div>
+
+  <details class="card">
+    <summary><h2 style="display:inline">Código de recuperación</h2></summary>
+    <p class="mut">Sirve para cambiar la clave desde la pantalla de entrada si la olvidás. Usá al menos 8 caracteres y guardalo en un lugar seguro, distinto de la clave.</p>
+    <input id="rCodigo" type="password" placeholder="Código nuevo (mínimo 8 caracteres)">
+    <button id="rGuardar">Guardar código</button>
+    <div class="mut" id="msgRec"></div>
+  </details>
+
+  <button class="sec" id="salir">Salir</button>
+  <div id="reporte"></div>
 </div>
 
 <script type="module">
@@ -212,332 +231,105 @@ const sb = createClient(
   'sb_publishable_pw9lAS5n8Vyv0V9EOowoDA_zT2lH0Ns'
 );
 
-let alumno = null, pin = null, dias = [], diaIdx = 0, ejercicios = [], ejActivo = null;
-let mesVista = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+let pin = null, alumnos = [], ejercicios = [], rutinas = [], plantillas = [], todas = [], planes = [];
+let alumnoSel = null, rutinaSel = null;
 
 const $ = id => document.getElementById(id);
-const el = (tag, props = {}) => Object.assign(document.createElement(tag), props);
-const hoyStr = () => new Date().toLocaleDateString('sv-SE');
-const fechaStr = d => d.toLocaleDateString('sv-SE');
-
-// ---------- SUPLEMENTACIÓN ----------
-async function cargarSuple() {
-  const { data, error } = await sb.rpc('alumno_suplementacion', { p_alumno: alumno, p_pin: pin });
-  $('suplementacion').textContent = error ? 'No se pudo cargar' : (data || 'Todavía no tenés suplementación cargada.');
-}
-
-// ---------- TEMPORIZADOR ----------
-let tTimer = null;
-function tStop() { clearInterval(tTimer); tTimer = null; }
-let tAudio = null;
-// Sonidos: inicio, trabajo, fin de ejercicio, fin de ronda y final
-const TONOS = {
-  inicio: [[660, 150], [880, 150], [1100, 250]],
-  trabajo: [[880, 120]],
-  finEjercicio: [[440, 250]],
-  finRonda: [[660, 150], [660, 150]],
-  final: [[990, 300], [1320, 500]]
+const el = (tag, props = {}, kids = []) => {
+  const n = Object.assign(document.createElement(tag), props);
+  kids.forEach(k => n.append(k));
+  return n;
 };
-function tSonido(tipo) {
-  try {
-    tAudio = tAudio || new (window.AudioContext || window.webkitAudioContext)();
-    let t = tAudio.currentTime;
-    (TONOS[tipo] || []).forEach(([f, d]) => {
-      const o = tAudio.createOscillator(), g = tAudio.createGain();
-      o.frequency.value = f; o.connect(g); g.connect(tAudio.destination);
-      g.gain.value = 0.3; o.start(t); o.stop(t + d / 1000);
-      t += d / 1000 + 0.08;
-    });
-  } catch (e) {}
-}
-$('tInicio').onclick = () => {
-  tStop();
-  const trab = Number($('tTrab').value) || 20;
-  const descEj = Number($('tDesc').value) || 10;
-  const ejs = Number($('tEjs').value) || 1;
-  const descRonda = Number($('tDescRonda').value) || 60;
-  const rondas = Number($('tRondas').value) || 3;
-
-  // Armo la secuencia completa de pasos
-  const pasos = [];
-  for (let r = 1; r <= rondas; r++) {
-    for (let e = 1; e <= ejs; e++) {
-      pasos.push({ fase: 'TRABAJO', seg: trab, txt: `Ronda ${r} de ${rondas} · ejercicio ${e} de ${ejs}`, sonido: pasos.length === 0 ? 'inicio' : 'trabajo' });
-      if (e < ejs) pasos.push({ fase: 'DESCANSO', seg: descEj, txt: `Ronda ${r} de ${rondas} · descanso entre ejercicios`, sonido: 'finEjercicio' });
-    }
-    if (r < rondas) pasos.push({ fase: 'DESCANSO ENTRE RONDAS', seg: descRonda, txt: `Terminaste la ronda ${r}. Próxima: ronda ${r + 1}`, sonido: 'finRonda' });
-  }
-
-  let idx = 0, seg = 0;
-  const mostrar = () => {
-    $('tDisplay').textContent = String(seg).padStart(2, '0');
-    $('tEstado').textContent = `${pasos[idx].fase} · ${pasos[idx].txt}`;
-  };
-  const cargarPaso = () => {
-    seg = pasos[idx].seg;
-    tSonido(pasos[idx].sonido);
-    mostrar();
-  };
-  cargarPaso();
-  tTimer = setInterval(() => {
-    seg--;
-    if (seg <= 0) {
-      idx++;
-      if (idx >= pasos.length) {
-        tStop(); $('tDisplay').textContent = '00'; $('tEstado').textContent = '¡Terminaste la rutina!'; tSonido('final');
-        return;
-      }
-      cargarPaso();
-      return;
-    }
-    mostrar();
-  }, 1000);
+const mesActualStr = () => new Date().toLocaleDateString('sv-SE').slice(0, 7);
+const mesAnteriorStr = m => {
+  const [y, mm] = m.split('-').map(Number);
+  const d = new Date(y, mm - 2, 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 };
-$('tReset').onclick = () => { tStop(); $('tDisplay').textContent = '00'; $('tEstado').textContent = 'Listo'; };
 
-// ---------- NAVEGACIÓN POR PESTAÑAS ----------
-function irA(tab) {
-  document.querySelectorAll('.tabpage').forEach(s => s.classList.toggle('on', s.dataset.tab === tab));
-  document.querySelectorAll('.tabbar button').forEach(b => b.classList.toggle('on', b.dataset.go === tab));
-  window.scrollTo(0, 0);
+async function rpc(nombre, args = {}) {
+  const { data, error } = await sb.rpc(nombre, { p_pin: pin, ...args });
+  if (error) throw error;
+  return data;
 }
-document.querySelectorAll('.tabbar button').forEach(b => b.onclick = () => irA(b.dataset.go));
 
 // ---------- LOGIN ----------
 $('entrar').onclick = async () => {
   $('errLogin').textContent = '';
-  const n = $('nombre').value.trim(), p = $('pin').value.trim();
-  const { data, error } = await sb.rpc('login_alumno', { p_nombre: n, p_pin: p });
-  if (error || !data) { $('errLogin').textContent = 'Nombre o PIN incorrecto'; return; }
-  alumno = data; pin = p;
-  localStorage.setItem('tf', JSON.stringify({ alumno, pin }));
-  await cargar();
+  const p = $('pin').value.trim();
+  const { data, error } = await sb.rpc('entrenador_login', { p_pin: p });
+  if (error || !data) { $('errLogin').textContent = 'PIN incorrecto'; return; }
+  pin = p;
+  localStorage.setItem('tfp', p);
+  await iniciar();
 };
 
-$('salir').onclick = () => { localStorage.removeItem('tf'); location.reload(); };
+$('salir').onclick = () => { localStorage.removeItem('tfp'); location.reload(); };
 
-$('cambiarPin').onclick = async () => {
-  const msg = $('msgPin');
-  const actual = $('pinActual').value.trim(), nuevo = $('pinNuevo').value.trim(), rep = $('pinRepetir').value.trim();
-  if (!/^[0-9]{4}$/.test(nuevo)) { msg.textContent = 'El PIN nuevo tiene que tener 4 números'; return; }
-  if (nuevo !== rep) { msg.textContent = 'Los PIN nuevos no coinciden'; return; }
-  if (actual !== pin) { msg.textContent = 'El PIN actual no es correcto'; return; }
-  const { error } = await sb.rpc('alumno_cambiar_pin', { p_alumno: alumno, p_pin: pin, p_nuevo: nuevo });
-  if (error) { msg.textContent = 'No se pudo cambiar, probá de nuevo'; return; }
-  pin = nuevo;
-  localStorage.setItem('tf', JSON.stringify({ alumno, pin }));
-  $('pinActual').value = ''; $('pinNuevo').value = ''; $('pinRepetir').value = '';
-  msg.textContent = 'PIN cambiado. Desde ahora usá el nuevo.';
+$('rcBtn').onclick = async () => {
+  const c = $('rcCodigo').value.trim(), n = $('rcNueva').value.trim();
+  if (!c || !n) { $('errRec').textContent = 'Completá el código y la clave nueva'; return; }
+  try {
+    await sb.rpc('entrenador_recuperar_pin', { p_codigo: c, p_nuevo: n });
+    $('errRec').textContent = 'Clave cambiada. Ingresá con la clave nueva.';
+    $('rcCodigo').value = ''; $('rcNueva').value = '';
+  } catch (e) { $('errRec').textContent = 'Código incorrecto o clave muy corta'; }
 };
 
-// ---------- CARGA GENERAL ----------
-async function cargar() {
-  const { data: est, error: eEst } = await sb.rpc('alumno_estado', { p_alumno: alumno, p_pin: pin });
-  if (eEst || !est || est === 'baja_bloqueada') {
-    localStorage.removeItem('tf');
-    alumno = null; pin = null;
-    $('login').classList.remove('hidden');
-    $('app').classList.add('hidden');
-    $('errLogin').textContent = est === 'baja_bloqueada'
-      ? 'Tu cuenta está de baja. Escribile a Brenda para más info.'
-      : 'No se pudo entrar, probá de nuevo';
-    return;
-  }
+$('rGuardar').onclick = async () => {
+  const c = $('rCodigo').value.trim();
+  const msg = $('msgRec');
+  if (c.length < 8) { msg.textContent = 'Tiene que tener al menos 8 caracteres'; return; }
+  try {
+    await rpc('entrenador_fijar_recuperacion', { p_codigo: c });
+    $('rCodigo').value = '';
+    msg.textContent = 'Código guardado';
+  } catch (e) { msg.textContent = 'Error: ' + e.message; }
+};
+
+async function iniciar() {
   $('login').classList.add('hidden');
   $('app').classList.remove('hidden');
-  $('app').classList.toggle('solo-lectura', est === 'baja_lectura');
-  $('estadoAlumna').textContent = est === 'activa' ? 'Estado: Activa' : 'Estado: De baja (solo lectura)';
-  if (est === 'baja_lectura' && !$('avisoBaja')) {
-    document.querySelector('.appHead').append(el('div', { id: 'avisoBaja', className: 'mut', textContent: 'Tu cuenta está de baja: podés ver tu historial, pero no cargar datos.' }));
-  }
-
-  $('fechaRutina').value = hoyStr();
-  $('fechaRutina').max = hoyStr();
-  renderCardio();
-  renderPesoCorp();
-  renderPerfil();
-  cargarCalendario();
-  cargarPlan();
-  cargarSuple();
-
-  const { data: rid, error } = await sb.rpc('alumno_rutina_vigente', { p_alumno: alumno, p_pin: pin });
-  if (error) { $('dia').textContent = 'Error: ' + error.message; return; }
-  if (!rid) { $('dia').textContent = 'Todavía no tenés una rutina asignada.'; return; }
-
-  const { data: det, error: e2 } = await sb.rpc('rutina_detalle', { p_alumno: alumno, p_pin: pin, p_rutina: rid });
-  if (e2) { $('dia').textContent = 'Error: ' + e2.message; return; }
-
-  dias = det;
-  const vistos = new Map();
-  dias.forEach(d => d.ejercicios.forEach(e => vistos.set(e.id, e)));
-  ejercicios = [...vistos.values()];
-
-  renderTabsDias();
-  mostrarDia(0);
-  renderSelectorGrafico();
+  $('planMes').value = mesActualStr();
+  $('cargasMes').value = mesActualStr();
+  await cargarTodo();
 }
 
-// ---------- RUTINA ----------
-function renderTabsDias() {
-  const t = $('tabs');
-  t.replaceChildren();
-  dias.forEach((d, i) => t.append(el('button', {
-    textContent: `Día ${d.numero}${d.nombre ? ' · ' + d.nombre : ''}`,
-    className: i === diaIdx ? 'on' : '',
-    onclick: () => { diaIdx = i; renderTabsDias(); mostrarDia(i); }
-  })));
+async function cargarTodo() {
+  alumnos = await rpc('entrenador_listar_alumnos');
+  ejercicios = await rpc('entrenador_listar_ejercicios');
+  if (!alumnoSel || !alumnos.find(a => a.id === alumnoSel.id)) alumnoSel = alumnos[0] || null;
+  renderAlumnos();
+  await cargarObjetivo();
+  renderEjercicios();
+  await renderPlantillas();
+  await renderRutinas();
+  await cargarPlanes();
 }
 
-function mostrarDia(i) {
-  const cont = $('dia');
-  cont.replaceChildren();
-  const lista = dias[i]?.ejercicios || [];
-  if (!lista.length) { cont.textContent = 'Este día todavía no tiene ejercicios.'; return; }
-  lista.forEach(ex => cont.append(filaEjercicio(ex)));
-}
-
-// ---------- REGISTRO DE SERIE ----------
-function filaEjercicio(ex) {
-  const box = el('div', { className: 'ex' });
-  box.append(el('strong', { textContent: ex.nombre }));
-  box.append(el('div', { className: 'mut', textContent: `Objetivo: ${ex.series ?? '-'} series × ${ex.reps ?? '-'} reps` }));
-  if (ex.video) box.append(el('a', { href: ex.video, target: '_blank', rel: 'noopener', textContent: 'Ver cómo se hace ▸', className: 'video' }));
-  if (ex.indicaciones) box.append(el('div', { className: 'indic', textContent: `Indicación: ${ex.indicaciones}` }));
-
-  const ultima = el('div', { className: 'mut' });
-  box.append(ultima);
-  mostrarUltima(ex.id, ultima);
-
-  const row = el('div', { className: 'row' });
-  const peso = el('input', { type: 'number', step: '0.5', placeholder: 'Peso kg', inputMode: 'decimal' });
-  const reps = el('input', { type: 'number', placeholder: 'Reps', inputMode: 'numeric' });
-  const btn = el('button', { textContent: 'Guardar' });
-  const msg = el('div', { className: 'mut' });
-
-  btn.onclick = async () => {
-    if (!peso.value || !reps.value) { msg.textContent = 'Cargá peso y reps'; return; }
-    btn.disabled = true;
-    const { error } = await sb.rpc('registrar_serie_con_fecha', {
-      p_alumno: alumno, p_pin: pin, p_ejercicio: ex.id,
-      p_peso: Number(peso.value), p_repeticiones: Number(reps.value),
-      p_fecha: $('fechaRutina').value || hoyStr()
+// ---------- CARGAS REGISTRADAS ----------
+async function verCargas() {
+  if (!alumnoSel) return;
+  const m = $('cargasMes').value || mesActualStr();
+  const [y, mm] = m.split('-').map(Number);
+  const desde = `${m}-01`;
+  const hasta = new Date(y, mm, 0).toLocaleDateString('sv-SE');
+  const l = $('listaCargas');
+  try {
+    const r = await rpc('entrenador_reporte_mes', { p_alumno: alumnoSel.id, p_desde: desde, p_hasta: hasta });
+    l.replaceChildren();
+    const regs = r.registros || [];
+    if (!regs.length) { l.append(el('div', { className: 'mut', textContent: 'No hay cargas en ese mes.' })); return; }
+    let ultimo = null;
+    regs.forEach(x => {
+      if (x.ejercicio !== ultimo) { l.append(el('h3', { textContent: x.ejercicio })); ultimo = x.ejercicio; }
+      l.append(el('div', { className: 'mut', textContent: `${x.fecha} · ${x.peso} kg × ${x.reps}` }));
     });
-    btn.disabled = false;
-    if (error) { msg.textContent = 'No se pudo guardar, probá de nuevo'; return; }
-    msg.textContent = `Guardado: ${peso.value} kg × ${reps.value}`;
-    ultima.textContent = `Última vez: ${peso.value} kg × ${reps.value}`;
-    peso.value = ''; reps.value = '';
-    cargarCalendario();
-    if (ejActivo === ex.id) verGrafico(ex.id);
-  };
-
-  row.append(peso, reps, btn);
-  box.append(row, msg);
-  return box;
+  } catch (e) { l.textContent = 'Error: ' + e.message; }
 }
+$('cargasVer').onclick = verCargas;
 
-async function mostrarUltima(id, nodo) {
-  const { data } = await sb.rpc('historial_ejercicio', { p_alumno: alumno, p_pin: pin, p_ejercicio: id });
-  if (data?.length) {
-    const u = data[data.length - 1];
-    nodo.textContent = `Última vez: ${u.peso} kg × ${u.repeticiones} (${u.fecha})`;
-  } else {
-    nodo.textContent = 'Primera vez con este ejercicio';
-  }
-}
-
-// ---------- CARDIO ----------
-async function renderCardio() {
-  const c = $('cardio');
-  c.replaceChildren();
-
-  const { data: obj } = await sb.rpc('alumno_cardio_objetivo', { p_alumno: alumno, p_pin: pin });
-  const o = obj?.[0];
-  if (o && (o.dias || o.minutos)) {
-    c.append(el('div', { className: 'mut', textContent: `Objetivo: ${o.dias ?? '-'} días por semana · ${o.minutos ?? '-'} min aprox.` }));
-  }
-
-  const fecha = el('input', { type: 'date', value: hoyStr(), max: hoyStr(), title: 'Fecha' });
-  const min = el('input', { type: 'number', placeholder: 'Minutos', inputMode: 'numeric' });
-  const nota = el('input', { placeholder: 'Nota (opcional)' });
-  const btn = el('button', { textContent: 'Guardar cardio' });
-  const msg = el('div', { className: 'mut' });
-
-  const fila = el('div', { className: 'row2' });
-  fila.style.gridTemplateColumns = '1fr 1fr';
-  fecha.style.minWidth = '0';
-  fecha.style.width = '100%';
-  min.style.minWidth = '0';
-  min.style.width = '100%';
-  fila.append(fecha, min);
-
-  btn.onclick = async () => {
-    if (!min.value) { msg.textContent = 'Poné los minutos'; return; }
-    btn.disabled = true;
-    const { error } = await sb.rpc('registrar_cardio', {
-      p_alumno: alumno, p_pin: pin, p_fecha: fecha.value || hoyStr(),
-      p_minutos: Number(min.value), p_nota: nota.value.trim() || null
-    });
-    btn.disabled = false;
-    msg.textContent = error ? 'No se pudo guardar' : `Guardado: ${min.value} min el ${fecha.value || hoyStr()}`;
-    if (!error) { min.value = ''; nota.value = ''; cargarCalendario(); }
-  };
-
-  c.append(fila, nota, btn, msg);
-}
-
-// ---------- PESO CORPORAL ----------
-async function renderPesoCorp() {
-  const c = $('pesoCorp');
-  c.replaceChildren();
-
-  const fecha = el('input', { type: 'date', value: hoyStr(), max: hoyStr(), title: 'Fecha' });
-  const kg = el('input', { type: 'number', step: '0.1', placeholder: 'Peso kg', inputMode: 'decimal' });
-  fecha.style.minWidth = '0'; fecha.style.width = '100%';
-  kg.style.minWidth = '0'; kg.style.width = '100%';
-  const fila = el('div', { className: 'row2' });
-  fila.style.gridTemplateColumns = '1fr 1fr';
-  fila.append(fecha, kg);
-
-  const btn = el('button', { textContent: 'Guardar peso' });
-  const msg = el('div', { className: 'mut' });
-  const lista = el('div', { style: 'margin-top:12px' });
-
-  btn.onclick = async () => {
-    if (!kg.value) { msg.textContent = 'Poné tu peso'; return; }
-    btn.disabled = true;
-    const { error } = await sb.rpc('alumno_registrar_peso', {
-      p_alumno: alumno, p_pin: pin, p_fecha: fecha.value || hoyStr(), p_peso: Number(kg.value)
-    });
-    btn.disabled = false;
-    if (error) { msg.textContent = 'No se pudo guardar'; return; }
-    msg.textContent = `Guardado: ${kg.value} kg el ${fecha.value || hoyStr()}`;
-    kg.value = '';
-    cargarListaPeso(lista);
-    renderGraficoPeso();
-  };
-
-  const grafico = el('div', { id: 'pesoGrafico', style: 'margin-top:10px' });
-  c.append(fila, btn, msg, lista, grafico);
-  cargarListaPeso(lista);
-  renderGraficoPeso();
-}
-
-async function cargarListaPeso(nodo) {
-  const { data, error } = await sb.rpc('alumno_listar_peso', { p_alumno: alumno, p_pin: pin });
-  nodo.replaceChildren();
-  if (error) { nodo.textContent = 'No se pudo cargar el historial'; return; }
-  if (!data?.length) { nodo.textContent = 'Todavía no registraste tu peso.'; return; }
-  const ult = data[0];
-  nodo.append(el('div', { className: 'mut', textContent: `Último registro: ${ult.peso} kg (${ult.fecha})` }));
-  data.forEach(p => nodo.append(el('div', {
-    className: 'mut',
-    textContent: `${p.fecha} · ${p.peso} kg`,
-    style: 'border-top:1px solid var(--line);padding:6px 0'
-  })));
-}
-
-// ---------- GRÁFICO Y DATOS ----------
+// ---------- DATOS, GRÁFICO E INFORME ----------
 function svgLinea(puntos) {
   const d = document.createElement('div');
   if (puntos.length < 2) { d.className = 'mut'; d.textContent = 'El gráfico aparece cuando haya al menos 2 pesos.'; return d; }
@@ -552,158 +344,475 @@ function svgLinea(puntos) {
   return d;
 }
 
-async function renderGraficoPeso() {
-  const g = $('pesoGrafico');
-  if (!g) return;
-  const { data } = await sb.rpc('alumno_listar_peso', { p_alumno: alumno, p_pin: pin });
-  g.replaceChildren(svgLinea([...(data || [])].reverse()));
+async function cargarPerfil() {
+  if (!alumnoSel) return;
+  const d = await rpc('entrenador_obtener_perfil', { p_alumno: alumnoSel.id });
+  const o = d?.[0] || {};
+  $('dObj').value = o.objetivo ?? '';
+  $('dAlt').value = o.altura_cm ?? '';
+  $('dPesoIni').value = o.peso_inicial ?? '';
+  $('dInicio').value = o.fecha_inicio ?? '';
+  $('dMail').value = o.mail ?? '';
+  $('dTel').value = o.telefono ?? '';
+  $('msgDatos').textContent = '';
+  const s = await rpc('entrenador_obtener_suplementacion', { p_alumno: alumnoSel.id });
+  $('suplTexto').value = s ?? '';
 }
 
-async function renderPerfil() {
-  const c = $('misDatos');
-  c.replaceChildren();
-  const { data, error } = await sb.rpc('alumno_obtener_datos', { p_alumno: alumno, p_pin: pin });
-  if (error) { c.textContent = 'No se pudieron cargar tus datos'; return; }
-  const o = data?.[0] || {};
-  const obj = el('input', { placeholder: 'Objetivo (ej: bajar 5 kg)', value: o.objetivo ?? '' });
-  const alt = el('input', { type: 'number', placeholder: 'Altura (cm)', value: o.altura_cm ?? '' });
-  const pesoIni = el('input', { type: 'number', step: '0.1', placeholder: 'Peso inicial (kg)', value: o.peso_inicial ?? '' });
-  const inicio = el('input', { type: 'date', title: 'Inicio del programa', value: o.fecha_inicio ?? '' });
-  const mail = el('input', { type: 'email', placeholder: 'Mail', value: o.mail ?? '' });
-  const tel = el('input', { placeholder: 'Teléfono', value: o.telefono ?? '' });
-  const btn = el('button', { textContent: 'Guardar mis datos' });
-  const msg = el('div', { className: 'mut' });
-  btn.onclick = async () => {
-    btn.disabled = true;
-    const { error } = await sb.rpc('alumno_guardar_datos', {
-      p_alumno: alumno, p_pin: pin,
-      p_objetivo: obj.value.trim() || null,
-      p_altura: alt.value ? Number(alt.value) : null,
-      p_peso_inicial: pesoIni.value ? Number(pesoIni.value) : null,
-      p_fecha_inicio: inicio.value || null,
-      p_mail: mail.value.trim() || null,
-      p_telefono: tel.value.trim() || null
+$('suplGuardar').onclick = async () => {
+  if (!alumnoSel) return;
+  try {
+    await rpc('entrenador_guardar_suplementacion', { p_alumno: alumnoSel.id, p_texto: $('suplTexto').value });
+    $('msgDatos').textContent = 'Suplementación guardada';
+  } catch (e) { $('msgDatos').textContent = 'Error: ' + e.message; }
+};
+
+$('dGuardar').onclick = async () => {
+  if (!alumnoSel) return;
+  const v = id => $(id).value.trim();
+  try {
+    await rpc('entrenador_guardar_perfil', {
+      p_alumno: alumnoSel.id,
+      p_objetivo: v('dObj') || null,
+      p_altura: v('dAlt') ? Number(v('dAlt')) : null,
+      p_peso_inicial: v('dPesoIni') ? Number(v('dPesoIni')) : null,
+      p_fecha_inicio: v('dInicio') || null,
+      p_mail: v('dMail') || null,
+      p_telefono: v('dTel') || null
     });
-    btn.disabled = false;
-    msg.textContent = error ? 'No se pudo guardar' : 'Datos guardados';
+    $('msgDatos').textContent = 'Datos guardados';
+  } catch (e) { $('msgDatos').textContent = 'Error: ' + e.message; }
+};
+
+function construirReporte(r, mes) {
+  const rep = $('reporte');
+  rep.replaceChildren();
+  const p = r.perfil || {};
+  rep.append(el('h1', { textContent: `Informe de seguimiento · ${p.nombre || ''}` }));
+  rep.append(el('div', { className: 'mut', textContent: `Mes: ${mes}` }));
+
+  rep.append(el('h2', { textContent: 'Datos' }));
+  const filas = [
+    ['Objetivo', p.objetivo],
+    ['Altura', p.altura ? p.altura + ' cm' : null],
+    ['Peso inicial', p.peso_inicial ? p.peso_inicial + ' kg' : null],
+    ['Inicio del programa', p.fecha_inicio],
+    ['Mail', p.mail],
+    ['Teléfono', p.telefono]
+  ].filter(f => f[1]);
+  filas.forEach(([k, v]) => rep.append(el('div', { textContent: `${k}: ${v}` })));
+
+  rep.append(el('h2', { textContent: 'Evolución del peso corporal' }));
+  rep.append(svgLinea(r.pesos || []));
+
+  rep.append(el('h2', { textContent: 'Cardio del mes' }));
+  if (!(r.cardio || []).length) rep.append(el('div', { textContent: 'Sin cardio registrado' }));
+  (r.cardio || []).forEach(c => rep.append(el('div', { textContent: `${c.fecha}: ${c.minutos} min${c.nota ? ' · ' + c.nota : ''}` })));
+
+  rep.append(el('h2', { textContent: 'Cargas por ejercicio' }));
+  if (!(r.registros || []).length) rep.append(el('div', { textContent: 'Sin cargas registradas' }));
+  let ultimo = null;
+  (r.registros || []).forEach(x => {
+    if (x.ejercicio !== ultimo) { rep.append(el('h3', { textContent: x.ejercicio })); ultimo = x.ejercicio; }
+    rep.append(el('div', { textContent: `${x.fecha} · ${x.peso} kg × ${x.reps}` }));
+  });
+}
+
+$('repExport').onclick = async () => {
+  if (!alumnoSel) return;
+  const m = $('repMes').value || mesActualStr();
+  const [y, mm] = m.split('-').map(Number);
+  const desde = `${m}-01`;
+  const hasta = new Date(y, mm, 0).toLocaleDateString('sv-SE');
+  try {
+    const r = await rpc('entrenador_reporte_mes', { p_alumno: alumnoSel.id, p_desde: desde, p_hasta: hasta });
+    construirReporte(r, m);
+    window.print();
+  } catch (e) { alert('Error: ' + e.message); }
+};
+
+// ---------- ALUMNOS ----------
+$('rPinBtn').onclick = async () => {
+  if (!alumnoSel) return;
+  const nuevo = $('rPin').value.trim();
+  const msg = $('msgRPin');
+  if (!/^[0-9]{4}$/.test(nuevo)) { msg.textContent = 'Tiene que tener 4 números'; return; }
+  if (!confirm(`¿Cambiar el PIN de ${alumnoSel.nombre}?`)) return;
+  try {
+    await rpc('entrenador_resetear_pin_alumno', { p_alumno: alumnoSel.id, p_nuevo: nuevo });
+    $('rPin').value = '';
+    msg.textContent = `PIN de ${alumnoSel.nombre} cambiado`;
+  } catch (e) { msg.textContent = 'Error: ' + e.message; }
+};
+
+async function cargarObjetivo() {
+  $('msgCardio').textContent = '';
+  if (!alumnoSel) { $('cDias').value = ''; $('cMin').value = ''; return; }
+  const d = await rpc('entrenador_obtener_cardio_objetivo', { p_alumno: alumnoSel.id });
+  const o = d?.[0];
+  $('cDias').value = o?.dias ?? '';
+  $('cMin').value = o?.minutos ?? '';
+  await cargarPesoPanel();
+  await cargarPerfil();
+  await cargarEstado();
+}
+
+async function cargarEstado() {
+  if (!alumnoSel) return;
+  const lista = await rpc('entrenador_estados');
+  const o = lista.find(x => x.id === alumnoSel.id);
+  $('estadoAl').value = o?.estado ?? 'activa';
+}
+
+$('estadoAl').onchange = async () => {
+  if (!alumnoSel) return;
+  const v = $('estadoAl').value;
+  if (v !== 'activa' && !confirm(`¿Dar de baja a ${alumnoSel.nombre}?`)) { await cargarEstado(); return; }
+  try {
+    await rpc('entrenador_cambiar_estado', { p_alumno: alumnoSel.id, p_estado: v });
+  } catch (e) { alert('Error: ' + e.message); await cargarEstado(); }
+};
+
+async function cargarPesoPanel() {
+  const l = $('listaPeso');
+  l.replaceChildren();
+  if (!alumnoSel) return;
+  const datos = await rpc('entrenador_listar_peso', { p_alumno: alumnoSel.id });
+  if (!datos.length) { l.append(el('div', { className: 'mut', textContent: 'Todavía no hay pesos registrados.' })); return; }
+  l.append(svgLinea([...datos].reverse()));
+  datos.forEach(p => l.append(el('div', { className: 'item', textContent: `${p.fecha} · ${p.peso} kg` })));
+}
+
+$('cGuardar').onclick = async () => {
+  if (!alumnoSel) return;
+  const dias = $('cDias').value === '' ? null : Number($('cDias').value);
+  const min = $('cMin').value === '' ? null : Number($('cMin').value);
+  try {
+    await rpc('entrenador_guardar_cardio_objetivo', { p_alumno: alumnoSel.id, p_dias: dias, p_minutos: min });
+    $('msgCardio').textContent = 'Objetivo guardado';
+  } catch (e) { $('msgCardio').textContent = 'Error: ' + e.message; }
+};
+function renderAlumnos() {
+  const s = $('selAlumno');
+  s.replaceChildren();
+  alumnos.forEach(a => s.append(el('option', { value: a.id, textContent: a.nombre, selected: alumnoSel && a.id === alumnoSel.id })));
+  s.onchange = async () => {
+    alumnoSel = alumnos.find(a => a.id === s.value);
+    rutinaSel = null; $('editor').replaceChildren();
+    $('nomPlan').textContent = alumnoSel ? alumnoSel.nombre : '—';
+    await cargarObjetivo();
+    await renderRutinas();
+    await cargarPlanes();
   };
-  c.append(obj, alt, pesoIni, inicio, mail, tel, btn, msg);
+  $('nomAlumno').textContent = alumnoSel ? alumnoSel.nombre : '—';
+  $('nomPlan').textContent = alumnoSel ? alumnoSel.nombre : '—';
 }
 
-// ---------- CALENDARIO ----------
-async function cargarCalendario() {
-  for (const id of ['calendario', 'calendarioCardio']) await dibujarCalendario(id);
+$('crearAlumno').onclick = async () => {
+  const nombre = $('nAlumno').value.trim(), p = $('nPinAlumno').value.trim();
+  if (!nombre || !p) { $('msgAlumno').textContent = 'Completá nombre y PIN'; return; }
+  try {
+    await rpc('entrenador_crear_alumno', { p_nombre: nombre, p_alumno_pin: p });
+    $('nAlumno').value = ''; $('nPinAlumno').value = '';
+    $('msgAlumno').textContent = 'Alumno creado';
+    await cargarTodo();
+  } catch (e) { $('msgAlumno').textContent = 'Error: ' + e.message; }
+};
+
+// ---------- EJERCICIOS ----------
+function renderEjercicios() {
+  const l = $('listaEj');
+  l.replaceChildren();
+  ejercicios.forEach(e => l.append(el('div', { className: 'item' }, [
+    el('span', { textContent: e.nombre }),
+    el('button', { className: 'peligro', textContent: 'Borrar', onclick: () => borrarEjercicio(e) })
+  ])));
 }
 
-async function dibujarCalendario(id) {
-  const cont = $(id);
-  const ini = new Date(mesVista.getFullYear(), mesVista.getMonth(), 1);
-  const fin = new Date(mesVista.getFullYear(), mesVista.getMonth() + 1, 0);
+async function borrarEjercicio(e) {
+  if (!confirm(`¿Borrar el ejercicio "${e.nombre}"?`)) return;
+  try {
+    await rpc('entrenador_borrar_ejercicio', { p_ejercicio: e.id });
+    ejercicios = await rpc('entrenador_listar_ejercicios');
+    renderEjercicios();
+    if (rutinaSel) renderEditor();
+  } catch (err) {
+    if (!err.message.includes('cargas')) { alert(err.message); return; }
+    const nombreDestino = prompt(`"${e.nombre}" tiene cargas de alumnas, así que no se puede borrar directo.\n\nSi es un repetido, escribí el nombre EXACTO del ejercicio que queda. Sus cargas y rutinas pasan a ese, y "${e.nombre}" se borra.`);
+    if (!nombreDestino) return;
+    const dest = ejercicios.find(x => x.nombre.trim().toLowerCase() === nombreDestino.trim().toLowerCase());
+    if (!dest || dest.id === e.id) { alert('No encontré ese ejercicio. Escribilo igual que aparece en la lista.'); return; }
+    if (!confirm(`¿Pasar todo de "${e.nombre}" a "${dest.nombre}" y borrar "${e.nombre}"?`)) return;
+    try {
+      await rpc('entrenador_fusionar_ejercicio', { p_origen: e.id, p_destino: dest.id });
+      ejercicios = await rpc('entrenador_listar_ejercicios');
+      renderEjercicios();
+      if (rutinaSel) renderEditor();
+      alert('Listo: se fusionaron los ejercicios.');
+    } catch (err2) { alert(err2.message); }
+  }
+}
 
-  const { data, error } = await sb.rpc('calendario', {
-    p_alumno: alumno, p_pin: pin, p_desde: fechaStr(ini), p_hasta: fechaStr(fin)
+$('crearEj').onclick = async () => {
+  const nombre = $('nEj').value.trim();
+  if (!nombre) return;
+  await rpc('entrenador_crear_ejercicio', { p_nombre: nombre });
+  $('nEj').value = '';
+  ejercicios = await rpc('entrenador_listar_ejercicios');
+  renderEjercicios();
+  if (rutinaSel) renderEditor();
+};
+
+$('importarEj').onclick = async () => {
+  const msg = $('msgImport');
+  const filas = $('pegarEj').value.split('\n').map(l => l.trim()).filter(Boolean);
+  if (!filas.length) { msg.textContent = 'Pegá las filas primero'; return; }
+  let ok = 0, fail = 0;
+  for (const f of filas) {
+    const cols = f.includes('\t') ? f.split('\t') : f.split(';');
+    const nombre = (cols[0] || '').trim();
+    const video = (cols[1] || '').trim() || null;
+    if (!nombre || nombre.toLowerCase() === 'nombre') continue;
+    try {
+      await rpc('entrenador_crear_ejercicio', { p_nombre: nombre, p_video: video });
+      ok++;
+    } catch (e) { fail++; }
+  }
+  $('pegarEj').value = '';
+  msg.textContent = `Importados: ${ok}${fail ? ' · con error: ' + fail : ''}`;
+  ejercicios = await rpc('entrenador_listar_ejercicios');
+  renderEjercicios();
+  if (rutinaSel) renderEditor();
+};
+
+// ---------- PLANTILLAS ----------
+async function renderPlantillas() {
+  plantillas = await rpc('entrenador_listar_plantillas');
+  const l = $('listaPlant');
+  l.replaceChildren();
+  if (!plantillas.length) { l.append(el('div', { className: 'mut', textContent: 'Todavía no hay plantillas.' })); }
+  plantillas.forEach(p => l.append(el('div', { className: 'item' }, [
+    el('div', { innerHTML: `<strong>${p.nombre}</strong><div class="mut">${p.dias} días</div>` }),
+    el('div', { style: 'display:flex;gap:6px' }, [
+      el('button', { className: 'sec', textContent: 'Editar', onclick: () => abrirRutina(p.id) }),
+      el('button', { className: 'peligro', textContent: 'Borrar', onclick: () => borrarRutina(p.id, p.nombre) })
+    ])
+  ])));
+  await renderOrigenes();
+}
+
+$('crearPlant').onclick = async () => {
+  const msg = $('msgPlant');
+  const nombre = $('pNombre').value.trim(), dias = Number($('pDias').value);
+  if (!nombre || !dias) { msg.textContent = 'Completá nombre y cantidad de días'; return; }
+  try {
+    const id = await rpc('entrenador_crear_plantilla', { p_nombre: nombre, p_dias: dias });
+    $('pNombre').value = ''; $('pDias').value = '';
+    msg.textContent = 'Plantilla creada';
+    await renderPlantillas();
+    abrirRutina(id);
+  } catch (e) { msg.textContent = 'Error: ' + e.message; }
+};
+
+// ---------- RUTINAS DEL ALUMNO ----------
+async function renderRutinas() {
+  const l = $('listaRut');
+  l.replaceChildren();
+  if (!alumnoSel) { l.textContent = 'Primero creá un alumno.'; return; }
+  rutinas = await rpc('entrenador_listar_rutinas', { p_alumno: alumnoSel.id });
+  if (!rutinas.length) { l.append(el('div', { className: 'mut', textContent: 'Este alumno todavía no tiene rutinas.' })); }
+  rutinas.forEach(r => l.append(el('div', { className: 'item' }, [
+    el('div', { innerHTML: `<strong>${r.nombre}</strong><div class="mut">${r.fecha_inicio} → ${r.fecha_fin}</div>` }),
+    el('div', { style: 'display:flex;gap:6px' }, [
+      el('button', { className: 'sec', textContent: 'Editar', onclick: () => abrirRutina(r.id) }),
+      el('button', { className: 'peligro', textContent: 'Borrar', onclick: () => borrarRutina(r.id, r.nombre) })
+    ])
+  ])));
+  await renderOrigenes();
+}
+
+// Desplegable de origen: en blanco + todas las rutinas y plantillas
+async function renderOrigenes() {
+  todas = await rpc('entrenador_listar_rutinas_todas');
+  const s = $('rOrigen');
+  const actual = s.value;
+  s.replaceChildren();
+  s.append(el('option', { value: 'blank', textContent: 'En blanco' }));
+  todas.forEach(t => s.append(el('option', { value: t.id, textContent: t.etiqueta })));
+  if (actual && [...s.options].some(o => o.value === actual)) s.value = actual;
+}
+
+$('crearRut').onclick = async () => {
+  const msg = $('msgRut');
+  const origen = $('rOrigen').value;
+  const nombre = $('rNombre').value.trim(), ini = $('rInicio').value, fin = $('rFin').value, dias = Number($('rDias').value);
+  if (!alumnoSel || !nombre || !ini || !fin) { msg.textContent = 'Completá nombre y fechas'; return; }
+  try {
+    let id;
+    if (origen === 'blank') {
+      if (!dias) { msg.textContent = 'Poné la cantidad de días'; return; }
+      id = await rpc('entrenador_crear_rutina', { p_alumno: alumnoSel.id, p_nombre: nombre, p_inicio: ini, p_fin: fin, p_dias: dias });
+    } else {
+      id = await rpc('entrenador_copiar_rutina_a', { p_origen: origen, p_alumno: alumnoSel.id, p_nombre: nombre, p_inicio: ini, p_fin: fin });
+    }
+    $('rNombre').value = '';
+    msg.textContent = 'Rutina creada';
+    await renderRutinas();
+    abrirRutina(id);
+  } catch (e) { msg.textContent = 'Error: ' + e.message; }
+};
+
+async function borrarRutina(id, nombre) {
+  if (!confirm(`¿Borrar "${nombre}"? Se quitan sus días y ejercicios.`)) return;
+  try {
+    await rpc('entrenador_borrar_rutina', { p_rutina: id });
+    if (rutinaSel === id) { rutinaSel = null; $('editor').replaceChildren(); }
+    await renderPlantillas();
+    await renderRutinas();
+  } catch (e) { alert('Error: ' + e.message); }
+}
+
+async function abrirRutina(id) {
+  rutinaSel = id;
+  await renderEditor();
+}
+
+// ---------- EDITOR DE RUTINA ----------
+async function renderEditor() {
+  const ed = $('editor');
+  ed.replaceChildren();
+  if (!rutinaSel) return;
+  const dias = await rpc('entrenador_rutina_detalle', { p_rutina: rutinaSel });
+
+  const cab = el('div', { className: 'item' }, [
+    el('h2', { textContent: 'Editar rutina' }),
+    el('button', { className: 'sec', textContent: 'Guardar como plantilla', onclick: async () => {
+      const nombre = prompt('Nombre de la plantilla:');
+      if (!nombre) return;
+      await rpc('entrenador_guardar_como_plantilla', { p_origen: rutinaSel, p_nombre: nombre.trim() });
+      await renderPlantillas();
+      alert('Plantilla guardada');
+    }})
+  ]);
+  ed.append(cab);
+  ed.append(el('button', {
+    className: 'peligro', textContent: 'Borrar esta rutina', style: 'width:100%;margin-bottom:12px',
+    onclick: () => {
+      const t = todas.find(x => x.id === rutinaSel);
+      borrarRutina(rutinaSel, t ? t.etiqueta : 'esta rutina');
+    }
+  }));
+
+  dias.forEach(d => {
+    const box = el('div', { className: 'dia' });
+
+    const cabDia = el('div', { className: 'grid4' });
+    const nombreDia = el('input', { value: d.nombre || '', placeholder: `Nombre del día ${d.numero} (ej: Pierna)` });
+    const guardarDia = el('button', { className: 'sec', textContent: 'Guardar nombre', onclick: async () => {
+      await rpc('entrenador_renombrar_dia', { p_dia: d.id, p_nombre: nombreDia.value.trim() || null });
+    }});
+    cabDia.append(nombreDia, guardarDia);
+    box.append(el('h3', { textContent: `Día ${d.numero}` }), cabDia);
+
+    d.ejercicios.forEach(ex => {
+      const fila = el('div', { className: 'lineaEj' });
+      const series = el('input', { type: 'number', value: ex.series ?? '', placeholder: 'Series' });
+      const reps = el('input', { value: ex.reps ?? '', placeholder: 'Reps (8-10)' });
+      const indic = el('input', { className: 'indic', value: ex.indicaciones ?? '', placeholder: 'Indicación (ej: bajada lenta)' });
+      fila.append(el('div', { textContent: ex.nombre }), series, reps, indic,
+        el('div', { className: 'acciones' }, [
+          el('button', { className: 'sec', textContent: 'Guardar', onclick: async () => {
+            await rpc('entrenador_editar_ejercicio', {
+              p_re: ex.id,
+              p_series: series.value ? Number(series.value) : null,
+              p_reps: reps.value.trim() || null,
+              p_indicaciones: indic.value.trim() || null
+            });
+          }}),
+          el('button', { className: 'peligro', textContent: 'Quitar', onclick: async () => {
+            await rpc('entrenador_quitar_ejercicio', { p_re: ex.id });
+            renderEditor();
+          }})
+        ]));
+      box.append(fila);
+    });
+
+    // agregar ejercicio al día
+    const sel = el('select');
+    ejercicios.forEach(e => sel.append(el('option', { value: e.id, textContent: e.nombre })));
+    const sSeries = el('input', { type: 'number', placeholder: 'Series' });
+    const sReps = el('input', { placeholder: 'Reps (8-10)' });
+    const sIndic = el('input', { className: 'indic', placeholder: 'Indicación (opcional)' });
+    const agregar = el('button', { textContent: 'Agregar al día', onclick: async () => {
+      if (!sel.value) return;
+      await rpc('entrenador_agregar_ejercicio', {
+        p_dia: d.id, p_ejercicio: sel.value,
+        p_series: sSeries.value ? Number(sSeries.value) : null,
+        p_reps: sReps.value.trim() || null,
+        p_indicaciones: sIndic.value.trim() || null
+      });
+      renderEditor();
+    }});
+    const add = el('div', { className: 'lineaEj' });
+    add.append(sel, sSeries, sReps, sIndic, el('div', { className: 'acciones' }, [agregar]));
+    box.append(el('div', { className: 'mut', textContent: 'Agregar ejercicio' }), add);
+
+    ed.append(box);
   });
 
-  cont.replaceChildren();
-
-  const nav = el('div', { className: 'nav' });
-  nav.append(
-    el('button', { className: 'sec', textContent: '←', onclick: () => {
-      mesVista = new Date(mesVista.getFullYear(), mesVista.getMonth() - 1, 1); cargarCalendario();
-    }}),
-    el('strong', { textContent: mesVista.toLocaleDateString('es-AR', { month: 'long', year: 'numeric' }) }),
-    el('button', { className: 'sec', textContent: '→', onclick: () => {
-      mesVista = new Date(mesVista.getFullYear(), mesVista.getMonth() + 1, 1); cargarCalendario();
-    }})
-  );
-  cont.append(nav);
-
-  if (error) { cont.append(el('div', { className: 'mut', textContent: 'No se pudo cargar el calendario' })); return; }
-
-  const entrenos = new Set((data.entrenos || []).map(e => e.fecha));
-  const cardio = new Map((data.cardio || []).map(c => [c.fecha, c]));
-
-  const grid = el('div', { className: 'grid' });
-  ['L', 'M', 'X', 'J', 'V', 'S', 'D'].forEach(d => grid.append(el('div', { className: 'dow', textContent: d })));
-
-  const offset = (ini.getDay() + 6) % 7;
-  for (let i = 0; i < offset; i++) grid.append(el('div'));
-
-  for (let d = 1; d <= fin.getDate(); d++) {
-    const f = fechaStr(new Date(ini.getFullYear(), ini.getMonth(), d));
-    const celda = el('div', { className: 'dia' + (f === hoyStr() ? ' hoy' : '') });
-    celda.append(el('div', { className: 'num', textContent: String(d) }));
-    if (entrenos.has(f)) celda.append(el('div', { className: 'ok', textContent: '✔' }));
-    const c = cardio.get(f);
-    if (c) celda.append(el('div', { className: 'cmin', textContent: `${c.minutos} min` }));
-    grid.append(celda);
-  }
-  cont.append(grid);
-}
-
-// ---------- GRÁFICO DE EVOLUCIÓN ----------
-async function renderSelectorGrafico() {
-  const s = $('ejSel');
-  s.replaceChildren();
-  const { data, error } = await sb.rpc('alumno_ejercicios_con_registros', { p_alumno: alumno, p_pin: pin });
-  if (error || !data?.length) { $('grafico').textContent = 'Todavía no hay registros de ejercicios.'; return; }
-  data.forEach(e => s.append(el('option', { value: e.id, textContent: e.nombre, selected: e.id === ejActivo })));
-  s.onchange = () => verGrafico(s.value);
-  const elegido = data.some(e => e.id === ejActivo) ? ejActivo : data[0].id;
-  verGrafico(elegido);
-}
-
-async function verGrafico(id) {
-  ejActivo = id;
-  const g = $('grafico');
-  const { data, error } = await sb.rpc('historial_ejercicio', { p_alumno: alumno, p_pin: pin, p_ejercicio: id });
-  if (error) { g.textContent = 'No se pudo cargar el gráfico'; return; }
-  if (!data?.length) { g.textContent = 'Todavía no hay registros de este ejercicio.'; return; }
-
-  const W = 480, H = 200, P = 32;
-  const pesos = data.map(d => Number(d.peso));
-  const min = Math.min(...pesos), max = Math.max(...pesos);
-  const rango = max - min || 1;
-  const x = i => data.length === 1 ? W / 2 : P + i * (W - 2 * P) / (data.length - 1);
-  const y = v => H - P - (Number(v) - min) / rango * (H - 2 * P);
-
-  const pts = pesos.map((v, i) => `${x(i)},${y(v)}`).join(' ');
-  const puntos = pesos.map((v, i) => `<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="var(--ac)"/><text x="${x(i)}" y="${y(v) - 9}" text-anchor="middle" fill="var(--txt)" font-size="11">${v}</text>`).join('');
-  const ultimo = data[data.length - 1];
-
-  g.innerHTML = `
-    <svg viewBox="0 0 ${W} ${H}" width="100%">
-      <polyline fill="none" stroke="var(--ac)" stroke-width="3" points="${pts}"/>
-      ${puntos}
-      <text x="${P}" y="${H - 6}" fill="var(--mut)" font-size="11">${data[0].fecha}</text>
-      <text x="${W - P}" y="${H - 6}" text-anchor="end" fill="var(--mut)" font-size="11">${ultimo.fecha}</text>
-      <text x="${W / 2}" y="${H - 6}" text-anchor="middle" fill="var(--mut)" font-size="11">Fecha</text>
-      <text x="2" y="12" fill="var(--mut)" font-size="11">Kilos</text>
-    </svg>
-    <div class="mut">Máximo: ${max} kg · Último: ${ultimo.peso} kg × ${ultimo.repeticiones} (${ultimo.fecha})</div>`;
+  ed.append(el('button', { className: 'sec', textContent: '+ Agregar día', style: 'width:100%', onclick: async () => {
+    await rpc('entrenador_agregar_dia', { p_rutina: rutinaSel });
+    renderEditor();
+  }}));
 }
 
 // ---------- PLAN DE ALIMENTACIÓN ----------
-async function cargarPlan() {
-  const cont = $('plan');
-  cont.replaceChildren();
-  const { data, error } = await sb.rpc('alumno_planes', { p_alumno: alumno, p_pin: pin });
-  if (error) { cont.textContent = 'No se pudo cargar el plan'; return; }
-  if (!data?.length) { cont.textContent = 'Todavía no tenés un plan de alimentación.'; return; }
-
-  const nombreMes = f => new Date(f + 'T12:00:00').toLocaleDateString('es-AR', { month: 'long', year: 'numeric' });
-  const sel = el('select', { className: 'planSel' });
-  data.forEach((p, i) => sel.append(el('option', { value: i, textContent: nombreMes(p.mes) })));
-  const txt = el('div', { className: 'plan' });
-  const mostrar = i => { txt.textContent = data[i].texto; };
-  sel.onchange = () => mostrar(sel.value);
-  mostrar(0);
-  cont.append(sel, txt);
+async function cargarPlanes() {
+  if (!alumnoSel) return;
+  planes = await rpc('entrenador_listar_planes', { p_alumno: alumnoSel.id });
+  const l = $('listaPlanes');
+  l.replaceChildren();
+  if (!planes.length) l.append(el('div', { className: 'mut', textContent: 'Todavía no hay planes cargados.' }));
+  planes.forEach(p => {
+    const m = p.mes.slice(0, 7);
+    l.append(el('button', { textContent: m, onclick: () => verMes(m) }));
+  });
+  verMes($('planMes').value || mesActualStr());
 }
 
+function verMes(m) {
+  $('planMes').value = m;
+  const p = planes.find(x => x.mes.slice(0, 7) === m);
+  $('planTexto').value = p ? p.texto : '';
+  $('msgPlan').textContent = p ? '' : 'No hay plan cargado para ese mes';
+}
+
+$('planMes').onchange = () => verMes($('planMes').value);
+$('planCargar').onclick = () => verMes($('planMes').value);
+
+$('planCopiar').onclick = () => {
+  const actual = $('planMes').value;
+  const anterior = mesAnteriorStr(actual);
+  const p = planes.find(x => x.mes.slice(0, 7) === anterior);
+  if (!p) { $('msgPlan').textContent = 'No hay plan del mes anterior'; return; }
+  $('planTexto').value = p.texto;
+  $('msgPlan').textContent = 'Copiado del mes anterior. Editalo y guardá.';
+};
+
+$('planGuardar').onclick = async () => {
+  const m = $('planMes').value;
+  if (!alumnoSel || !m) return;
+  try {
+    await rpc('entrenador_guardar_plan', { p_alumno: alumnoSel.id, p_mes: m + '-01', p_texto: $('planTexto').value });
+    $('msgPlan').textContent = 'Plan guardado';
+    await cargarPlanes();
+    verMes(m);
+  } catch (e) { $('msgPlan').textContent = 'Error: ' + e.message; }
+};
+
 // ---------- SESIÓN GUARDADA ----------
-const s = JSON.parse(localStorage.getItem('tf') || 'null');
-if (s) { alumno = s.alumno; pin = s.pin; await cargar(); }
+const guardado = localStorage.getItem('tfp');
+if (guardado) { pin = guardado; await iniciar(); }
 </script>
 </body>
 </html>
