@@ -500,6 +500,7 @@ function renderAlumnos() {
     alumnoSel = alumnos.find(a => a.id === s.value);
     rutinaSel = null; $('editor').replaceChildren();
     $('nomPlan').textContent = alumnoSel ? alumnoSel.nombre : '—';
+    $('nomAlumno').textContent = alumnoSel ? alumnoSel.nombre : '—';
     await cargarObjetivo();
     await renderRutinas();
     await cargarPlanes();
