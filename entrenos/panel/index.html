@@ -75,6 +75,14 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
   <h1>Panel entrenadora</h1>
 
   <div class="card">
+    <h2>Entreno de hoy · <span id="hoyNom">—</span></h2>
+    <div class="mut">Elegí la alumna en "Alumnos" y se muestra su rutina vigente.</div>
+    <div id="hoyTabs" style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0"></div>
+    <div id="hoyDia"></div>
+    <button class="sec" id="hoyActualizar" style="margin-top:8px">Actualizar</button>
+  </div>
+
+  <div class="card">
     <h2>Alumnos</h2>
     <select id="selAlumno"></select>
     <select id="estadoAl" title="Estado de la alumna" style="margin-top:6px">
@@ -293,6 +301,70 @@ async function iniciar() {
   $('planMes').value = mesActualStr();
   $('cargasMes').value = mesActualStr();
   await cargarTodo();
+  await cargarHoy();
+}
+
+// ---------- ENTRENO DE HOY (vista rápida para el gym) ----------
+let hoyDias = [], hoyIdx = 0, hoyRutina = null, hoyUltimas = {};
+$('hoyActualizar').onclick = () => cargarHoy();
+
+async function cargarHoy() {
+  const t = $('hoyTabs'), d = $('hoyDia');
+  t.replaceChildren(); d.replaceChildren();
+  $('hoyNom').textContent = alumnoSel ? alumnoSel.nombre : '—';
+  if (!alumnoSel) { d.textContent = 'Elegí una alumna en "Alumnos".'; return; }
+  try {
+    const hoy = new Date().toLocaleDateString('sv-SE');
+    const lista = await rpc('entrenador_listar_rutinas', { p_alumno: alumnoSel.id });
+    hoyRutina = lista.find(r => r.fecha_inicio <= hoy && hoy <= r.fecha_fin) || lista[0] || null;
+    if (!hoyRutina) { d.textContent = 'Esta alumna todavía no tiene rutina.'; return; }
+    hoyDias = await rpc('entrenador_rutina_detalle', { p_rutina: hoyRutina.id });
+    hoyIdx = 0;
+
+    // última carga de cada ejercicio (últimos 6 meses)
+    const desde = new Date(); desde.setDate(desde.getDate() - 180);
+    const reg = await rpc('entrenador_reporte_mes', { p_alumno: alumnoSel.id, p_desde: desde.toLocaleDateString('sv-SE'), p_hasta: hoy });
+    hoyUltimas = {};
+    (reg.registros || []).forEach(x => {
+      const u = hoyUltimas[x.ejercicio];
+      if (!u || x.fecha > u.fecha || (x.fecha === u.fecha && Number(x.peso) > Number(u.peso))) hoyUltimas[x.ejercicio] = x;
+    });
+
+    // comentarios que la alumna dejó hoy
+    const notasHoy = await rpc('entrenador_notas_alumna', { p_alumno: alumnoSel.id, p_desde: hoy, p_hasta: hoy });
+    if (notasHoy.length) {
+      d.append(el('div', { className: 'item', innerHTML: '<strong>Comentarios de hoy</strong>' }));
+      notasHoy.forEach(n => d.append(el('div', { className: 'item', textContent: `Día ${n.dia_numero}${n.dia_nombre ? ' (' + n.dia_nombre + ')' : ''}: ${n.texto}` })));
+    }
+    mostrarHoy();
+  } catch (e) { d.textContent = 'Error: ' + e.message; }
+}
+
+function mostrarHoy() {
+  const t = $('hoyTabs'), d = $('hoyDia');
+  t.replaceChildren();
+  hoyDias.forEach((x, i) => t.append(el('button', {
+    textContent: `Día ${x.numero}${x.nombre ? ' · ' + x.nombre : ''}`,
+    className: i === hoyIdx ? '' : 'sec',
+    onclick: () => { hoyIdx = i; mostrarHoy(); }
+  })));
+  // mantiene los comentarios de hoy arriba y reemplaza solo el detalle del día
+  [...d.querySelectorAll('.hoyDetalle')].forEach(n => n.remove());
+  const x = hoyDias[hoyIdx];
+  if (!x) return;
+  const cont = el('div', { className: 'hoyDetalle' });
+  cont.append(el('div', { className: 'mut', textContent: `${hoyRutina.nombre} · ${hoyRutina.fecha_inicio} → ${hoyRutina.fecha_fin}` }));
+  if (x.notas_coach) cont.append(el('div', { className: 'item', textContent: `Nota: ${x.notas_coach}` }));
+  if (!x.ejercicios.length) cont.append(el('div', { className: 'mut', textContent: 'Este día no tiene ejercicios.' }));
+  x.ejercicios.forEach(ex => {
+    const u = hoyUltimas[ex.nombre];
+    cont.append(el('div', { className: 'item' }, [
+      el('strong', { textContent: ex.nombre }),
+      el('div', { className: 'mut', textContent: `${ex.series ?? '-'} series × ${ex.reps ?? '-'} reps${ex.indicaciones ? ' · ' + ex.indicaciones : ''}` }),
+      el('div', { className: 'mut', textContent: u ? `Última vez: ${u.peso} kg × ${u.reps} (${u.fecha})` : 'Sin cargas previas' })
+    ]));
+  });
+  d.append(cont);
 }
 
 async function cargarTodo() {
@@ -509,6 +581,7 @@ function renderAlumnos() {
     await cargarObjetivo();
     await renderRutinas();
     await cargarPlanes();
+    await cargarHoy();
   };
   $('nomAlumno').textContent = alumnoSel ? alumnoSel.nombre : '—';
   $('nomPlan').textContent = alumnoSel ? alumnoSel.nombre : '—';
