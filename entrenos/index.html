@@ -403,8 +403,8 @@ function mostrarDia(i) {
 function bloqueNotas(d) {
   const box = el('div', { className: 'ex' });
   if (d.notas_coach) box.append(el('div', { className: 'indic', textContent: `Nota de Brenda: ${d.notas_coach}` }));
-  box.append(el('strong', { textContent: 'Mi comentario de este entreno' }));
-  const txt = el('textarea', { rows: 3, placeholder: 'Cómo te sentiste, molestias, cómo salió la sesión…' });
+  box.append(el('strong', { textContent: 'Comentarios' }));
+  const txt = el('textarea', { rows: 3 });
   txt.style.width = '100%';
   const guardar = el('button', { textContent: 'Guardar comentario' });
   const msg = el('div', { className: 'mut' });
