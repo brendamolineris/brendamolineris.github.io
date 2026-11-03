@@ -368,6 +368,7 @@ async function cargar() {
   if (e2) { $('dia').textContent = 'Error: ' + e2.message; return; }
 
   dias = det;
+  $('fechaRutina').onchange = () => mostrarDia(diaIdx);
   const vistos = new Map();
   dias.forEach(d => d.ejercicios.forEach(e => vistos.set(e.id, e)));
   ejercicios = [...vistos.values()];
@@ -391,9 +392,35 @@ function renderTabsDias() {
 function mostrarDia(i) {
   const cont = $('dia');
   cont.replaceChildren();
-  const lista = dias[i]?.ejercicios || [];
-  if (!lista.length) { cont.textContent = 'Este día todavía no tiene ejercicios.'; return; }
+  const d = dias[i];
+  const lista = d?.ejercicios || [];
+  if (!lista.length) cont.append(el('div', { textContent: 'Este día todavía no tiene ejercicios.' }));
   lista.forEach(ex => cont.append(filaEjercicio(ex)));
+  if (d) cont.append(bloqueNotas(d));
+}
+
+// ---------- NOTAS DEL DÍA ----------
+function bloqueNotas(d) {
+  const box = el('div', { className: 'ex' });
+  if (d.notas_coach) box.append(el('div', { className: 'indic', textContent: `Nota de Brenda: ${d.notas_coach}` }));
+  box.append(el('strong', { textContent: 'Mi comentario de este entreno' }));
+  const txt = el('textarea', { rows: 3, placeholder: 'Cómo te sentiste, molestias, cómo salió la sesión…' });
+  txt.style.width = '100%';
+  const guardar = el('button', { textContent: 'Guardar comentario' });
+  const msg = el('div', { className: 'mut' });
+  const fecha = () => $('fechaRutina').value || hoyStr();
+
+  guardar.onclick = async () => {
+    guardar.disabled = true;
+    const { error } = await sb.rpc('alumno_guardar_nota', { p_alumno: alumno, p_pin: pin, p_dia: d.id, p_fecha: fecha(), p_texto: txt.value });
+    guardar.disabled = false;
+    msg.textContent = error ? 'No se pudo guardar: ' + error.message : 'Comentario guardado';
+  };
+
+  box.append(txt, guardar, msg);
+  sb.rpc('alumno_leer_nota', { p_alumno: alumno, p_pin: pin, p_dia: d.id, p_fecha: fecha() })
+    .then(({ data, error }) => { if (!error) txt.value = data ?? ''; });
+  return box;
 }
 
 // ---------- REGISTRO DE SERIE ----------
