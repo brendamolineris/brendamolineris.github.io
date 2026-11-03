@@ -319,12 +319,17 @@ async function verCargas() {
     const r = await rpc('entrenador_reporte_mes', { p_alumno: alumnoSel.id, p_desde: desde, p_hasta: hasta });
     l.replaceChildren();
     const regs = r.registros || [];
-    if (!regs.length) { l.append(el('div', { className: 'mut', textContent: 'No hay cargas en ese mes.' })); return; }
+    if (!regs.length) { l.append(el('div', { className: 'mut', textContent: 'No hay cargas en ese mes.' })); }
     let ultimo = null;
     regs.forEach(x => {
       if (x.ejercicio !== ultimo) { l.append(el('h3', { textContent: x.ejercicio })); ultimo = x.ejercicio; }
       l.append(el('div', { className: 'mut', textContent: `${x.fecha} · ${x.peso} kg × ${x.reps}` }));
     });
+    const notas = await rpc('entrenador_notas_alumna', { p_alumno: alumnoSel.id, p_desde: desde, p_hasta: hasta });
+    if (notas.length) {
+      l.append(el('h3', { textContent: 'Comentarios de la alumna' }));
+      notas.forEach(n => l.append(el('div', { className: 'item', textContent: `${n.fecha} · Día ${n.dia_numero}${n.dia_nombre ? ' (' + n.dia_nombre + ')' : ''}: ${n.texto}` })));
+    }
   } catch (e) { l.textContent = 'Error: ' + e.message; }
 }
 $('cargasVer').onclick = verCargas;
@@ -713,7 +718,14 @@ async function renderEditor() {
       await rpc('entrenador_renombrar_dia', { p_dia: d.id, p_nombre: nombreDia.value.trim() || null });
     }});
     cabDia.append(nombreDia, guardarDia);
-    box.append(el('h3', { textContent: `Día ${d.numero}` }), cabDia);
+    const notaDia = el('textarea', { rows: 2, value: d.notas_coach || '', placeholder: 'Nota para la alumna (ej: Abdominales: 3 × 20 al final)' });
+    notaDia.textContent = d.notas_coach || '';
+    notaDia.style.width = '100%';
+    const guardarNota = el('button', { className: 'sec', textContent: 'Guardar nota del día', onclick: async () => {
+      await rpc('entrenador_guardar_notas_coach', { p_dia: d.id, p_texto: notaDia.value });
+      alert('Nota guardada');
+    }});
+    box.append(el('h3', { textContent: `Día ${d.numero}` }), cabDia, notaDia, guardarNota);
 
     d.ejercicios.forEach(ex => {
       const fila = el('div', { className: 'lineaEj' });
