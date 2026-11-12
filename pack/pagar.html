@@ -12,6 +12,7 @@
 <style>
 :root{--bg:#0b0b0b;--card:#171614;--gold:#c9a24a;--soft:#e3c57a;--text:#f5f0e6;--muted:#afa99d;--line:#343029}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.65}a{color:inherit}header{border-bottom:1px solid var(--line);background:rgba(11,11,11,.96)}.wrap{max-width:960px;margin:auto;padding:0 22px}header .wrap{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:15px}.logo{font:800 .95rem 'Manrope',sans-serif;letter-spacing:.14em;color:var(--gold);text-decoration:none}.back{font-size:.85rem;color:var(--muted);text-decoration:none}.back:hover{color:var(--soft)}main{padding:58px 0 78px}.eyebrow{color:var(--soft);font-size:.76rem;font-weight:800;letter-spacing:.17em;text-transform:uppercase}.intro{text-align:center;max-width:720px;margin:0 auto 37px}.intro h1{font:800 clamp(2.1rem,5vw,3.7rem)/1.13 'Manrope',sans-serif;letter-spacing:-.055em;margin:15px 0}.intro h1 span{color:var(--soft)}.intro p{color:var(--muted);margin:0}.card{background:linear-gradient(150deg,#1c1a16,#11100f);border:1px solid var(--line);border-radius:22px;padding:clamp(24px,4vw,35px)}.sections{display:grid;gap:25px}.region-label{font:800 .81rem 'Manrope',sans-serif;color:var(--soft);letter-spacing:.1em;text-transform:uppercase}.region-title{font:800 clamp(1.35rem,3vw,1.85rem)/1.25 'Manrope',sans-serif;letter-spacing:-.03em;margin:8px 0 7px}.desc{color:var(--muted);font-size:.94rem;margin:0}.price{font:800 clamp(2.5rem,5vw,3.4rem)/1.12 'Manrope',sans-serif;color:var(--soft);letter-spacing:-.055em;margin:23px 0 6px}.price small{font-size:.85rem;letter-spacing:0;color:var(--muted)}.pay-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:23px}.method{border:1px solid var(--line);border-radius:16px;padding:19px;background:#121110}.method h3{font:800 1rem 'Manrope',sans-serif;margin:0 0 7px}.method p{font-size:.87rem;color:var(--muted);margin:0 0 14px;min-height:46px}.btn{display:block;text-align:center;text-decoration:none;border-radius:999px;background:var(--gold);color:#111;font:800 .85rem 'Manrope',sans-serif;padding:15px 12px;border:0}.btn:hover{background:var(--soft)}.btn-disabled{display:block;text-align:center;border-radius:999px;background:#4a4233;color:#d4c8ab;font:800 .81rem 'Manrope',sans-serif;padding:15px 12px;cursor:not-allowed}.notice{font-size:.83rem;color:var(--muted);margin:13px 0 0}.divider{height:1px;background:var(--line);margin:14px 0}.exterior{border-color:rgba(201,162,74,.6)}.payment-label{display:inline-block;background:rgba(201,162,74,.12);border:1px solid rgba(201,162,74,.32);border-radius:100px;padding:5px 12px;font:700 .73rem 'Manrope',sans-serif;color:var(--soft);margin:15px 0 0}.stripe{max-width:440px;margin-top:20px}.details{margin-top:32px;display:flex;justify-content:center;flex-wrap:wrap;gap:9px 28px;color:var(--muted);font-size:.85rem;text-align:center}.details span:before{content:'✦ ';color:var(--gold)}footer{border-top:1px solid var(--line);padding:22px 0 36px;color:var(--muted);font-size:.79rem}footer .wrap{text-align:center}@media(max-width:650px){main{padding:35px 0 58px}.pay-grid{grid-template-columns:1fr}.method p{min-height:0}.card{padding:23px 19px}.back{font-size:.76rem}}
+.alias-box{display:flex;flex-direction:column;gap:3px;background:#211d17;border:1px solid rgba(201,162,74,.35);border-radius:12px;padding:12px 15px;margin:0 0 12px}.alias-box span{font-size:.76rem;color:var(--muted)}.alias-box strong{font:800 1.12rem Manrope,sans-serif;color:var(--soft);overflow-wrap:anywhere}.copy-btn{width:100%;cursor:pointer}
 </style>
 </head>
 <body>
@@ -23,20 +24,20 @@
 <div class="region-label">Para Argentina</div><h2 class="region-title">Pagá en pesos argentinos</h2><p class="desc">Accedés a los mismos 3 ebooks digitales de entrenamiento, alimentación y recetas.</p>
 <div class="price">$19.999 <small>ARS</small></div>
 <div class="pay-grid">
-<div class="method"><h3>Tarjeta o Mercado Pago</h3><p>Pagá online con los medios disponibles en Mercado Pago.</p><span class="btn-disabled" aria-disabled="true">LINK DE PAGO PENDIENTE</span></div>
-<div class="method"><h3>Transferencia bancaria</h3><p>Pagá por transferencia con los datos que se informarán aquí.</p><span class="btn-disabled" aria-disabled="true">DATOS PENDIENTES</span></div>
-</div><p class="notice">Antes de publicar, faltan configurar el enlace de Mercado Pago y los datos de transferencia.</p>
+<div class="method"><h3>Tarjeta o Mercado Pago</h3><p>Pagá online con los medios disponibles en Mercado Pago.</p><a class="btn" href="https://mpago.la/1uH1e5t" target="_blank" rel="noopener noreferrer">PAGAR CON MERCADO PAGO →</a></div>
+<div class="method"><h3>Transferencia bancaria</h3><p>Transferí el importe exacto al siguiente alias y guardá tu comprobante.</p><div class="alias-box"><span>Alias</span><strong>bren.molineris</strong></div><button type="button" class="btn copy-btn" onclick="navigator.clipboard.writeText(&quot;bren.molineris&quot;).then(()=>{this.textContent=&quot;¡ALIAS COPIADO!&quot;}).catch(()=>{this.textContent=&quot;SELECCIONÁ EL ALIAS PARA COPIAR&quot;})">COPIAR ALIAS</button></div>
+</div><p class="notice">Para transferencia, conservá el comprobante: el acceso se entrega luego de verificar el pago. El enlace de Mercado Pago abre su plataforma de cobro.</p>
 </section>
 <section class="card exterior" id="exterior">
 <div class="region-label">Compra internacional</div><h2 class="region-title">¿Estás en el exterior?</h2><p class="desc">Comprá tu Total Fit Reset desde otro país y pagá en dólares con Stripe.</p>
 <div class="payment-label">Pago seguro con Stripe</div>
 <div class="price">USD 15</div>
-<p class="desc">Precio en dólares pendiente de definir.</p>
-<div class="stripe"><span class="btn-disabled" aria-disabled="true">PAGAR CON STRIPE →</span></div>
-<p class="notice">El precio internacional ya está definido. Falta conectar tu enlace de pago de Stripe para habilitar el botón.</p>
+<p class="desc">Pago único por los 3 ebooks. Sin suscripción.</p>
+<div class="stripe"><a class="btn" href="https://buy.stripe.com/6oUaEY3Bc34Ke5ibqK2wU03" target="_blank" rel="noopener noreferrer">PAGAR CON STRIPE →</a></div>
+<p class="notice">Te redirigimos al checkout seguro de Stripe para completar tu compra.</p>
 </section>
 </div>
 <div class="details"><span>Pack de 3 ebooks</span><span>Pago único</span><span>Sin suscripción</span></div>
 </div></main>
-<footer><div class="wrap">© Total Fit · Brenda Molineris · Los pagos aún deben configurarse antes de publicar.</div></footer>
+<footer><div class="wrap">© 2026 Total Fit · Brenda Molineris</div></footer>
 </body></html>
