@@ -672,12 +672,31 @@ async function renderPlantillas() {
   if (!plantillas.length) { l.append(el('div', { className: 'mut', textContent: 'Todavía no hay plantillas.' })); }
   plantillas.forEach(p => l.append(el('div', { className: 'item' }, [
     el('div', { innerHTML: `<strong>${p.nombre}</strong><div class="mut">${p.dias} días</div>` }),
-    el('div', { style: 'display:flex;gap:6px' }, [
+    el('div', { style: 'display:flex;gap:6px;flex-wrap:wrap' }, [
+      el('button', { textContent: `Asignar a ${alumnoSel ? alumnoSel.nombre : '…'}`, onclick: () => asignarPlantilla(p) }),
       el('button', { className: 'sec', textContent: 'Editar', onclick: () => abrirRutina(p.id) }),
       el('button', { className: 'peligro', textContent: 'Borrar', onclick: () => borrarRutina(p.id, p.nombre) })
     ])
   ])));
   await renderOrigenes();
+}
+
+// Copia la plantilla a la alumna elegida en "Alumnos".
+// Si no completaste nombre o fechas en "Nueva rutina", usa el nombre de la plantilla y el mes actual.
+async function asignarPlantilla(p) {
+  if (!alumnoSel) { alert('Primero elegí una alumna en "Alumnos" (arriba).'); return; }
+  const hoy = new Date();
+  const ini = $('rInicio').value || new Date(hoy.getFullYear(), hoy.getMonth(), 1).toLocaleDateString('sv-SE');
+  const fin = $('rFin').value || new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).toLocaleDateString('sv-SE');
+  const nombre = $('rNombre').value.trim() || `${p.nombre} · ${ini.slice(0, 7)}`;
+  if (!confirm(`¿Asignar "${p.nombre}" a ${alumnoSel.nombre}?\nNombre: ${nombre}\nDesde ${ini} hasta ${fin}`)) return;
+  try {
+    const id = await rpc('entrenador_copiar_rutina_a', { p_origen: p.id, p_alumno: alumnoSel.id, p_nombre: nombre, p_inicio: ini, p_fin: fin });
+    $('rNombre').value = '';
+    await renderRutinas();
+    abrirRutina(id);
+    alert(`Listo: la rutina ya está en la app de ${alumnoSel.nombre}`);
+  } catch (e) { alert('Error: ' + e.message); }
 }
 
 $('crearPlant').onclick = async () => {
