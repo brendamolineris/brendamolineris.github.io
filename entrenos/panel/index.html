@@ -834,26 +834,56 @@ async function renderEditor() {
 
     d.ejercicios.forEach((ex, i) => {
       const fila = el('div', { className: 'lineaEj' });
-      const series = el('input', { type: 'number', value: ex.series ?? '', placeholder: 'Series' });
-      const reps = el('input', { value: ex.reps ?? '', placeholder: 'Reps (8-10)' });
-      const indic = el('input', { className: 'indic', value: ex.indicaciones ?? '', placeholder: 'Indicación (ej: bajada lenta)' });
-      fila.append(el('div', { textContent: ex.nombre }), series, reps, indic,
-        el('div', { className: 'acciones' }, [
-          el('button', { className: 'sec', textContent: '↑', title: 'Subir', onclick: () => moverEj(d, i, -1) }),
-          el('button', { className: 'sec', textContent: '↓', title: 'Bajar', onclick: () => moverEj(d, i, 1) }),
-          el('button', { className: 'sec', textContent: 'Guardar', onclick: async () => {
-            await rpc('entrenador_editar_ejercicio', {
-              p_re: ex.id,
-              p_series: series.value ? Number(series.value) : null,
-              p_reps: reps.value.trim() || null,
-              p_indicaciones: indic.value.trim() || null
-            });
-          }}),
-          el('button', { className: 'peligro', textContent: 'Quitar', onclick: async () => {
-            await rpc('entrenador_quitar_ejercicio', { p_re: ex.id });
-            renderEditor();
-          }})
-        ]));
+
+      // Vista: muestra el ejercicio cargado, con botón Editar
+      const pintarVista = () => {
+        fila.replaceChildren(
+          el('div', {}, [
+            el('strong', { textContent: ex.nombre }),
+            el('div', { className: 'mut', textContent: `${ex.series ?? '-'} series × ${ex.reps ?? '-'} reps${ex.indicaciones ? ' · ' + ex.indicaciones : ''}` })
+          ]),
+          el('div', { className: 'acciones' }, [
+            el('button', { className: 'sec', textContent: '↑', title: 'Subir', onclick: () => moverEj(d, i, -1) }),
+            el('button', { className: 'sec', textContent: '↓', title: 'Bajar', onclick: () => moverEj(d, i, 1) }),
+            el('button', { className: 'sec', textContent: 'Editar', onclick: () => pintarEdicion() }),
+            el('button', { className: 'peligro', textContent: 'Quitar', onclick: async () => {
+              await rpc('entrenador_quitar_ejercicio', { p_re: ex.id });
+              renderEditor();
+            }})
+          ])
+        );
+      };
+
+      // Edición: cambiar ejercicio, series, reps e indicaciones
+      const pintarEdicion = () => {
+        const series = el('input', { type: 'number', value: ex.series ?? '', placeholder: 'Series' });
+        const reps = el('input', { value: ex.reps ?? '', placeholder: 'Reps (8-10)' });
+        const indic = el('input', { className: 'indic', value: ex.indicaciones ?? '', placeholder: 'Indicación (ej: bajada lenta)' });
+        const cambiar = el('select');
+        ejercicios.forEach(e => cambiar.append(el('option', { value: e.id, textContent: e.nombre, selected: e.id === ex.ejercicio_id })));
+        fila.replaceChildren(
+          cambiar, series, reps, indic,
+          el('div', { className: 'acciones' }, [
+            el('button', { className: 'sec', textContent: 'Guardar', onclick: async () => {
+              try {
+                if (cambiar.value !== ex.ejercicio_id) {
+                  await rpc('entrenador_cambiar_ejercicio', { p_re: ex.id, p_ejercicio: cambiar.value });
+                }
+                await rpc('entrenador_editar_ejercicio', {
+                  p_re: ex.id,
+                  p_series: series.value ? Number(series.value) : null,
+                  p_reps: reps.value.trim() || null,
+                  p_indicaciones: indic.value.trim() || null
+                });
+                renderEditor();
+              } catch (e) { alert('Error: ' + e.message); }
+            }}),
+            el('button', { className: 'sec', textContent: 'Cancelar', onclick: pintarVista })
+          ])
+        );
+      };
+
+      pintarVista();
       box.append(fila);
     });
 
