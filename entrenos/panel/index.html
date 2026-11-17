@@ -187,7 +187,8 @@ summary{cursor:pointer;color:var(--ac);font-weight:600;margin-bottom:8px}
   <div class="card">
     <h2>Rutinas de <span id="nomAlumno"></span></h2>
     <div id="listaRut"></div>
-    <h3>Nueva rutina</h3>
+    <h3>Nueva rutina para esta alumna</h3>
+    <div class="mut">Elegí una plantilla para copiarla, o "En blanco" para armarla desde cero.</div>
     <select id="rOrigen"></select>
     <input id="rNombre" placeholder="Nombre (ej: Noviembre - Fuerza)">
     <div class="grid4">
@@ -673,7 +674,7 @@ async function renderPlantillas() {
   plantillas.forEach(p => l.append(el('div', { className: 'item' }, [
     el('div', { innerHTML: `<strong>${p.nombre}</strong><div class="mut">${p.dias} días</div>` }),
     el('div', { style: 'display:flex;gap:6px;flex-wrap:wrap' }, [
-      el('button', { textContent: `Asignar a ${alumnoSel ? alumnoSel.nombre : '…'}`, onclick: () => asignarPlantilla(p) }),
+      el('button', { textContent: 'Asignar', title: alumnoSel ? `Asignar a ${alumnoSel.nombre}` : 'Elegí una alumna primero', style: 'padding:6px 10px;font-size:13px;background:#D9B93C;color:#111;border:0;border-radius:8px', onclick: () => asignarPlantilla(p) }),
       el('button', { className: 'sec', textContent: 'Editar', onclick: () => abrirRutina(p.id) }),
       el('button', { className: 'peligro', textContent: 'Borrar', onclick: () => borrarRutina(p.id, p.nombre) })
     ])
@@ -729,14 +730,14 @@ async function renderRutinas() {
   await renderOrigenes();
 }
 
-// Desplegable de origen: en blanco + todas las rutinas y plantillas
+// Desplegable de origen: en blanco + solo plantillas (las rutinas de cada alumna no se copian desde acá)
 async function renderOrigenes() {
   todas = await rpc('entrenador_listar_rutinas_todas');
   const s = $('rOrigen');
   const actual = s.value;
   s.replaceChildren();
-  s.append(el('option', { value: 'blank', textContent: 'En blanco' }));
-  todas.forEach(t => s.append(el('option', { value: t.id, textContent: t.etiqueta })));
+  s.append(el('option', { value: 'blank', textContent: 'En blanco (armar desde cero)' }));
+  plantillas.forEach(p => s.append(el('option', { value: p.id, textContent: `Plantilla: ${p.nombre}` })));
   if (actual && [...s.options].some(o => o.value === actual)) s.value = actual;
 }
 
