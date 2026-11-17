@@ -757,6 +757,18 @@ async function abrirRutina(id) {
 }
 
 // ---------- EDITOR DE RUTINA ----------
+// Sube o baja un ejercicio dentro del día y guarda el nuevo orden
+async function moverEj(d, i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= d.ejercicios.length) return;
+  const ids = d.ejercicios.map(e => e.id);
+  [ids[i], ids[j]] = [ids[j], ids[i]];
+  try {
+    await rpc('entrenador_reordenar_dia', { p_dia: d.id, p_ids: ids });
+    renderEditor();
+  } catch (e) { alert('Error: ' + e.message); }
+}
+
 async function renderEditor() {
   const ed = $('editor');
   ed.replaceChildren();
@@ -800,13 +812,15 @@ async function renderEditor() {
     }});
     box.append(el('h3', { textContent: `Día ${d.numero}` }), cabDia, notaDia, guardarNota);
 
-    d.ejercicios.forEach(ex => {
+    d.ejercicios.forEach((ex, i) => {
       const fila = el('div', { className: 'lineaEj' });
       const series = el('input', { type: 'number', value: ex.series ?? '', placeholder: 'Series' });
       const reps = el('input', { value: ex.reps ?? '', placeholder: 'Reps (8-10)' });
       const indic = el('input', { className: 'indic', value: ex.indicaciones ?? '', placeholder: 'Indicación (ej: bajada lenta)' });
       fila.append(el('div', { textContent: ex.nombre }), series, reps, indic,
         el('div', { className: 'acciones' }, [
+          el('button', { className: 'sec', textContent: '↑', title: 'Subir', onclick: () => moverEj(d, i, -1) }),
+          el('button', { className: 'sec', textContent: '↓', title: 'Bajar', onclick: () => moverEj(d, i, 1) }),
           el('button', { className: 'sec', textContent: 'Guardar', onclick: async () => {
             await rpc('entrenador_editar_ejercicio', {
               p_re: ex.id,
