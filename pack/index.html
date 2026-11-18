@@ -427,6 +427,40 @@ footer .wrap{text-align:center;max-width:750px;}
 footer .footer-brand{font-weight:650;letter-spacing:.015em;}
 footer .footer-disclaimer{font-size:.78rem;line-height:1.65;opacity:.68;max-width:680px;margin:12px auto 0;}
 
+
+/* Prueba social: perfiles reales, junto a la presentación */
+#quien .social-proof { margin-top:42px; }
+#quien .social-intro { max-width:690px; text-align:center; margin:0 auto 26px; }
+#quien .social-intro h3 { font-family:'Manrope',sans-serif; font-size:clamp(1.45rem,3vw,2.2rem);font-weight:800;letter-spacing:-.035em;margin-bottom:12px; }
+#quien .social-intro p { color:var(--muted);font-size:.95rem; }
+.social-cards {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;max-width:850px;margin:0 auto;}
+.social-card {min-width:0;overflow:hidden;border:1px solid rgba(201,162,74,.35);border-radius:20px;background:#171513;display:flex;flex-direction:column;}
+.social-card-head {display:flex;align-items:center;justify-content:space-between;gap:10px;padding:17px 17px 13px;}
+.social-platform {font-weight:800;color:var(--text);font-size:1rem;}
+.social-handle {color:var(--muted);font-size:.78rem;overflow-wrap:anywhere;}
+.social-card img {display:block;width:100%;height:320px;object-fit:cover;object-position:center top;background:#f7f7f7;}
+.social-card-foot {padding:15px 17px 18px;display:flex;flex-direction:column;gap:12px;flex:1;justify-content:space-between;}
+.social-card-foot span {color:var(--muted);font-size:.82rem;}
+.social-card-foot strong {color:var(--gold-soft);}
+.social-button {display:inline-block;align-self:stretch;text-align:center;border-radius:99px;background:var(--gold);color:#16120b;font-weight:800;font-size:.84rem;text-decoration:none;padding:11px 12px;transition:background .2s;}
+.social-button:hover {background:var(--gold-soft);}
+/* Compactas y lado a lado, incluso en pantallas pequeñas */
+.social-cards{max-width:690px;gap:14px;}
+.social-card img{height:240px;}
+@media(max-width:650px){
+  .social-cards{grid-template-columns:repeat(2,minmax(0,1fr));max-width:100%;gap:10px;}
+  .social-card{border-radius:14px;}
+  .social-card-head{padding:10px 9px 8px;display:flex;flex-direction:column;align-items:flex-start;gap:1px;}
+  .social-platform{font-size:.85rem;}
+  .social-handle{font-size:.69rem;}
+  .social-card img{height:170px;object-fit:cover;object-position:center top;}
+  .social-card-foot{padding:10px 9px 12px;gap:9px;}
+  .social-card-foot span{font-size:.73rem;line-height:1.35;}
+  .social-button{font-size:.73rem;padding:10px 5px;}
+}
+@media(max-width:375px){.social-card img{height:145px;}.social-cards{gap:8px;}}
+
+
 </style>
 <!-- Meta Pixel Code · VIP / Total Fit Reset -->
 <script>
@@ -495,6 +529,31 @@ fbq('track', 'PageView');
 </div>
 <div class="brenda-photo"><img alt="Brenda Molineris con su medalla de competición" decoding="async" height="1536" loading="lazy" src="brenda-medalla.webp" width="1024"/></div>
 </div>
+  <div class="wrap social-proof" aria-labelledby="social-title">
+    <div class="social-intro">
+      <span class="eyebrow">Mi comunidad</span>
+      <h3 id="social-title">Conoceme también en <em>mis redes</em></h3>
+      <p>Compartimos entrenamientos, recetas, consejos y mi experiencia como Fitness Coach. Podés visitar mis perfiles y conocer más sobre mi trabajo.</p>
+    </div>
+    <div class="social-cards">
+      <article class="social-card">
+        <div class="social-card-head"><span class="social-platform">Instagram</span><span class="social-handle">@brendamolineris</span></div>
+        <img src="perfil-instagram.webp" loading="lazy" decoding="async" alt="Captura del perfil de Instagram de Brenda Molineris, con 36,6 mil seguidores y publicaciones fitness" width="707" height="742">
+        <div class="social-card-foot">
+          <span><strong>36,6 mil</strong> seguidores</span>
+          <a href="https://www.instagram.com/brendamolineris/" target="_blank" rel="noopener noreferrer" class="social-button" aria-label="Ver perfil de Brenda en Instagram">Ver Instagram ↗</a>
+        </div>
+      </article>
+      <article class="social-card">
+        <div class="social-card-head"><span class="social-platform">TikTok</span><span class="social-handle">@brendamolineris</span></div>
+        <img src="perfil-tiktok.webp" loading="lazy" decoding="async" alt="Captura del perfil de TikTok de Brenda Molineris, con 44,5 mil seguidores y 376,7 mil me gusta" width="707" height="712">
+        <div class="social-card-foot">
+          <span><strong>44,5 mil</strong> seguidores</span>
+          <a href="https://www.tiktok.com/@brendamolineris" target="_blank" rel="noopener noreferrer" class="social-button" aria-label="Ver perfil de Brenda en TikTok">Ver TikTok ↗</a>
+        </div>
+      </article>
+    </div>
+  </div>
 </section>
 <!-- PARA QUIÉN -->
 <section class="for" id="para-vos">
@@ -623,7 +682,7 @@ fbq('track', 'PageView');
 </details>
 <details>
 <summary>¿Cómo recibo los archivos?</summary>
-<p>Con tarjeta o Mercado Pago, la página de confirmación tiene el botón de descarga de cada PDF. Con transferencia, nos enviás el comprobante y te los mandamos en [X] horas hábiles. Te recomendamos guardarlos en tu celu o computadora.</p>
+<p>Con tarjeta o Mercado Pago, la página de confirmación tiene el botón de descarga de cada PDF. Con transferencia, nos enviás el comprobante y, una vez acreditado el pago, ¡te los mandamos de inmediato! Te recomendamos guardarlos en tu celu o computadora.</p>
 </details>
 <details>
 <summary>¿Es un pago único?</summary>
