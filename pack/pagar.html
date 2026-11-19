@@ -3,66 +3,173 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b0b0b">
-<title>Elegí cómo pagar · Total Fit Reset</title>
-<meta name="description" content="Elegí cómo pagar tu pack digital Total Fit Reset: opciones para Argentina y el exterior.">
+<meta name="theme-color" content="#f7f6f3">
+<title>Finalizá tu compra · Total Fit Reset</title>
+<meta name="description" content="Elegí tu método de pago para Total Fit Reset. Argentina con Mercado Pago o transferencia, y exterior con Stripe.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b0b0b;--card:#171614;--gold:#c9a24a;--soft:#e3c57a;--text:#f5f0e6;--muted:#afa99d;--line:#343029}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.65}a{color:inherit}header{border-bottom:1px solid var(--line);background:rgba(11,11,11,.96)}.wrap{max-width:960px;margin:auto;padding:0 22px}header .wrap{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:15px}.logo{font:800 .95rem 'Manrope',sans-serif;letter-spacing:.14em;color:var(--gold);text-decoration:none}.back{font-size:.85rem;color:var(--muted);text-decoration:none}.back:hover{color:var(--soft)}main{padding:58px 0 78px}.eyebrow{color:var(--soft);font-size:.76rem;font-weight:800;letter-spacing:.17em;text-transform:uppercase}.intro{text-align:center;max-width:720px;margin:0 auto 37px}.intro h1{font:800 clamp(2.1rem,5vw,3.7rem)/1.13 'Manrope',sans-serif;letter-spacing:-.055em;margin:15px 0}.intro h1 span{color:var(--soft)}.intro p{color:var(--muted);margin:0}.card{background:linear-gradient(150deg,#1c1a16,#11100f);border:1px solid var(--line);border-radius:22px;padding:clamp(24px,4vw,35px)}.sections{display:grid;gap:25px}.region-label{font:800 .81rem 'Manrope',sans-serif;color:var(--soft);letter-spacing:.1em;text-transform:uppercase}.region-title{font:800 clamp(1.35rem,3vw,1.85rem)/1.25 'Manrope',sans-serif;letter-spacing:-.03em;margin:8px 0 7px}.desc{color:var(--muted);font-size:.94rem;margin:0}.price{font:800 clamp(2.5rem,5vw,3.4rem)/1.12 'Manrope',sans-serif;color:var(--soft);letter-spacing:-.055em;margin:23px 0 6px}.price small{font-size:.85rem;letter-spacing:0;color:var(--muted)}.pay-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:23px}.method{border:1px solid var(--line);border-radius:16px;padding:19px;background:#121110}.method h3{font:800 1rem 'Manrope',sans-serif;margin:0 0 7px}.method p{font-size:.87rem;color:var(--muted);margin:0 0 14px;min-height:46px}.btn{display:block;text-align:center;text-decoration:none;border-radius:999px;background:var(--gold);color:#111;font:800 .85rem 'Manrope',sans-serif;padding:15px 12px;border:0}.btn:hover{background:var(--soft)}.btn-disabled{display:block;text-align:center;border-radius:999px;background:#4a4233;color:#d4c8ab;font:800 .81rem 'Manrope',sans-serif;padding:15px 12px;cursor:not-allowed}.notice{font-size:.83rem;color:var(--muted);margin:13px 0 0}.divider{height:1px;background:var(--line);margin:14px 0}.exterior{border-color:rgba(201,162,74,.6)}.payment-label{display:inline-block;background:rgba(201,162,74,.12);border:1px solid rgba(201,162,74,.32);border-radius:100px;padding:5px 12px;font:700 .73rem 'Manrope',sans-serif;color:var(--soft);margin:15px 0 0}.stripe{max-width:440px;margin-top:20px}.details{margin-top:32px;display:flex;justify-content:center;flex-wrap:wrap;gap:9px 28px;color:var(--muted);font-size:.85rem;text-align:center}.details span:before{content:'✦ ';color:var(--gold)}footer{border-top:1px solid var(--line);padding:22px 0 36px;color:var(--muted);font-size:.79rem}footer .wrap{text-align:center}@media(max-width:650px){main{padding:35px 0 58px}.pay-grid{grid-template-columns:1fr}.method p{min-height:0}.card{padding:23px 19px}.back{font-size:.76rem}}
-.alias-box{display:flex;flex-direction:column;gap:3px;background:#211d17;border:1px solid rgba(201,162,74,.35);border-radius:12px;padding:12px 15px;margin:0 0 12px}.alias-box span{font-size:.76rem;color:var(--muted)}.alias-box strong{font:800 1.12rem Manrope,sans-serif;color:var(--soft);overflow-wrap:anywhere}.copy-btn{width:100%;cursor:pointer}
+:root{--ink:#222322;--muted:#6b6e6c;--gold:#bf9540;--gold-soft:#e6c77b;--line:#e4e3df;--white:#fff;--bg:#f7f6f3}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.6 'DM Sans',system-ui,sans-serif}a{color:inherit}button{font:inherit}
+.top{background:#111110;color:#f9f6f0}.container{width:min(1120px,100% - 36px);margin:auto}
+.top .container{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font:800 16px 'Manrope',sans-serif;letter-spacing:.16em;color:var(--gold-soft);text-decoration:none}
+.back{color:#d0cec8;font-size:13px;text-decoration:none}.back:hover{text-decoration:underline}
+.status{background:#efe7d5;text-align:center;color:#6b5428;padding:9px 16px;font-size:13px;font-weight:700}
+main{padding:42px 0 65px}
+.headline{margin:0 0 24px;display:flex;justify-content:space-between;align-items:end;gap:16px}
+.eyebrow{color:#98712d;text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:800}
+h1{font:800 clamp(26px,4vw,38px)/1.22 Manrope,sans-serif;letter-spacing:-.04em;margin:5px 0 7px}
+.headline p{margin:0;color:var(--muted);font-size:14px}
+.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.82fr);gap:23px;align-items:start}
+.panel{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 30px rgba(25,23,17,.035);overflow:hidden}
+.panel-pad{padding:28px}
+.block-title{font:800 18px Manrope,sans-serif;margin:0 0 7px}
+.helper{color:var(--muted);font-size:13px;margin:0 0 19px}
+.method{border:1px solid #e0dfdb;border-radius:14px;padding:17px 18px;display:block;cursor:pointer;transition:border-color .15s,background .15s;position:relative}
+.method+.method{margin-top:12px}
+.method input{position:absolute;top:21px;left:16px;accent-color:#b88d37;width:18px;height:18px;margin:0}
+.method-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-left:28px;font-weight:800;font-family:Manrope,sans-serif;font-size:14px}
+.method-desc{display:block;margin:5px 0 0 28px;color:var(--muted);font-size:12px}
+.method:has(input:checked){border-color:var(--gold);background:#fffdf8;box-shadow:inset 0 0 0 1px #caa65d}
+.brand-pill{font-weight:800;font-size:11px;letter-spacing:.01em;color:#735217;background:#f7ecd2;border-radius:6px;padding:5px 7px;white-space:nowrap}
+.actions{padding:0 28px 27px}
+.pay-body{display:none}
+.pay-body.active{display:block}
+.pay-cta{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:12px;background:#cda54d;color:#17140d;cursor:pointer;text-decoration:none;padding:16px 18px;text-align:center;font:800 14px Manrope,sans-serif;transition:background .15s,transform .15s}
+.pay-cta:hover{background:#e1be6d;transform:translateY(-1px)}
+.smallprint{font-size:12px;text-align:center;color:var(--muted);margin:12px 0 0}
+.alias-box{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;border-radius:12px;background:#f6f5f1;border:1px solid var(--line);margin:0 0 13px}
+.alias-box span{font-size:12px;color:var(--muted)}.alias-box strong{display:block;font:800 17px Manrope,sans-serif;overflow-wrap:anywhere}
+.copy{border:1px solid #c7a65f;border-radius:8px;background:white;color:#655020;padding:8px 10px;font-size:12px;font-weight:800;cursor:pointer}
+.transfer-instructions{font-size:13px;color:var(--muted);margin:0 0 12px}
+.wa-btn{background:#1fa960;color:white}.wa-btn:hover{background:#1c9957}
+.email-alt{text-align:center;margin:12px 0 0;font-size:12px;color:var(--muted)}.email-alt a{color:#7a5b25;text-decoration:underline;overflow-wrap:anywhere}
+.region-divider{height:1px;background:var(--line);margin:24px 0}
+.international{border-radius:14px;background:#faf9f6;border:1px solid #e6dfcc;padding:20px}
+.international h2{font:800 18px Manrope,sans-serif;margin:0 0 5px}.international p{font-size:13px;color:var(--muted);margin:0 0 16px}
+.usd{font:800 28px Manrope,sans-serif;color:#a77a25;letter-spacing:-.04em;margin:0 0 14px}
+.stripe-btn{background:#242323;color:white}.stripe-btn:hover{background:#3b3b3b}
+.summary{position:sticky;top:22px}
+.summary-header{padding:22px 23px 0}.summary h2{font:800 17px Manrope,sans-serif;margin:0 0 15px}
+.ebooks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.ebooks img{width:100%;display:block;aspect-ratio:3/4;object-fit:contain;background:#12110f;border-radius:8px;border:1px solid #e4dfd3}
+.product-info{padding:16px 23px 17px}.product-name{font-weight:800;font-family:Manrope,sans-serif;font-size:15px;margin:0 0 2px}
+.product-info p{color:var(--muted);font-size:12px;margin:0}
+.summary-list{list-style:none;margin:0;padding:17px 23px;border-top:1px solid var(--line)}
+.summary-list li{font-size:13px;color:#555852;padding:4px 0 4px 23px;position:relative}
+.summary-list li::before{content:"✓";position:absolute;left:0;color:#b28a38;font-weight:800}
+.summary-total{border-top:1px solid var(--line);padding:17px 23px 22px;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.summary-total span{font-size:13px;color:var(--muted)}.summary-total strong{font:800 21px Manrope,sans-serif;color:#916c28}
+.trust{margin-top:18px;padding:18px 20px;border-radius:14px;border:1px solid #e5dfcf;background:#fffaf0}
+.trust strong{font:800 13px Manrope,sans-serif;display:block;margin-bottom:5px}.trust p{font-size:12px;color:#646056;margin:0}
+.disclosure{font-size:12px;color:var(--muted);text-align:center;margin:19px 0 0}
+footer{border-top:1px solid var(--line);padding:25px 16px;color:var(--muted);text-align:center;font-size:12px}
 
-.receipt-area{margin-top:23px;padding-top:19px;border-top:1px solid var(--line)}
-.receipt-title{display:block;font:800 .95rem 'Manrope',sans-serif;color:var(--soft);margin-bottom:7px}
-.method .receipt-info{margin:0 0 15px;min-height:0;line-height:1.65}
-.whatsapp-btn{background:#25d366;color:#0a190f;overflow-wrap:anywhere}
-.whatsapp-btn:hover{background:#45df7d}
-.method .receipt-alt{margin:14px 0 0;min-height:0;font-size:.83rem}
-.receipt-alt a{color:var(--soft);text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
-
+.method-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-left:28px}
+.method-title-row .method-title{margin-left:0}
+.mp-logo{height:28px;max-width:138px;display:block;object-fit:contain}
+.cta-logo{height:22px;display:block;object-fit:contain}
+.pay-cta.has-logo{justify-content:space-between;padding-inline:18px 16px}
+.pay-cta.has-logo .cta-text{display:inline-flex;align-items:center;gap:8px}
+@media(max-width:480px){.method-title-row{flex-direction:column;align-items:flex-start}.mp-logo{height:24px}.pay-cta.has-logo{gap:12px;justify-content:center;flex-wrap:wrap}}
+@media(max-width:760px){main{padding:25px 0 42px}.layout{grid-template-columns:1fr;gap:18px}.summary{position:static}.panel-pad{padding:20px}.actions{padding:0 20px 20px}.headline{margin-bottom:18px}.top .container{min-height:64px}.back{font-size:11px}.summary-header{padding-top:18px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
-<!-- Meta Pixel Code · VIP / Total Fit Reset -->
+<!-- Meta Pixel · VIP / Total Fit Reset -->
 <script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1381162173938345');
-fbq('track', 'PageView');
-fbq('track', 'InitiateCheckout', {content_name: 'Total Fit Reset - 30 Días', currency: 'ARS', value: 19999});
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','1381162173938345');
+fbq('track','PageView');
+fbq('track','InitiateCheckout',{content_name:'Total Fit Reset - 30 Días',currency:'ARS',value:19999});
 </script>
-<!-- End Meta Pixel Code -->
 </head>
 <body>
-<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1381162173938345&ev=PageView&noscript=1" alt=""/></noscript>
-<header><div class="wrap"><a href="index.html" class="logo">TOTAL FIT</a><a href="index.html#pagar" class="back">← Volver al pack</a></div></header>
-<main><div class="wrap">
-<div class="intro"><span class="eyebrow">TOTAL FIT RESET · 30 DÍAS</span><h1>Elegí cómo <span>pagar tus ebooks</span></h1><p>Un solo pago. Elegí la opción que corresponda a tu país y completá tu compra.</p></div>
-<div class="sections">
-<section class="card" id="argentina">
-<div class="region-label">Para Argentina</div><h2 class="region-title">Pagá en pesos argentinos</h2><p class="desc">Accedés a los mismos 3 ebooks digitales de entrenamiento, alimentación y recetas.</p>
-<div class="price">$19.999 <small>ARS</small></div>
-<div class="pay-grid">
-<div class="method"><h3>Tarjeta o Mercado Pago</h3><p>Pagá online con los medios disponibles en Mercado Pago.</p><a class="btn" href="https://mpago.la/1uH1e5t" target="_blank" rel="noopener noreferrer">PAGAR CON MERCADO PAGO →</a></div>
-<div class="method"><h3>Transferencia bancaria</h3><p>Transferí el importe exacto al siguiente alias y guardá tu comprobante.</p><div class="alias-box"><span>Alias</span><strong>bren.molineris</strong></div><button type="button" class="btn copy-btn" onclick="navigator.clipboard.writeText(&quot;bren.molineris&quot;).then(()=>{this.textContent=&quot;¡ALIAS COPIADO!&quot;}).catch(()=>{this.textContent=&quot;SELECCIONÁ EL ALIAS PARA COPIAR&quot;})">COPIAR ALIAS</button>
-<div class="receipt-area">
-  <strong class="receipt-title">¿Ya realizaste la transferencia?</strong>
-  <p class="receipt-info">Enviá tu comprobante junto con tu nombre y email. Una vez acreditado el pago, te enviamos el acceso a los ebooks.</p>
-  <a class="btn whatsapp-btn" href="https://wa.me/5491122909562?text=%C2%A1Hola%21%20Compr%C3%A9%20Total%20Fit%20Reset%20por%20transferencia%20de%20%2419.999%20ARS.%20Te%20env%C3%ADo%20el%20comprobante%20adjunto.%20Mi%20nombre%20es%3A%20_____.%20Mi%20email%20es%3A%20_____." target="_blank" rel="noopener noreferrer">ENVIAR COMPROBANTE POR WHATSAPP →</a>
-  <p class="receipt-alt">O enviá el comprobante por email a <a href="mailto:totalfitprogram@gmail.com?subject=Comprobante%20de%20transferencia%20-%20Total%20Fit%20Reset&body=Hola%2C%20hice%20una%20transferencia%20de%20%2419.999%20ARS%20por%20Total%20Fit%20Reset.%0A%0ANombre%3A%20%0AEmail%20para%20recibir%20los%20ebooks%3A%20%0A%0AAdjunto%20mi%20comprobante%20de%20pago.">totalfitprogram@gmail.com</a></p>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1381162173938345&amp;ev=PageView&amp;noscript=1" alt=""></noscript>
+<header class="top"><div class="container"><a class="logo" href="index.html">TOTAL FIT</a><a class="back" href="index.html#pagar">← Volver al pack</a></div></header>
+<div class="status">✓ Pago procesado por Mercado Pago o Stripe · Elegí la opción de tu país</div>
+<main><div class="container">
+<div class="headline"><div><span class="eyebrow">TOTAL FIT RESET · 30 DÍAS</span><h1>Finalizá tu compra</h1><p>Elegí cómo pagar. El acceso a tus ebooks se entrega después de confirmar el pago.</p></div></div>
+<div class="layout">
+<section class="panel" aria-label="Medios de pago">
+<div class="panel-pad">
+<h2 class="block-title">Método de pago · Argentina</h2>
+<p class="helper">Seleccioná una opción. No necesitás ingresar tu tarjeta en esta página.</p>
+<label class="method" for="mp">
+<input type="radio" name="metodo" id="mp" value="mp" checked>
+<div class="method-title-row">
+<span class="method-title">Mercado Pago <span class="brand-pill">Tarjetas y billetera</span></span>
+<img class="mp-logo" src="mercado-pago-logo.svg" alt="Logo de Mercado Pago" loading="lazy">
+</div>
+<span class="method-desc">Completás el pago en el sitio oficial de Mercado Pago.</span>
+</label>
+<label class="method" for="transfer">
+<input type="radio" name="metodo" id="transfer" value="transfer">
+<span class="method-title">Transferencia bancaria <span class="brand-pill">Alias</span></span>
+<span class="method-desc">Transferís el importe y enviás el comprobante para verificarlo.</span>
+</label>
+</div>
+<div class="actions">
+<div id="mpPanel" class="pay-body active">
+<a class="pay-cta has-logo" href="https://mpago.la/1uH1e5t" target="_blank" rel="noopener noreferrer"><span class="cta-text">Continuar a Mercado Pago ↗</span><img class="cta-logo" src="mercado-pago-logo.svg" alt="Mercado Pago"></a>
+<p class="smallprint">Abriremos Mercado Pago para completar tu compra de $19.999 ARS.</p>
+</div>
+<div id="transferPanel" class="pay-body">
+<div class="alias-box"><div><span>Transferí $19.999 ARS al alias</span><strong id="aliasValue">bren.molineris</strong></div><button class="copy" type="button" id="copyAlias">Copiar alias</button></div>
+<p class="transfer-instructions">Después de transferir, enviá el comprobante junto con tu nombre y email. Te mandamos el acceso cuando verifiquemos que el pago se acreditó.</p>
+<a class="pay-cta wa-btn" href="https://wa.me/5491122909562?text=%C2%A1Hola%21%20Hice%20una%20transferencia%20de%20%2419.999%20por%20Total%20Fit%20Reset.%20Adjunto%20el%20comprobante.%20Mi%20nombre%20es%3A%20____%20y%20mi%20email%20es%3A%20____." target="_blank" rel="noopener noreferrer">Enviar comprobante por WhatsApp ↗</a>
+<p class="email-alt">O por email: <a href="mailto:totalfitprogram@gmail.com?subject=Comprobante%20de%20transferencia%20-%20Total%20Fit%20Reset&amp;body=Hola%2C%20hice%20una%20transferencia%20de%20%2419.999%20por%20Total%20Fit%20Reset.%0ANombre%3A%0AEmail%3A%0AAdjunto%20mi%20comprobante.">totalfitprogram@gmail.com</a></p>
 </div>
 </div>
-</div><p class="notice">Para transferencia, conservá el comprobante: el acceso se entrega luego de verificar el pago. El enlace de Mercado Pago abre su plataforma de cobro.</p>
+<div class="panel-pad" style="padding-top:0">
+<div class="region-divider"></div>
+<div class="international">
+<h2>¿Estás en el exterior? 🌎</h2>
+<p>Pagá en dólares por el mismo pack de tres ebooks mediante Stripe.</p>
+<div class="usd">USD 15</div>
+<a class="pay-cta stripe-btn" href="https://buy.stripe.com/6oUaEY3Bc34Ke5ibqK2wU03" target="_blank" rel="noopener noreferrer">Pagar con Stripe ↗</a>
+<p class="smallprint">Se abre el checkout de Stripe para completar el pago.</p>
+</div>
+</div>
 </section>
-<section class="card exterior" id="exterior">
-<div class="region-label">Compra internacional</div><h2 class="region-title">¿Estás en el exterior?</h2><p class="desc">Comprá tu Total Fit Reset desde otro país y pagá en dólares con Stripe.</p>
-<div class="payment-label">Pago seguro con Stripe</div>
-<div class="price">USD 15</div>
-<p class="desc">Pago único por los 3 ebooks. Sin suscripción.</p>
-<div class="stripe"><a class="btn" href="https://buy.stripe.com/6oUaEY3Bc34Ke5ibqK2wU03" target="_blank" rel="noopener noreferrer">PAGAR CON STRIPE →</a></div>
-<p class="notice">Te redirigimos al checkout seguro de Stripe para completar tu compra.</p>
-</section>
+<aside>
+<div class="panel summary">
+<div class="summary-header">
+<h2>Resumen de tu pedido</h2>
+<div class="ebooks">
+<img src="ebook-entrenamiento.webp" alt="Ebook Entrenamiento" loading="lazy">
+<img src="ebook-alimentacion.webp" alt="Ebook Alimentación" loading="lazy">
+<img src="ebook-recetas.webp" alt="Ebook Recetas" loading="lazy">
 </div>
-<div class="details"><span>Pack de 3 ebooks</span><span>Pago único</span><span>Sin suscripción</span></div>
+</div>
+<div class="product-info"><p class="product-name">TOTAL FIT RESET · 30 DÍAS</p><p>Pack de tres ebooks digitales · Pago único · Sin suscripción</p></div>
+<ul class="summary-list">
+<li>Rutinas de 4 días para casa o gimnasio</li>
+<li>Guía práctica de alimentación</li>
+<li>Más de 100 recetas saludables</li>
+<li>Planner, lista de compras y hábitos</li>
+</ul>
+<div class="summary-total"><span>Total · Argentina</span><strong>$19.999 ARS</strong></div>
+</div>
+<div class="trust"><strong>¿Cómo recibís tus ebooks?</strong><p>Con Mercado Pago o Stripe, la entrega se coordina después de confirmar el pago. Si transferís, enviá el comprobante por WhatsApp o email para recibir el enlace de descarga una vez acreditado.</p></div>
+</aside>
+</div>
+<p class="disclosure">Total Fit · Brenda Molineris · Soporte: totalfitprogram@gmail.com</p>
 </div></main>
-<footer><div class="wrap">© 2026 Total Fit · Brenda Molineris</div></footer>
+<footer>© 2026 Total Fit · Brenda Molineris</footer>
+<script>
+(function(){
+const mp=document.getElementById('mpPanel'),transfer=document.getElementById('transferPanel');
+document.querySelectorAll('input[name="metodo"]').forEach(input=>input.addEventListener('change',()=>{
+const byTransfer=document.getElementById('transfer').checked;
+mp.classList.toggle('active',!byTransfer);
+transfer.classList.toggle('active',byTransfer);
+}));
+document.getElementById('copyAlias').addEventListener('click',async function(){
+try{await navigator.clipboard.writeText('bren.molineris');this.textContent='¡Copiado!';}
+catch(e){this.textContent='Seleccioná el alias y copialo';}
+});
+})();
+</script>
 </body></html>
