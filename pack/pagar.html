@@ -69,11 +69,8 @@ footer{border-top:1px solid var(--line);padding:25px 16px;color:var(--muted);tex
 
 .method-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-left:28px}
 .method-title-row .method-title{margin-left:0}
-.mp-logo{height:28px;max-width:138px;display:block;object-fit:contain}
-.cta-logo{height:22px;display:block;object-fit:contain}
-.pay-cta.has-logo{justify-content:space-between;padding-inline:18px 16px}
-.pay-cta.has-logo .cta-text{display:inline-flex;align-items:center;gap:8px}
-@media(max-width:480px){.method-title-row{flex-direction:column;align-items:flex-start}.mp-logo{height:24px}.pay-cta.has-logo{gap:12px;justify-content:center;flex-wrap:wrap}}
+.mp-logo{height:29px;width:43px;display:block;object-fit:contain;border-radius:3px;flex-shrink:0}
+@media(max-width:480px){.method-title-row{flex-direction:column;align-items:flex-start}.mp-logo{height:27px;width:40px}}
 @media(max-width:760px){main{padding:25px 0 42px}.layout{grid-template-columns:1fr;gap:18px}.summary{position:static}.panel-pad{padding:20px}.actions{padding:0 20px 20px}.headline{margin-bottom:18px}.top .container{min-height:64px}.back{font-size:11px}.summary-header{padding-top:18px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
@@ -88,7 +85,7 @@ fbq('track','InitiateCheckout',{content_name:'Total Fit Reset - 30 Días',curren
 <body>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1381162173938345&amp;ev=PageView&amp;noscript=1" alt=""></noscript>
 <header class="top"><div class="container"><a class="logo" href="index.html">TOTAL FIT</a><a class="back" href="index.html#pagar">← Volver al pack</a></div></header>
-<div class="status">✓ Pago procesado por Mercado Pago o Stripe · Elegí la opción de tu país</div>
+<div class="status">✓ Elegí Mercado Pago, transferencia o Stripe para completar tu compra</div>
 <main><div class="container">
 <div class="headline"><div><span class="eyebrow">TOTAL FIT RESET · 30 DÍAS</span><h1>Finalizá tu compra</h1><p>Elegí cómo pagar. El acceso a tus ebooks se entrega después de confirmar el pago.</p></div></div>
 <div class="layout">
@@ -100,7 +97,7 @@ fbq('track','InitiateCheckout',{content_name:'Total Fit Reset - 30 Días',curren
 <input type="radio" name="metodo" id="mp" value="mp" checked>
 <div class="method-title-row">
 <span class="method-title">Mercado Pago <span class="brand-pill">Tarjetas y billetera</span></span>
-<img class="mp-logo" src="mercado-pago-logo.svg" alt="Logo de Mercado Pago" loading="lazy">
+<img class="mp-logo" src="mercado-pago-icon.png" alt="Logo de Mercado Pago" loading="lazy">
 </div>
 <span class="method-desc">Completás el pago en el sitio oficial de Mercado Pago.</span>
 </label>
@@ -112,7 +109,7 @@ fbq('track','InitiateCheckout',{content_name:'Total Fit Reset - 30 Días',curren
 </div>
 <div class="actions">
 <div id="mpPanel" class="pay-body active">
-<a class="pay-cta has-logo" href="https://mpago.la/1uH1e5t" target="_blank" rel="noopener noreferrer"><span class="cta-text">Continuar a Mercado Pago ↗</span><img class="cta-logo" src="mercado-pago-logo.svg" alt="Mercado Pago"></a>
+<a class="pay-cta" href="https://mpago.la/1uH1e5t" target="_blank" rel="noopener noreferrer">Continuar a Mercado Pago ↗</a>
 <p class="smallprint">Abriremos Mercado Pago para completar tu compra de $19.999 ARS.</p>
 </div>
 <div id="transferPanel" class="pay-body">
