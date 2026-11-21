@@ -129,6 +129,28 @@ section{padding:94px 0}.center{text-align:center}.section-lead{max-width:670px;m
 .coach-visual .coach-gallery-slide img{object-fit:contain;object-position:center;}
 @media(max-width:520px){.coach-carousel-arrow{height:38px;width:38px}}
 
+
+/* Corrección portada móvil — evita las columnas estrechas y textos superpuestos */
+@media (max-width:800px){
+  .intro{display:block;min-height:0;padding:0 0 35px;overflow:hidden}
+  .intro .hero-grid{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;min-height:0;padding-top:0;padding-bottom:0}
+  .intro .hero-copy{display:contents}
+  .intro .hero-copy>.eyebrow{order:1;margin-top:36px;margin-bottom:14px;width:100%;max-width:100%;font-size:10px;line-height:1.55;letter-spacing:.13em;overflow-wrap:normal}
+  .intro .hero-copy>h1{order:2;width:100%;max-width:100%;margin:0 0 23px;font-size:clamp(30px,7.8vw,47px);line-height:1.13;letter-spacing:-.045em;overflow-wrap:normal;hyphens:none}
+  .intro .hero-figure.hero-comparison{order:3;display:flex;width:100%;height:auto;min-height:0;align-self:center;margin:0 0 21px;padding:0;overflow:visible;flex-direction:column}
+  .intro .hero-comparison img{display:block;width:100%;height:auto;max-width:520px;max-height:none;object-fit:contain;aspect-ratio:1 / 1;border:1px solid #6d5635;border-radius:14px;box-shadow:0 13px 33px #0008}
+  .intro .hero-copy>p{order:4;width:100%;max-width:620px;margin:0 0 22px;color:#d1c7b6;font-size:clamp(14px,3.8vw,17px);line-height:1.65}
+  .intro .hero-copy>.hero-actions{order:5;display:flex;flex-direction:column;margin:0;gap:0;width:100%;max-width:450px}
+  .intro .hero-actions .btn{display:flex;width:100%;padding:17px 21px;min-height:52px}
+  .intro .hero-copy>.micro{order:6;display:flex;margin:18px 0 0;gap:8px;justify-content:flex-start}
+  .intro .micro span{font-size:11px;padding:6px 10px}
+}
+@media (max-width:400px){
+  .intro .hero-copy>.eyebrow{margin-top:27px}
+  .intro .hero-copy>h1{font-size:clamp(29px,8.1vw,34px);margin-bottom:19px}
+  .intro .hero-comparison img{width:100%;height:auto}
+  .intro .hero-copy>p{font-size:15px}
+}
 </style>
 <!-- Píxel existente Total Fit VIP -->
 <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1381162173938345');fbq('track','PageView');</script>
@@ -143,7 +165,7 @@ section{padding:94px 0}.center{text-align:center}.section-lead{max-width:670px;m
  <p>El método Total Fit trabaja en conjunto la mentalidad y el cuerpo para acompañar una transformación física. Pensado para mujeres profesionales con poco tiempo que quieren verse y sentirse increíbles.</p>
  <div class="hero-actions"><a href="#programa" class="btn">VER QUÉ INCLUYE</a></div>
  <div class="micro"><span>✓ 12 semanas de acompañamiento</span><span>✓ 3 videollamadas 1:1</span><span>✓ Casa o gimnasio</span></div></div>
- <div class="hero-figure hero-comparison"><img src="brenda-transformacion-portada.webp" alt="Fotografías de Brenda Molineris en dos etapas diferentes de su trayectoria fitness" fetchpriority="high" width="1100" height="1100"><div class="hero-photo-caption">Mi transformación personal a lo largo del tiempo · Los resultados varían y no representan una promesa individual de pérdida de peso</div></div>
+ <div class="hero-figure hero-comparison"><img src="brenda-transformacion-portada.webp" alt="Fotografías de Brenda Molineris en dos etapas diferentes de su trayectoria fitness" fetchpriority="high" width="1100" height="1100"></div>
 </div></section>
 <!-- Video original y métricas de la landing principal -->
 <section class="original-video"><div class="wrap"><div class="video-frame"><iframe src="https://www.youtube.com/embed/QT9mF50e1SE?rel=0" title="Brenda Molineris - Total Fit" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div></div></section>
