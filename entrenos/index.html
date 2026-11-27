@@ -51,7 +51,7 @@ details[open]>summary::after{content:' ▴'}
 .tabpage{display:none}
 .tabpage.on{display:block}
 #app{padding-bottom:96px}
-.tabbar{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:50;max-width:520px;margin:0 auto}
+.tabbar{position:fixed;bottom:0;left:0;right:0;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;display:flex;background:var(--card);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:50;max-width:520px;margin:0 auto}
 .tabbar button{flex:1;background:transparent;color:var(--mut);font-weight:400;font-size:10.5px;line-height:1.2;padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;border-radius:8px}
 .tabbar button span{font-size:20px;line-height:1.1}
 .tabbar button.on{color:var(--ac);font-weight:700;background:rgba(217,185,60,0.12)}
@@ -217,6 +217,18 @@ let mesVista = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
 const $ = id => document.getElementById(id);
 const el = (tag, props = {}) => Object.assign(document.createElement(tag), props);
+
+// ---------- MANTENIMIENTO ----------
+// true = la app muestra el cartel y no se puede usar. false = vuelve a abrirse.
+const EN_MANTENIMIENTO = true;
+if (EN_MANTENIMIENTO) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const cartel = document.createElement('div');
+    cartel.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#111;color:#eee;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:system-ui,sans-serif';
+    cartel.innerHTML = '<div><h1 style="font-size:1.3rem;color:#D9B93C;text-transform:uppercase;letter-spacing:.04em">Total Fit</h1><p>La app está en mantenimiento por unos días.</p><p>Te avisamos cuando vuelva. ¡Gracias por tu paciencia!</p></div>';
+    document.body.append(cartel);
+  });
+}
 const hoyStr = () => new Date().toLocaleDateString('sv-SE');
 const fechaStr = d => d.toLocaleDateString('sv-SE');
 
