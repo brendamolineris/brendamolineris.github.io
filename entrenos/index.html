@@ -217,18 +217,6 @@ let mesVista = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
 const $ = id => document.getElementById(id);
 const el = (tag, props = {}) => Object.assign(document.createElement(tag), props);
-
-// ---------- MANTENIMIENTO ----------
-// true = la app muestra el cartel y no se puede usar. false = vuelve a abrirse.
-const EN_MANTENIMIENTO = true;
-if (EN_MANTENIMIENTO) {
-  document.addEventListener('DOMContentLoaded', () => {
-    const cartel = document.createElement('div');
-    cartel.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#111;color:#eee;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:system-ui,sans-serif';
-    cartel.innerHTML = '<div><h1 style="font-size:1.3rem;color:#D9B93C;text-transform:uppercase;letter-spacing:.04em">Total Fit</h1><p>La app está en mantenimiento por unos días.</p><p>Te avisamos cuando vuelva. ¡Gracias por tu paciencia!</p></div>';
-    document.body.append(cartel);
-  });
-}
 const hoyStr = () => new Date().toLocaleDateString('sv-SE');
 const fechaStr = d => d.toLocaleDateString('sv-SE');
 
